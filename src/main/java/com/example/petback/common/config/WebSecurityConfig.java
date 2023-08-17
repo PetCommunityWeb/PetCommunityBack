@@ -25,7 +25,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 @EnableMethodSecurity(securedEnabled = true)
 public class WebSecurityConfig {
-
+    // 테스트1
     private final JwtUtil jwtUtil;
     private final UserDetailsServiceImpl userDetailsService;
     private final AuthenticationConfiguration authenticationConfiguration;
@@ -69,15 +69,15 @@ public class WebSecurityConfig {
         http.authorizeHttpRequests((authorizeHttpRequests) ->
                 authorizeHttpRequests
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll() // resources 접근 허용 설정
-                        .requestMatchers("/users/**").permitAll() // '/users/'로 시작하는 요청 모두 접근 허가
+                        .requestMatchers("/api/users/**").permitAll() // '/users/'로 시작하는 요청 모두 접근 허가
                         .anyRequest().authenticated() // 그 외 모든 요청 인증처리 -->permitAll
 
         );
 
         http.formLogin((formLogin) ->
                 formLogin
-                        .loginPage("/users/login-page").permitAll()
-                        .loginProcessingUrl("/users/login").permitAll()
+                        .loginPage("/api/users/login-page").permitAll()
+                        .loginProcessingUrl("/api/users/login").permitAll()
                         .defaultSuccessUrl("/")//로그인 성공 시 이동될 경로
         );
         // 필터 관리
