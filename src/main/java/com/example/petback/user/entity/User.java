@@ -1,15 +1,16 @@
 package com.example.petback.user.entity;
 
+import com.example.petback.hospital.entity.Hospital;
 import com.example.petback.user.enums.UserRoleEnum;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
+@Builder
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,8 +21,13 @@ public class User {
 
     @Column(nullable = false)
     private String password;
+    private String email;
+    private String nickname;
+    private String imageUrl;
 
-    @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)
     private UserRoleEnum role;
+
+    @OneToOne(mappedBy = "user")
+    private Hospital hospital;
 }
