@@ -2,6 +2,9 @@ package com.example.petback.hospital.entity;
 
 import com.example.petback.common.domain.Address;
 import com.example.petback.user.entity.User;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerator;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.SQLDelete;
