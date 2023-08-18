@@ -1,5 +1,6 @@
 package com.example.petback.user.entity;
 
+
 import com.example.petback.chat.entity.ChatMessage;
 import com.example.petback.user.enums.UserRoleEnum;
 import jakarta.persistence.*;
@@ -15,6 +16,7 @@ import java.util.List;
 @Setter
 @Builder
 @Table(name = "Users")
+@EqualsAndHashCode(of = "id")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
