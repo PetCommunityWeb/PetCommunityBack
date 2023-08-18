@@ -70,6 +70,7 @@ public class WebSecurityConfig {
                 authorizeHttpRequests
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll() // resources 접근 허용 설정
                         .requestMatchers("/api/users/**").permitAll() // '/users/'로 시작하는 요청 모두 접근 허가
+                        .requestMatchers("/api/feeds/**").permitAll()
                         .anyRequest().authenticated() // 그 외 모든 요청 인증처리 -->permitAll
 
         );
