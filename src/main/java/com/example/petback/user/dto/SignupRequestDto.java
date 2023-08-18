@@ -10,7 +10,7 @@ import lombok.Getter;
 @Getter
 @Builder
 public class SignupRequestDto {
-    @NotBlank
+    @NotBlank(message = "null 과 \"\" 과 \" \" 모두 허용하지 않습니다.")
     private String username;
     @NotBlank
     private String password;
@@ -19,9 +19,6 @@ public class SignupRequestDto {
     @Email
     @NotBlank
     private String email;
-
-    @Builder.Default
-    private UserRoleEnum role= UserRoleEnum.USER;
 
     public void setPassword(String password) {
         this.password = password;
@@ -33,7 +30,6 @@ public class SignupRequestDto {
                 .password(password)
                 .email(email)
                 .nickname(nickname)
-                .role(role)
                 .build();
     }
 }
