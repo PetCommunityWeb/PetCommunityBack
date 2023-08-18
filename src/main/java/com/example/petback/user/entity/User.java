@@ -11,6 +11,7 @@ import lombok.*;
 @Getter
 @Setter
 @Builder
+@EqualsAndHashCode(of = "id")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
