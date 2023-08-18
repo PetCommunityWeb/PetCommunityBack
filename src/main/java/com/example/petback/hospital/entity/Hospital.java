@@ -15,6 +15,7 @@ import org.hibernate.annotations.Where;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(of = "id")
 @Where(clause = "is_deleted = false")
 @SQLDelete(sql = "UPDATE hospital SET is_deleted = true WHERE id = ?")
 public class Hospital {

@@ -20,8 +20,7 @@ public class SignupRequestDto {
     @NotBlank
     private String email;
 
-    @Builder.Default
-    private UserRoleEnum role= UserRoleEnum.USER;
+    private UserRoleEnum role;
 
     public void setPassword(String password) {
         this.password = password;
