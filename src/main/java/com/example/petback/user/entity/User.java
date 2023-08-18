@@ -1,6 +1,5 @@
 package com.example.petback.user.entity;
 
-import com.example.petback.hospital.entity.Hospital;
 import com.example.petback.user.enums.UserRoleEnum;
 import jakarta.persistence.*;
 import lombok.*;
@@ -28,6 +27,6 @@ public class User {
     @Enumerated(value = EnumType.STRING)
     private UserRoleEnum role;
 
-    @OneToOne(mappedBy = "user")
-    private Hospital hospital;
+//    @OneToOne(mappedBy = "user")
+//    private Hospital hospital;
 }
