@@ -59,7 +59,8 @@ public class HospitalServiceImpl implements HospitalService{
         if (!user.equals(hospital.getUser())) throw new IllegalArgumentException("병원 수정 권한이 없습니다.");
         hospitalRepository.delete(hospital);
     }
-    private Hospital findHospital(Long id){
+    @Override
+    public Hospital findHospital(Long id){
         return hospitalRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 병원입니다."));
     }
