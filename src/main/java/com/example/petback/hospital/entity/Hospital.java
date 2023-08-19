@@ -1,14 +1,15 @@
 package com.example.petback.hospital.entity;
 
 import com.example.petback.common.domain.Address;
+import com.example.petback.hospitalspecies.entity.HospitalSpecies;
 import com.example.petback.user.entity.User;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerator;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Builder
@@ -33,14 +34,21 @@ public class Hospital {
     private String phoneNumber;
     @Builder.Default
     private boolean isDeleted = Boolean.FALSE;
-
-    @OneToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private User user;
+    @Builder.Default
+    @OneToMany(mappedBy = "hospital", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<HospitalSpecies> hospitalSpecies = new HashSet<>();
 
     public void setUser(User user) {
         this.user = user;
     }
-
+    public void addHospitalSpecies(HospitalSpecies hospitalSpecies) {
+        this.hospitalSpecies.add(hospitalSpecies);
+    }
+    public void resetHospitalSpecies(){
+        this.hospitalSpecies.clear();
+    }
     public Hospital updateName(String name) {
         this.name = name;
         return this;
