@@ -32,4 +32,7 @@ public class Comment {
     @ManyToOne
     @JoinColumn
     private User user;
+
+    @Builder.Default
+    private boolean isDeleted = Boolean.FALSE;
 }

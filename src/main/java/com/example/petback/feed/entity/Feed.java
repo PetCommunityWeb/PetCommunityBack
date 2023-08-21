@@ -38,8 +38,7 @@ public class Feed {
     @JoinColumn
     private User user;
 
-    @OneToMany
-    @JoinColumn
+    @OneToMany(mappedBy = "feed", orphanRemoval = true)
     private List<Comment> comments;
 
     //    @OneToMany

@@ -27,7 +27,12 @@ public class FeedServiceImpl implements FeedService {
         Feed feed = requestDto.toEntity();
         feed.setUser(user);
         feedRepository.save(feed);
-        return FeedResponseDto.of(feed);
+//        return FeedResponseDto.of(feed);
+        return FeedResponseDto.builder()
+                .id(feed.getId())
+                .title(feed.getTitle())
+                .content(feed.getContent())
+                .build();
     }
 
     //피드 전체 조회
