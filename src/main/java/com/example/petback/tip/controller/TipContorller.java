@@ -1,10 +1,10 @@
 package com.example.petback.tip.controller;
 
 import com.example.petback.common.advice.ApiResponseDto;
+import com.example.petback.common.security.UserDetailsImpl;
 import com.example.petback.tip.dto.TipRequestDto;
 import com.example.petback.tip.dto.TipResponseDto;
 import com.example.petback.tip.service.TipService;
-import com.example.petback.user.security.UserDetailsImpl;
 import com.example.petback.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -24,13 +24,13 @@ public class TipContorller {
     private final UserService userService;
 
     // 팁 작성
-    @PostMapping("/")
+    @PostMapping("")
     public TipResponseDto createTip(@RequestBody TipRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return tipService.createTip(requestDto, userDetails.getUser());
     }
 
     // 팁 전체 조회
-    @GetMapping("/")
+    @GetMapping("")
     public ResponseEntity selectTips() {
         List<TipResponseDto> responseDto = tipService.selectTips();
         return ResponseEntity.ok().body(responseDto);
@@ -38,7 +38,7 @@ public class TipContorller {
 
     // 팁 상세 조회
     @GetMapping("/{id}")
-    public ResponseEntity selectFeed(@PathVariable Long id) {
+    public ResponseEntity selectTip(@PathVariable Long id) {
         TipResponseDto responseDto = tipService.selectTip(id);
         return ResponseEntity.ok().body(responseDto);
     }
@@ -58,6 +58,8 @@ public class TipContorller {
     }
 
     // 팁 삭제
+
+    @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponseDto> deleteTip(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable Long id) {
         try {
             tipService.deleteTip(id, userDetails.getUser());
@@ -66,4 +68,6 @@ public class TipContorller {
             return ResponseEntity.badRequest().body(new ApiResponseDto("작성자만 삭제할 수 있습니다.", HttpStatus.BAD_REQUEST.value()));
         }
     }
+
+    //
 }
