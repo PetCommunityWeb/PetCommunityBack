@@ -2,13 +2,10 @@ package com.example.petback.chat.dto;
 
 import com.example.petback.chat.entity.ChatMessage;
 import com.example.petback.chat.entity.ChatRoom;
-import com.example.petback.chat.repository.ChatRoomRepository;
 import com.example.petback.user.entity.User;
-import com.example.petback.user.repository.UserRepository;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 
