@@ -7,6 +7,8 @@ import lombok.Getter;
 
 import java.util.List;
 
+import java.util.List;
+
 @Getter
 public class HospitalRequestDto {
     private String name;
