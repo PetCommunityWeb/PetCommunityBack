@@ -3,6 +3,7 @@ package com.example.petback.hospital.dto;
 import com.example.petback.common.domain.Address;
 import com.example.petback.hospital.entity.Hospital;
 import com.example.petback.species.SpeciesEnum;
+import com.example.petback.subject.SubjectEnum;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -21,6 +22,7 @@ public class HospitalResponseDto {
     private Address address;
     private String phoneNumber;
     private List<SpeciesEnum> speciesEnums;
+    private List<SubjectEnum> subjectEnums;
 
     public static HospitalResponseDto of(Hospital hospital){
         return HospitalResponseDto.builder()
@@ -34,6 +36,11 @@ public class HospitalResponseDto {
                 .speciesEnums(
                         hospital.getHospitalSpecies().stream()
                                 .map(hospitalSpecies -> hospitalSpecies.getSpecies().getName())
+                                .toList()
+                )
+                .subjectEnums(
+                        hospital.getHospitalSubjects().stream()
+                                .map(hospitalSpecies -> hospitalSpecies.getSubject().getName())
                                 .toList()
                 )
                 .build();

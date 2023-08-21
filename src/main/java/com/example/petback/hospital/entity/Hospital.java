@@ -2,6 +2,7 @@ package com.example.petback.hospital.entity;
 
 import com.example.petback.common.domain.Address;
 import com.example.petback.hospitalspecies.entity.HospitalSpecies;
+import com.example.petback.hospitalsubject.entity.HospitalSubject;
 import com.example.petback.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
@@ -40,15 +41,24 @@ public class Hospital {
     @OneToMany(mappedBy = "hospital", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<HospitalSpecies> hospitalSpecies = new HashSet<>();
 
+    @Builder.Default
+    @OneToMany(mappedBy = "hospital", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<HospitalSubject> hospitalSubjects = new HashSet<>();
+
     public void setUser(User user) {
         this.user = user;
     }
     public void addHospitalSpecies(HospitalSpecies hospitalSpecies) {
         this.hospitalSpecies.add(hospitalSpecies);
     }
+    public void addHospitalSubject(HospitalSubject hospitalSubject) {
+        this.hospitalSubjects.add(hospitalSubject);
+    }
     public void resetHospitalSpecies(){
         this.hospitalSpecies.clear();
+        this.hospitalSubjects.clear();
     }
+
     public Hospital updateName(String name) {
         this.name = name;
         return this;
