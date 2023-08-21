@@ -1,9 +1,12 @@
 package com.example.petback.tip.service;
 
 
+import com.example.petback.common.security.UserDetailsImpl;
 import com.example.petback.tip.dto.TipRequestDto;
 import com.example.petback.tip.dto.TipResponseDto;
 import com.example.petback.tip.entity.Tip;
+import com.example.petback.tip.entity.TipLike;
+import com.example.petback.tip.repository.TipLikeRepository;
 import com.example.petback.tip.repository.TipRepository;
 import com.example.petback.user.entity.User;
 import com.example.petback.user.enums.UserRoleEnum;
@@ -13,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.concurrent.RejectedExecutionException;
 
 @Service
 @RequiredArgsConstructor
@@ -20,6 +24,7 @@ import java.util.List;
 public class TipServiceImpl implements TipService {
     private final TipRepository tipRepository;
     private final UserRepository userRepository;
+    private final TipLikeRepository tipLikeRepository;
 
     // 팁 작성
     @Override
@@ -76,6 +81,56 @@ public class TipServiceImpl implements TipService {
         return tipRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 게시글입니다."));
     }
+
+    // 팁 좋아요
+    public void likeTip(UserDetailsImpl userDetails, Long id) {
+        User user = userDetails.getUser();
+
+        if (user == null) {
+            throw new RejectedExecutionException("사용자를 찾을 수 없습니다.");
+        }
+
+        Tip tip = tipRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("팁 게시글을 찾을 수 없습니다."));
+
+        if (user.getId().equals(tip.getUser().getId())) {
+            throw new RejectedExecutionException("본인의 팁 게시글엔 좋아요를 할 수 없습니다.");
+        }
+
+        TipLike tipLike = tipLikeRepository.findByUserAndTip(user, tip);
+        if (tipLike != null) {
+            throw new RejectedExecutionException("이미 좋아요를 눌렀습니다.");
+        }
+        tipLikeRepository.save(new TipLike(user, tip));
+    }
+
+
+    // 팁 좋아요 취소
+    public void deleteLikeTip(UserDetailsImpl userDetails, Long id) {
+        User user = userDetails.getUser();
+
+        if (user == null) {
+            throw new RejectedExecutionException("사용자를 찾을 수 없습니다.");
+        }
+
+        Tip tip = tipRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("팁 게시글을 찾을 수 없습니다."));
+
+        TipLike tipLike = tipLikeRepository.findByUserAndTip(user, tip);
+        if (tipLike == null) {
+            throw new RejectedExecutionException("좋아요를 누르지 않았습니다.");
+        }
+
+        if (this.checkValidUser(user, tipLike)) {
+            throw new RejectedExecutionException("본인의 좋아요만 취소할 수 있습니다.");
+        }
+
+        tipLikeRepository.delete(tipLike);
+    }
+
+    private boolean checkValidUser(User user, TipLike tipLike) {
+        boolean result = !(user.getId().equals(tipLike.getUser().getId())) && !(user.getRole().equals(UserRoleEnum.ADMIN));
+        return result;
+    }
+
 
 }
 

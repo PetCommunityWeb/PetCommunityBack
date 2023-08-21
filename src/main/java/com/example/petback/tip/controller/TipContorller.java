@@ -6,6 +6,7 @@ import com.example.petback.tip.dto.TipRequestDto;
 import com.example.petback.tip.dto.TipResponseDto;
 import com.example.petback.tip.service.TipService;
 import com.example.petback.user.service.UserService;
+import com.sun.jdi.request.DuplicateRequestException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -69,5 +70,25 @@ public class TipContorller {
         }
     }
 
-    //
+    // 팁 좋아요
+    @PostMapping("/{id}/likes")
+    public ResponseEntity<ApiResponseDto> likeTip(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable Long id) {
+        try {
+            tipService.likeTip(userDetails, id);
+        } catch (DuplicateRequestException e) {
+            return ResponseEntity.badRequest().body(new ApiResponseDto(e.getMessage(), HttpStatus.BAD_REQUEST.value()));
+        }
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(new ApiResponseDto("팁 좋아요 성공", HttpStatus.OK.value()));
+    }
+
+    // 팁 좋아요 취소
+    @DeleteMapping("/{id}/likes")
+    public ResponseEntity<ApiResponseDto> deleteLikeTip(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable Long id) {
+        try {
+            tipService.deleteLikeTip(userDetails, id);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(new ApiResponseDto(e.getMessage(), HttpStatus.BAD_REQUEST.value()));
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponseDto("팁 좋아요 취소 성공", HttpStatus.OK.value()));
+    }
 }
