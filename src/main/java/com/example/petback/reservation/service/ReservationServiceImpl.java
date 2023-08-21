@@ -6,6 +6,7 @@ import com.example.petback.reservation.ReservationStatusEnum;
 import com.example.petback.reservation.dto.ReservationRequestDto;
 import com.example.petback.reservation.dto.ReservationResponseDto;
 import com.example.petback.reservation.entity.Reservation;
+import com.example.petback.reservation.event.EventPublisher;
 import com.example.petback.reservationslot.entity.ReservationSlot;
 import com.example.petback.reservation.repository.ReservationRepository;
 import com.example.petback.reservationslot.repository.ReservationSlotRepository;
@@ -20,13 +21,14 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
 public class ReservationServiceImpl implements ReservationService{
     private final ReservationRepository reservationRepository;
     private final HospitalService hospitalService;
     private final ReservationSlotRepository reservationSlotRepository;
+    private final EventPublisher eventPublisher;
 
     @Override
+    // @Transactional
     public ReservationResponseDto createReservation(User user, ReservationRequestDto requestDto) {
         Hospital hospital = hospitalService.findHospital(requestDto.getHospitalId());
         Optional<ReservationSlot> optionalSlot = reservationSlotRepository
@@ -45,11 +47,17 @@ public class ReservationServiceImpl implements ReservationService{
                 .reservationSlot(slot)
                 .reservationStatus(ReservationStatusEnum.예약완료)
                 .build();
+
         reservationRepository.save(reservation);
+
+        // 비동기 처리 이벤트 발생
+        eventPublisher.publishEvent(reservation);
+
         return ReservationResponseDto.of(reservation);
     }
 
     @Override
+    @Transactional
     public void deleteReservation(User user, String reservationNum) {
         Reservation reservation = reservationRepository.findById(reservationNum)
                 .orElseThrow(() -> new IllegalArgumentException("해당 예약이 존재하지 않습니다."));
@@ -60,11 +68,13 @@ public class ReservationServiceImpl implements ReservationService{
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<ReservationResponseDto> selectAllReservations(User user) {
         return reservationRepository.findAllByUser(user).stream().map(ReservationResponseDto::of).toList();
     }
 
     @Override
+    @Transactional(readOnly = true)
     public ReservationResponseDto selectReservation(User user, String reservationNum) {
         Reservation reservation = reservationRepository.findById(reservationNum)
                 .orElseThrow(()->new IllegalArgumentException("해당 예약이 존재하지 않습니다."));

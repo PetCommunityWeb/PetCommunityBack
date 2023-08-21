@@ -8,6 +8,7 @@ import com.example.petback.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,6 +19,7 @@ import java.util.List;
 public class ReservationController {
     private final ReservationService reservationService;
     @PostMapping
+    @Transactional
     public ResponseEntity createReservation(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody ReservationRequestDto requestDto){
         ReservationResponseDto responseDto = reservationService.createReservation(userDetails.getUser(), requestDto);
         return ResponseEntity.ok().body(responseDto);
