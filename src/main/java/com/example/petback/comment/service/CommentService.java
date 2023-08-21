@@ -17,7 +17,4 @@ public interface CommentService {
     // 코멘트 삭제
     void deleteComment(Long id, User user);
 
-    // 코멘트 조회 ->  매핑필요?
-    List<CommentResponseDto> selectComments();
-    CommentResponseDto selectComment(Long id);
 }
