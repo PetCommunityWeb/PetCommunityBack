@@ -53,9 +53,10 @@ public class CommentServiceImpl implements CommentService {
 
     //코멘트 삭제
     @Override
-    public void deleteComment(Long id, User user) {
-        String username = findComment(id).getUser().getUsername();
-        Comment comment = findComment(id);
+    public void deleteComment(Long commentId, Long feedId, User user) {
+        String username = findComment(commentId).getUser().getUsername();
+        Feed feed = feedService.findFeed(feedId);
+        Comment comment = findComment(commentId);
         if (!(user.getRole().equals(UserRoleEnum.ADMIN) || username.equals(user.getUsername()))) {
             throw new RejectedExecutionException();
         } else commentRepository.delete(comment);

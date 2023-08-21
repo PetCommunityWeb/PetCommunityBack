@@ -23,9 +23,9 @@ public class CommentController {
     // 코멘트 생성
     @PostMapping("/")
     public CommentResponseDto createComment(@RequestBody CommentRequestDto commentRequestDto,
-                                            @RequestParam Long id,
+                                            @RequestParam Long feedId,
                                             @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return commentService.createComment(commentRequestDto, userDetails.getUser(),id);
+        return commentService.createComment(commentRequestDto, userDetails.getUser(),feedId);
     }
 
 
@@ -42,11 +42,12 @@ public class CommentController {
         }
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{commentId}")
     public ResponseEntity<ApiResponseDto> deleteComment(@AuthenticationPrincipal UserDetailsImpl userDetails,
-                                                        @PathVariable Long id){
+                                                        @PathVariable Long commentId,
+                                                        @RequestParam Long feedId){
         try{
-            commentService.deleteComment(id, userDetails.getUser());
+            commentService.deleteComment(commentId, feedId, userDetails.getUser());
             return ResponseEntity.ok().body(new ApiResponseDto("삭제 되었습니다." , HttpStatus.OK.value()));
         } catch (RejectedExecutionException c) {
             return ResponseEntity.badRequest().body(new ApiResponseDto("작성자만 삭제할 수 있습니다.", HttpStatus.BAD_REQUEST.value()));

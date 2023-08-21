@@ -74,7 +74,7 @@ public class FeedServiceImpl implements FeedService {
         } else feedRepository.delete(feed);
     }
 
-    private Feed findFeed(Long id) {
+    public Feed findFeed(Long id) {
         return feedRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("피드가 존재하지 않습니다."));
     }
