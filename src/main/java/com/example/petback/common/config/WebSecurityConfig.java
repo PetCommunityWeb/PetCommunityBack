@@ -51,11 +51,6 @@ public class WebSecurityConfig {
         return filter;
     }
 
-//     @Bean
-//     public JwtAuthorizationFilter jwtAuthorizationFilter() {
-//         return new JwtAuthorizationFilter(jwtUtil, userDetailsService);
-//     }
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         // CSRF 설정
@@ -69,10 +64,13 @@ public class WebSecurityConfig {
         http.authorizeHttpRequests((authorizeHttpRequests) ->
                 authorizeHttpRequests
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll() // resources 접근 허용 설정
-                        .requestMatchers("/api/users/**").permitAll() // '/users/'로 시작하는 요청 모두 접근 허가
+                        .requestMatchers("/api/users/**").permitAll() //
+                        .requestMatchers("/ws/**").permitAll() // ws에서 접속하는 websocket 권한 허용
+                        .requestMatchers("/chats").permitAll() // 채팅방 조회를 위한 권한 허용
+                        .requestMatchers("/chat").permitAll() // 채팅방 조회를 위한 권한 허용
                         .requestMatchers("/api/feeds/**").permitAll()
-                        .anyRequest().authenticated() // 그 외 모든 요청 인증처리 -->permitAll
-
+                        .anyRequest().authenticated() // 그 외 모든 요청 인증처리 --> permitAll
+                      
         );
 
         http.formLogin((formLogin) ->

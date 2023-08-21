@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+
     public void signUp(SignupRequestDto requestDto) {
         String password = passwordEncoder.encode(requestDto.getPassword());
         requestDto.setPassword(password);

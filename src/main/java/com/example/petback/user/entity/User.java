@@ -1,6 +1,8 @@
 package com.example.petback.user.entity;
 
 import com.example.petback.hospital.entity.Hospital;
+
+import com.example.petback.chat.entity.ChatMessage;
 import com.example.petback.user.enums.UserRoleEnum;
 import jakarta.persistence.*;
 import lombok.*;
@@ -14,6 +16,7 @@ import java.util.List;
 @Getter
 @Setter
 @Builder
+@Table(name = "Users")
 @EqualsAndHashCode(of = "id")
 public class User {
     @Id
@@ -30,9 +33,12 @@ public class User {
     private String imageUrl;
 
     @Enumerated(value = EnumType.STRING)
-    private UserRoleEnum role;
+    @Builder.Default
+    private UserRoleEnum role= UserRoleEnum.USER;
 
     @Builder.Default
     @OneToMany(mappedBy = "user")
     private List<Hospital> hospital = new ArrayList<>();
+    @OneToMany(mappedBy = "user", orphanRemoval = true)
+    private List<ChatMessage> chatMessages = new ArrayList<>();
 }
