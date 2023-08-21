@@ -1,5 +1,6 @@
 package com.example.petback.user.dto;
 
+import com.example.petback.user.entity.User;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -12,4 +13,11 @@ import lombok.NoArgsConstructor;
 public class LoginRequestDto {
     private String username;
     private String password;
+
+    public User toEntity() {
+        return User.builder()
+                .username(username)
+                .password(password)
+                .build();
+    }
 }

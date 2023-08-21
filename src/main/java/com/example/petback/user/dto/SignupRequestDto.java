@@ -16,6 +16,9 @@ public class SignupRequestDto {
     private String password;
     @NotBlank
     private String nickname;
+
+    private String imageUrl;
+
     @Email
     @NotBlank
     private String email;
@@ -33,6 +36,7 @@ public class SignupRequestDto {
                 .password(password)
                 .email(email)
                 .nickname(nickname)
+                .imageUrl(imageUrl)
                 .role(role)
                 .build();
     }
