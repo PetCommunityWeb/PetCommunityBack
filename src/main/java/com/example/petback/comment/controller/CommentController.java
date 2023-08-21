@@ -37,7 +37,7 @@ public class CommentController {
             CommentResponseDto result = commentService.updateComment(id, requestDto, userDetails.getUser());
             return ResponseEntity.ok().body(new ApiResponseDto("수정이 완료되었습니다", HttpStatus.OK.value()));
         } catch (RejectedExecutionException e) {
-            return ResponseEntity.badRequest().body(new ApiResponseDto(("작성자만 수정할 수 있습니다", HttpStatus.BAD_REQUEST.value())));
+            return ResponseEntity.badRequest().body(new ApiResponseDto("작성자만 수정할 수 있습니다", HttpStatus.BAD_REQUEST.value()));
 
         }
     }
