@@ -2,6 +2,7 @@ package com.example.petback.feed.service;
 
 import com.example.petback.feed.dto.FeedRequestDto;
 import com.example.petback.feed.dto.FeedResponseDto;
+import com.example.petback.feed.entity.Feed;
 import com.example.petback.user.entity.User;
 
 import java.util.List;
@@ -22,6 +23,8 @@ public interface FeedService {
 
     //삭제
     void deleteFeed(Long id, User user);
+
+    Feed findFeed(Long id);
 
 
 }

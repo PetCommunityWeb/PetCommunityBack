@@ -3,6 +3,7 @@ package com.example.petback.user.entity;
 import com.example.petback.hospital.entity.Hospital;
 
 import com.example.petback.chat.entity.ChatMessage;
+import com.example.petback.notification.entity.Notification;
 import com.example.petback.user.enums.UserRoleEnum;
 import jakarta.persistence.*;
 import lombok.*;

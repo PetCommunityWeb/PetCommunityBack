@@ -69,8 +69,10 @@ public class WebSecurityConfig {
                         .requestMatchers("/chats").permitAll() // 채팅방 조회를 위한 권한 허용
                         .requestMatchers("/chat").permitAll() // 채팅방 조회를 위한 권한 허용
                         .requestMatchers("/api/feeds/**").permitAll()
-                        .anyRequest().authenticated() // 그 외 모든 요청 인증처리 --> permitAll
-                      
+
+                        .requestMatchers("/api/comments/**").permitAll()
+                        .anyRequest().authenticated() // 그 외 모든 요청 인증처리 -->permitAll
+
         );
 
         http.formLogin((formLogin) ->
