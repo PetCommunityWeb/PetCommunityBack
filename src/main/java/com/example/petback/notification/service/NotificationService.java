@@ -12,4 +12,5 @@ public interface NotificationService {
     void deleteNotification(Long notificationId, User user);
 
     Notification findNotification(Long notificationId);
+
 }

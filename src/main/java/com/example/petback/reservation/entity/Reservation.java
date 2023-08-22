@@ -27,7 +27,7 @@ public class Reservation {
     private User user;
     @ManyToOne
     private Hospital hospital;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     private ReservationSlot reservationSlot;
 
     public void cancle() {
