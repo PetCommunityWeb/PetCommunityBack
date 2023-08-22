@@ -19,6 +19,7 @@ public class ChatRoom {
     @Column
     private String roomName;
 
+    @Builder.Default
     @OneToMany(mappedBy = "chatRoom", orphanRemoval = true)
     private List<ChatMessage> ChatMessages = new ArrayList<>();
 }

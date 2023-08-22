@@ -9,6 +9,7 @@ import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 @Entity
+@Table(name = "feeds")
 @Getter
 @Setter
 @Builder

@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @Entity
+@Table(name = "hospital_species")
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
