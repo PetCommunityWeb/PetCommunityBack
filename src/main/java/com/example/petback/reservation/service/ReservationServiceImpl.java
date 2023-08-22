@@ -7,8 +7,8 @@ import com.example.petback.reservation.dto.ReservationRequestDto;
 import com.example.petback.reservation.dto.ReservationResponseDto;
 import com.example.petback.reservation.entity.Reservation;
 import com.example.petback.reservation.event.EventPublisher;
-import com.example.petback.reservationslot.entity.ReservationSlot;
 import com.example.petback.reservation.repository.ReservationRepository;
+import com.example.petback.reservationslot.entity.ReservationSlot;
 import com.example.petback.reservationslot.repository.ReservationSlotRepository;
 import com.example.petback.user.entity.User;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +28,7 @@ public class ReservationServiceImpl implements ReservationService{
     private final EventPublisher eventPublisher;
 
     @Override
-    // @Transactional
+    @Transactional
     public ReservationResponseDto createReservation(User user, ReservationRequestDto requestDto) {
         Hospital hospital = hospitalService.findHospital(requestDto.getHospitalId());
         Optional<ReservationSlot> optionalSlot = reservationSlotRepository
@@ -48,7 +48,7 @@ public class ReservationServiceImpl implements ReservationService{
                 .reservationStatus(ReservationStatusEnum.예약완료)
                 .build();
 
-        reservationRepository.save(reservation);
+        reservationRepository.saveAndFlush(reservation);
 
         // 비동기 처리 이벤트 발생
         eventPublisher.publishEvent(reservation);

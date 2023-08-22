@@ -20,7 +20,6 @@ public class EventPublisher {
     public final ApplicationEventPublisher eventPublisher;
 
     @Async
-    @Transactional(isolation = Isolation.READ_UNCOMMITTED)
     public void publishEvent(Reservation reservation) {
         log.info("이벤트 생성");
         ReservationEvent reservationEvent = new ReservationEvent(this, reservation);

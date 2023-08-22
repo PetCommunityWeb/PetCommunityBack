@@ -46,16 +46,16 @@ public class NotificationServiceImpl implements NotificationService {
         );
     }
 
+    @Transactional
     @Scheduled(fixedRate = 60000)
     public void checkReservation() {
         log.info("스케쥴러 실행");
-        List<Reservation> reservations = reservationRepository.findAll();
-        LocalDateTime now = LocalDateTime.now();
-        LocalDateTime threeMinutesLater = now.plusMinutes(5);
+        LocalDateTime later = LocalDateTime.now().plusMinutes(6);
+        List<Reservation> reservations = reservationRepository.findByReservationSlot_StartTimeBetween(LocalTime.from(LocalDateTime.now()), LocalTime.from(later));
         for (Reservation reservation : reservations) {
             LocalTime reservationTime = reservation.getReservationSlot().getStartTime();
-            Duration difference = Duration.between(reservationTime, threeMinutesLater);
-            if (difference.getSeconds() < 60) {
+            Duration difference = Duration.between(reservationTime, later);
+            if (Math.abs(difference.getSeconds()) < 60) {
                 log.info("5분전");
                 sendNotification(reservation);
             }
