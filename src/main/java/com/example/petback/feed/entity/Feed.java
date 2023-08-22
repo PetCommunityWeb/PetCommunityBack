@@ -1,12 +1,15 @@
 package com.example.petback.feed.entity;
 
 
+import com.example.petback.comment.entity.Comment;
 import com.example.petback.user.entity.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
+
+import java.util.List;
 
 @Entity
 @Getter
@@ -34,6 +37,9 @@ public class Feed {
     @ManyToOne
     @JoinColumn
     private User user;
+
+    @OneToMany(mappedBy = "feed", orphanRemoval = true)
+    private List<Comment> comments;
 
     //    @OneToMany
 //    @JoinColumn
