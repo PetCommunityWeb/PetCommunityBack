@@ -1,5 +1,6 @@
 package com.example.petback.user.entity;
 
+import com.example.petback.hospital.entity.Hospital;
 
 import com.example.petback.chat.entity.ChatMessage;
 import com.example.petback.user.enums.UserRoleEnum;
@@ -35,6 +36,9 @@ public class User {
     @Builder.Default
     private UserRoleEnum role= UserRoleEnum.USER;
 
+    @Builder.Default
+    @OneToMany(mappedBy = "user")
+    private List<Hospital> hospital = new ArrayList<>();
     @OneToMany(mappedBy = "user", orphanRemoval = true)
     private List<ChatMessage> chatMessages = new ArrayList<>();
 }
