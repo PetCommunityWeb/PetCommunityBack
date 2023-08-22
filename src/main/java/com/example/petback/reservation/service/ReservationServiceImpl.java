@@ -12,13 +12,18 @@ import com.example.petback.reservationslot.entity.ReservationSlot;
 import com.example.petback.reservationslot.repository.ReservationSlotRepository;
 import com.example.petback.user.entity.User;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionSynchronization;
+import org.springframework.transaction.support.TransactionSynchronizationAdapter;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ReservationServiceImpl implements ReservationService{
@@ -48,10 +53,15 @@ public class ReservationServiceImpl implements ReservationService{
                 .reservationStatus(ReservationStatusEnum.예약완료)
                 .build();
 
-        reservationRepository.saveAndFlush(reservation);
+        reservationRepository.save(reservation);
 
-        // 비동기 처리 이벤트 발생
-        eventPublisher.publishEvent(reservation);
+        TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
+            @Override
+            public void afterCommit() {
+                log.info("After commit: Transaction completed.");
+                eventPublisher.publishEvent(reservation);
+            }
+        });
 
         return ReservationResponseDto.of(reservation);
     }
