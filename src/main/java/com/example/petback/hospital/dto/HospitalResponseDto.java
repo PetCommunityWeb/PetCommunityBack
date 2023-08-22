@@ -2,8 +2,14 @@ package com.example.petback.hospital.dto;
 
 import com.example.petback.common.domain.Address;
 import com.example.petback.hospital.entity.Hospital;
+import com.example.petback.species.SpeciesEnum;
+import com.example.petback.subject.SubjectEnum;
 import lombok.Builder;
 import lombok.Getter;
+
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Builder
 @Getter
@@ -15,6 +21,8 @@ public class HospitalResponseDto {
     private double longitude;
     private Address address;
     private String phoneNumber;
+    private List<SpeciesEnum> speciesEnums;
+    private List<SubjectEnum> subjectEnums;
 
     public static HospitalResponseDto of(Hospital hospital){
         return HospitalResponseDto.builder()
@@ -25,6 +33,16 @@ public class HospitalResponseDto {
                 .longitude(hospital.getLongitude())
                 .address(hospital.getAddress())
                 .phoneNumber(hospital.getPhoneNumber())
+                .speciesEnums(
+                        hospital.getHospitalSpecies().stream()
+                                .map(hospitalSpecies -> hospitalSpecies.getSpecies().getName())
+                                .toList()
+                )
+                .subjectEnums(
+                        hospital.getHospitalSubjects().stream()
+                                .map(hospitalSpecies -> hospitalSpecies.getSubject().getName())
+                                .toList()
+                )
                 .build();
     }
 }
