@@ -1,4 +1,4 @@
-package com.example.petback.like.entity;
+package com.example.petback.feed.entity;
 
 import com.example.petback.feed.entity.Feed;
 import com.example.petback.user.entity.User;
@@ -13,14 +13,12 @@ import org.hibernate.annotations.Where;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Where(clause = "is_deleted = false") // !!!!
-@SQLDelete(sql = "UPDATE like SET is_deleted = true WHERE id = ?")
 
-public class Like {
+public class FeedLike {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = " like_id")
+    @Column
     private Long id;
 
     @ManyToOne
@@ -31,4 +29,8 @@ public class Like {
     @JoinColumn(name = "feed_id")
     private Feed feed;
 
+    public FeedLike(User user, Feed feed) {
+        this.user = user;
+        this.feed = feed;
+    }
 }

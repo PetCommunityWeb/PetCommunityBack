@@ -3,15 +3,19 @@ package com.example.petback.feed.service;
 import com.example.petback.feed.dto.FeedRequestDto;
 import com.example.petback.feed.dto.FeedResponseDto;
 import com.example.petback.feed.entity.Feed;
+import com.example.petback.feed.repository.FeedLikeRepository;
 import com.example.petback.feed.repository.FeedRepository;
+import com.example.petback.feed.entity.FeedLike;
 import com.example.petback.user.entity.User;
 import com.example.petback.user.enums.UserRoleEnum;
 import com.example.petback.user.repository.UserRepository;
+import com.sun.jdi.request.DuplicateRequestException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.RejectedExecutionException;
 
 @Service
@@ -20,6 +24,7 @@ import java.util.concurrent.RejectedExecutionException;
 public class FeedServiceImpl implements FeedService {
     private final FeedRepository feedRepository;
     private final UserRepository userRepository;
+    private final FeedLikeRepository feedLikeRepository;
 
     //피드 생성
     @Override
@@ -72,6 +77,26 @@ public class FeedServiceImpl implements FeedService {
         if (!(user.getRole().equals(UserRoleEnum.ADMIN) || username.equals(user.getUsername()))) {
             throw new RejectedExecutionException();
         } else feedRepository.delete(feed);
+    }
+
+    public void likeFeed(Long id, User user) {
+        Feed feed = findFeed(id);
+        if (feedLikeRepository.existsByUserAndFeed(user, feed)) {
+            throw new DuplicateRequestException("이미 좋아요 한 피드 입니다.");
+        } else {
+            FeedLike feedLike = new FeedLike(user, feed);
+            feedLikeRepository.save(feedLike);
+        }
+    }
+
+    public void dislikeFeed(Long id, User user) {
+        Feed feed = findFeed(id);
+        Optional<FeedLike> feedLikeOptional = feedLikeRepository.findByUserAndFeed(user, feed);
+        if(feedLikeOptional.isPresent()) {
+            feedLikeRepository.delete(feedLikeOptional.get());
+        }else {
+            throw new IllegalArgumentException("해당 게시글에 취소할 수 있는 좋아요가 없습니다.");
+        }
     }
 
     public Feed findFeed(Long id) {

@@ -6,6 +6,7 @@ import com.example.petback.user.entity.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
@@ -40,6 +41,11 @@ public class Feed {
 
     @OneToMany(mappedBy = "feed", orphanRemoval = true)
     private List<Comment> comments;
+    private Integer commentCnt; // 댓글 수
+
+    @OneToMany(mappedBy = "feed", cascade = CascadeType.REMOVE)
+    private List<FeedLike> feedLikes; //좋아요 수?
+
 
     //    @OneToMany
 //    @JoinColumn
