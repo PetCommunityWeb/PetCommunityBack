@@ -12,6 +12,7 @@ import org.hibernate.annotations.Where;
 import java.util.List;
 
 @Entity
+@Table(name = "feeds")
 @Getter
 @Setter
 @Builder

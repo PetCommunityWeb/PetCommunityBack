@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.mapping.ToOne;
 
 @Entity
+@Table(name = "reservations")
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor

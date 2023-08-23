@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Table(name = "reservation_slots")
 @Getter
 @Setter
 @Builder
@@ -28,6 +29,7 @@ public class ReservationSlot {
     @ManyToOne
     private Hospital hospital;
 
+    @Builder.Default
     @OneToMany(mappedBy = "reservationSlot")
     private List<Reservation> reservations = new ArrayList<>();
 }

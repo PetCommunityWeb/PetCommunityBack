@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.Set;
 
 @Entity
+@Table(name = "species")
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor

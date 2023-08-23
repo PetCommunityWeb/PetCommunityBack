@@ -17,7 +17,7 @@ import java.util.List;
 @Getter
 @Setter
 @Builder
-@Table(name = "Users")
+@Table(name = "users")
 @EqualsAndHashCode(of = "id")
 public class User {
     @Id
@@ -40,6 +40,8 @@ public class User {
     @Builder.Default
     @OneToMany(mappedBy = "user")
     private List<Hospital> hospital = new ArrayList<>();
+
+    @Builder.Default
     @OneToMany(mappedBy = "user", orphanRemoval = true)
     private List<ChatMessage> chatMessages = new ArrayList<>();
 }
