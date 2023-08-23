@@ -26,5 +26,8 @@ public interface FeedService {
 
     Feed findFeed(Long id);
 
+    void likeFeed(Long id, User user);
 
+
+    void dislikeFeed(Long id, User user);
 }
