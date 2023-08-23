@@ -34,7 +34,7 @@ public class ReservationServiceImpl implements ReservationService{
         Optional<ReservationSlot> optionalSlot = reservationSlotRepository
                 .findByHospitalAndDateAndStartTime(hospital, requestDto.getDate(), requestDto.getStartTime());
         if (optionalSlot.isEmpty()) {
-            throw new IllegalArgumentException("The slot does not exist.");
+            throw new IllegalArgumentException("예약이 불가능한 시간입니다.");
         }
         ReservationSlot slot = optionalSlot.get();
         if (slot.isReserved()) throw new IllegalArgumentException("이미 예약된 시간입니다.");
