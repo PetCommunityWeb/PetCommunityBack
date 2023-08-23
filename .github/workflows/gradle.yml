@@ -28,6 +28,11 @@ jobs:
       with:
         java-version: '17'
         distribution: 'temurin'
+    - name: create test-yml
+      run: |
+           cd ./src/main/resources
+           touch ./application.yml
+           echo "${{secrets.APPLICATION_YML}}" > ./application.yml
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
     - name: Build with Gradle
