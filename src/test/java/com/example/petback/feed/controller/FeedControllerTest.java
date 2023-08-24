@@ -65,6 +65,7 @@ public class FeedControllerTest {
 
 
     @Test
+    @DisplayName("피드 생성 테스트")
     void createFeed() throws Exception {
         FeedRequestDto feedRequestDto = FeedRequestDto.builder()
                 .title("테스트피드제목")
