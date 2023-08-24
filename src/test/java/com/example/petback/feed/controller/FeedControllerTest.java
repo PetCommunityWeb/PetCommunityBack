@@ -113,12 +113,12 @@ public class FeedControllerTest {
     @Test
     @DisplayName("피드 수정 테스트")
     void updateFeed() throws Exception {
-        createTestFeed();
+        Feed feed = createTestFeed();
         FeedRequestDto updateFeedRequestDto = FeedRequestDto.builder()
                 .title("수정된타이틀")
                 .content("수정된내용")
                 .build();
-        mockMvc.perform(put("/api/feeds/1")
+        mockMvc.perform(put("/api/feeds/"+feed.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .header(JwtUtil.AUTHORIZATION_HEADER, accessToken)
                         .content(objectMapper.writeValueAsString(updateFeedRequestDto))
@@ -179,8 +179,8 @@ public class FeedControllerTest {
 
     }
 
-    private void createTestFeed() {
-        feedRepository.save(Feed.builder()
+    private Feed createTestFeed() {
+        return feedRepository.save(Feed.builder()
                 .title("테스트피드제목")
                 .content("테스트피드내용")
                 .user(user)

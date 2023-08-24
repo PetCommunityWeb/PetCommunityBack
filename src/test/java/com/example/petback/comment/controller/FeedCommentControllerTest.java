@@ -89,14 +89,14 @@ public class FeedCommentControllerTest {
     @Test
     @DisplayName("피드 수정 테스트")
     void updateComment() throws Exception {
-        createTestFeed();
+        Feed feed = createTestFeed();
         createTestComment();
 
         CommentRequestDto updateCommentRequestDto = CommentRequestDto.builder()
                 .content("수정된내용")
                 .build();
 
-        mockMvc.perform(put("/api/comments/1?feedId=")
+        mockMvc.perform(put("/api/comments/"+feed.getId()+"?feedId=")
                         .contentType(MediaType.APPLICATION_JSON)
                         .header(JwtUtil.AUTHORIZATION_HEADER, accessToken)
                         .content(objectMapper.writeValueAsString(updateCommentRequestDto))
@@ -109,10 +109,10 @@ public class FeedCommentControllerTest {
     @Test
     @DisplayName("코멘트 삭제 테스트")
     void deleteComment() throws Exception {
-        createTestFeed();
-        createTestComment();
+        Feed feed = createTestFeed();
+        Comment comment = createTestComment();
 
-        mockMvc.perform(delete("/api/comments/1?feedId=1")
+        mockMvc.perform(delete("/api/comments/"+comment.getId()+"?feedId="+feed.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .header(JwtUtil.AUTHORIZATION_HEADER, accessToken)
                 )
@@ -121,17 +121,18 @@ public class FeedCommentControllerTest {
                 .andReturn();
     }
 
-    private void createTestFeed() {
-        feedRepository.save(Feed.builder()
+    private Feed createTestFeed() {
+       return feedRepository.save(Feed.builder()
                 .title("테스트피드제목")
                 .content("테스트피드내용")
                 .user(user)
                 .build());
+
     }
 
-    private void createTestComment() {
+    private Comment createTestComment() {
         Feed feed = feedRepository.findByTitle("테스트피드제목").orElseThrow();
-        commentRepository.save(Comment.builder()
+       return commentRepository.save(Comment.builder()
                 .feed(feed)
                 .user(user)
                 .username(user.getUsername())
