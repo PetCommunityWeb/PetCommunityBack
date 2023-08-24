@@ -82,7 +82,7 @@ public class FeedController {
         }
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(new ApiResponseDto("게시글 좋아요 성공",HttpStatus.ACCEPTED.value()));
     }
-
+    //좋취
     @DeleteMapping("/{id}/likes")
     public ResponseEntity<ApiResponseDto> dislikeFeed(@AuthenticationPrincipal UserDetailsImpl userDetails,
                                                       @PathVariable Long id) {
