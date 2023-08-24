@@ -186,10 +186,4 @@ public class FeedControllerTest {
                 .user(user)
                 .build());
     }
-
-    private void feedLike() {
-        feedLikeRepository.save(FeedLike.builder()
-                .user(user)
-                .build());
-    }
 }
