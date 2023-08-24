@@ -53,15 +53,13 @@ public class CommentServiceImpl implements CommentService {
 
     //코멘트 삭제
     @Override
-    public void deleteComment(Long commentId, Long feedId, User user) {
-        String username = findComment(commentId).getUser().getUsername();
-        Feed feed = feedService.findFeed(feedId);
-        Comment comment = findComment(commentId);
-        if (!(user.getRole().equals(UserRoleEnum.ADMIN) || username.equals(user.getUsername()))) {
+    public void deleteComment(Long id, User user) {
+        Comment comment = commentRepository.findById(id).orElseThrow();
+
+        if (!user.getRole().equals(UserRoleEnum.ADMIN) && !comment.getUser().equals(user)) {
             throw new RejectedExecutionException();
-        } else commentRepository.delete(comment);
-
-
+        }
+        commentRepository.delete(comment);
     }
 
     private Comment findComment(Long id) {
@@ -69,6 +67,5 @@ public class CommentServiceImpl implements CommentService {
                 .orElseThrow(() -> new IllegalArgumentException("코멘트가 존재하지 않습니다."));
 
     }
-
 
 }

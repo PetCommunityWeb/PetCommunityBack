@@ -10,6 +10,7 @@ import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -36,16 +37,17 @@ public class Feed {
     @Builder.Default
     private boolean isDeleted = Boolean.FALSE;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn
     private User user;
 
+    @Builder.Default
     @OneToMany(mappedBy = "feed", orphanRemoval = true)
-    private List<Comment> comments;
-    private Integer commentCnt; // 댓글 수
+    private List<Comment> comments = new ArrayList<>();
 
-    @OneToMany(mappedBy = "feed", cascade = CascadeType.REMOVE)
-    private List<FeedLike> feedLikes; //좋아요 수?
+    @Builder.Default
+    @OneToMany(mappedBy = "feed", orphanRemoval = true, cascade = CascadeType.REMOVE)
+    private List<FeedLike> feedLikes = new ArrayList<>();  //좋아요 수?
 
 
     //    @OneToMany
