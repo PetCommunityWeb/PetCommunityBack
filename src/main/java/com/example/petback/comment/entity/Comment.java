@@ -24,6 +24,7 @@ public class Comment {
 
     @NotNull
     private String content;
+    private String username;
 
     @ManyToOne
     @JoinColumn

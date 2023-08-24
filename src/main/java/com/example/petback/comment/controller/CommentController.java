@@ -29,6 +29,7 @@ public class CommentController {
     }
 
 
+
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponseDto> updateComment(@AuthenticationPrincipal UserDetailsImpl userDetails,
                                                         @PathVariable Long id,
@@ -42,12 +43,11 @@ public class CommentController {
         }
     }
 
-    @DeleteMapping("/{commentId}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponseDto> deleteComment(@AuthenticationPrincipal UserDetailsImpl userDetails,
-                                                        @PathVariable Long commentId,
-                                                        @RequestParam Long feedId){
+                                                        @PathVariable Long id) {
         try{
-            commentService.deleteComment(commentId, feedId, userDetails.getUser());
+        commentService.deleteComment(id, userDetails.getUser());
             return ResponseEntity.ok().body(new ApiResponseDto("삭제 되었습니다." , HttpStatus.OK.value()));
         } catch (RejectedExecutionException c) {
             return ResponseEntity.badRequest().body(new ApiResponseDto("작성자만 삭제할 수 있습니다.", HttpStatus.BAD_REQUEST.value()));
