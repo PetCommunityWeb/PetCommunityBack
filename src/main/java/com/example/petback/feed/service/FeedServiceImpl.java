@@ -51,13 +51,12 @@ public class FeedServiceImpl implements FeedService {
     //피드 수정
     @Override
     public FeedResponseDto updateFeed(Long id, FeedRequestDto requestDto, User user) {
-        String username = findFeed(id).getUser().getUsername();
         Feed feed = findFeed(id);
-        if (!(user.getRole().equals(UserRoleEnum.ADMIN) || username.equals(user.getUsername()))) {
-            throw new RejectedExecutionException();
+        if (feed.getUser().equals(user)) {
+            throw new IllegalArgumentException("feed 작성자만 수정할 수 있습니다.");
         }
-        feed.setTitle(requestDto.getTitle());
-        feed.setContent(requestDto.getContent());
+        feed.updateTitle(requestDto.getTitle());
+        feed.updateContent(requestDto.getContent());
         return FeedResponseDto.of(feed);
     }
 

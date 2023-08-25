@@ -43,7 +43,8 @@ public class CommentController {
 
         }
     }
-
+    
+    // 댓글 삭제
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponseDto> deleteComment(@AuthenticationPrincipal UserDetailsImpl userDetails,
                                                         @PathVariable Long id) {

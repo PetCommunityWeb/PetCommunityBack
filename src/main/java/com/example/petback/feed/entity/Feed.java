@@ -14,7 +14,6 @@ import java.util.List;
 @Entity
 @Table(name = "feeds")
 @Getter
-@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -49,4 +48,16 @@ public class Feed {
     @Builder.Default
     @OneToMany(mappedBy = "feed", orphanRemoval = true)
     private List<FeedLike> feedLikes = new ArrayList<>();
+
+    public void updateTitle(String title) {
+        this.title = title;
+    }
+
+    public void updateContent(String content) {
+        this.content = content;
+    }
+
+    public void updateImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
 }
