@@ -25,7 +25,7 @@ public class FeedServiceImpl implements FeedService {
     private final FeedRepository feedRepository;
     private final FeedLikeRepository feedLikeRepository;
 
-    //피드 생성
+    // 피드 생성
     @Override
     public FeedResponseDto createFeed(FeedRequestDto requestDto, User user) {
         Feed feed = requestDto.toEntity(user);
@@ -33,14 +33,14 @@ public class FeedServiceImpl implements FeedService {
         return FeedResponseDto.of(feed);
     }
 
-    //피드 전체 조회
+    // 피드 전체 조회
     @Transactional(readOnly = true)
     @Override
     public List<FeedResponseDto> selectFeeds() {
         return feedRepository.findAll().stream().map(FeedResponseDto::of).toList();
     }
 
-    //피드 상세 조회
+    // 피드 상세 조회
     @Transactional(readOnly = true)
     @Override
     public FeedResponseDto selectFeed(Long id) {
@@ -48,29 +48,30 @@ public class FeedServiceImpl implements FeedService {
         return FeedResponseDto.of(feed);
     }
 
-    //피드 수정
+    // 피드 수정
     @Override
-    public FeedResponseDto updateFeed(Long id, FeedRequestDto requestDto, User user) {
+    public void updateFeed(Long id, FeedRequestDto requestDto, User user) {
         Feed feed = findFeed(id);
-        if (feed.getUser().equals(user)) {
-            throw new IllegalArgumentException("feed 작성자만 수정할 수 있습니다.");
+        System.out.println(feed.getUser().getId());
+        System.out.println(user.getId());
+        if (!feed.getUser().equals(user)) {
+            throw new IllegalArgumentException("피드 작성자만 수정할 수 있습니다.");
         }
-        feed.updateTitle(requestDto.getTitle());
-        feed.updateContent(requestDto.getContent());
-        return FeedResponseDto.of(feed);
+        feed.update(requestDto.getTitle(), requestDto.getContent(), requestDto.getImageUrl());
     }
 
-    //피드 삭제
+    // 피드 삭제
     @Override
     public void deleteFeed(Long id, User user) {
-        String username = findFeed(id).getUser().getUsername();
         Feed feed = findFeed(id);
-        if (!(user.getRole().equals(UserRoleEnum.ADMIN) || username.equals(user.getUsername()))) {
-            throw new RejectedExecutionException();
-        } else feedRepository.delete(feed);
+        if (!feed.getUser().equals(user)) {
+            throw new IllegalArgumentException("피드 작성자만 삭제할 수 있습니다.");
+        }
+        feedRepository.delete(feed);
     }
     
     // 피드 좋아요
+    @Override
     public String likeFeed(Long id, User user) {
         Feed feed = findFeed(id);
         if (feed.getUser().equals(user)) {

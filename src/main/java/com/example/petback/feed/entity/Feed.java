@@ -18,7 +18,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Where(clause = "is_deleted = false")
-@SQLDelete(sql = "UPDATE feed SET is_deleted = true WHERE id = ?")
+@SQLDelete(sql = "UPDATE feeds SET is_deleted = true WHERE id = ?")
 public class Feed {
 
     @Id
@@ -49,15 +49,10 @@ public class Feed {
     @OneToMany(mappedBy = "feed", orphanRemoval = true)
     private List<FeedLike> feedLikes = new ArrayList<>();
 
-    public void updateTitle(String title) {
+    public void update(String title, String content, String imageUrl) {
         this.title = title;
-    }
-
-    public void updateContent(String content) {
         this.content = content;
-    }
-
-    public void updateImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
     }
+
 }

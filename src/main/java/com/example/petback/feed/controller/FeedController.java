@@ -47,20 +47,15 @@ public class FeedController {
     public ResponseEntity updateFeed(@AuthenticationPrincipal UserDetailsImpl userDetails,
                                                      @PathVariable Long id,
                                                      @RequestBody FeedRequestDto requestDto) {
-        FeedResponseDto responseDto = feedService.updateFeed(id, requestDto, userDetails.getUser());
-        return ResponseEntity.ok().body(responseDto);
+        feedService.updateFeed(id, requestDto, userDetails.getUser());
+        return ResponseEntity.ok().body(new ApiResponseDto("피드가 수정되었습니다.", HttpStatus.OK.value()));
     }
 
     //피드 삭제
     @DeleteMapping("/{id}")
-    public ResponseEntity<ApiResponseDto> deleteFeed(@AuthenticationPrincipal UserDetailsImpl userDetails,
-                                                     @PathVariable Long id) {
-        try {
-            feedService.deleteFeed(id, userDetails.getUser());
-            return ResponseEntity.ok().body(new ApiResponseDto("삭제되었습니다.", HttpStatus.OK.value()));
-        } catch (RejectedExecutionException c) {
-            return ResponseEntity.badRequest().body(new ApiResponseDto("작성자만 삭제할 수 있습니다.", HttpStatus.BAD_REQUEST.value()));
-        }
+    public ResponseEntity deleteFeed(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable Long id) {
+        feedService.deleteFeed(id, userDetails.getUser());
+        return ResponseEntity.ok().body(new ApiResponseDto("피드가 삭제되었습니다.", HttpStatus.OK.value()));
     }
 
     // 피드 좋아요
