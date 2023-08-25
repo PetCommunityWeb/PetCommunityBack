@@ -75,7 +75,7 @@ public class FeedServiceImpl implements FeedService {
     public String likeFeed(Long id, User user) {
         Feed feed = findFeed(id);
         if (feed.getUser().equals(user)) {
-            throw new IllegalArgumentException("본인은 좋아요를 누를 수 없습니다.");
+            throw new IllegalArgumentException("본인 피드에 좋아요 누를 수 없습니다.");
         }
         if (feedLikeRepository.existsByUserAndFeed(user, feed)) {
             FeedLike feedLike = feedLikeRepository.findByUserAndFeed(user, feed).get();
