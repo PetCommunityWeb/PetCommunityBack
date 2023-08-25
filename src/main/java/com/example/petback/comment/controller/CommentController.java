@@ -21,7 +21,7 @@ public class CommentController {
     private final CommentService  commentService;
 
     // 코멘트 생성
-    @PostMapping("/")
+    @PostMapping
     public CommentResponseDto createComment(@RequestBody CommentRequestDto commentRequestDto,
                                             @RequestParam Long feedId,
                                             @AuthenticationPrincipal UserDetailsImpl userDetails) {
