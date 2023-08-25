@@ -21,19 +21,13 @@ import java.util.concurrent.RejectedExecutionException;
 @Transactional
 public class CommentServiceImpl implements CommentService {
     private final CommentRepository commentRepository;
-    private final UserRepository userRepository;
     private final FeedService feedService;
-    private final FeedRepository feedRepository;
 
     // 코멘트 생성
     @Override
-    public CommentResponseDto createComment(CommentRequestDto requestDto, User user, Long id) {
-        Feed feed = feedRepository.findById(id).orElseThrow(()
-                -> new IllegalArgumentException("존재하지 않는 피드입니다."));
-
-        Comment comment = requestDto.toEntity();
-        comment.setUser(user);
-        comment.setFeed(feed);
+    public CommentResponseDto createComment(CommentRequestDto requestDto, Long id, User user) {
+        Feed feed = feedService.findFeed(id);
+        Comment comment = requestDto.toEntity(feed, user);
         commentRepository.save(comment);
         return CommentResponseDto.of(comment);
     }

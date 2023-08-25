@@ -72,26 +72,22 @@ public class FeedServiceImpl implements FeedService {
         } else feedRepository.delete(feed);
     }
 
-    public void likeFeed(Long id, User user) {
+    public String likeFeed(Long id, User user) {
         Feed feed = findFeed(id);
+        if (feed.getUser().equals(user)) {
+            throw new IllegalArgumentException("본인은 좋아요를 누를 수 없습니다.");
+        }
         if (feedLikeRepository.existsByUserAndFeed(user, feed)) {
-            throw new DuplicateRequestException("이미 좋아요 한 피드 입니다.");
+            FeedLike feedLike = feedLikeRepository.findByUserAndFeed(user, feed).get();
+            feedLikeRepository.delete(feedLike);
+            return "취소";
         }
         FeedLike feedLike = FeedLike.builder()
                 .user(user)
                 .feed(feed)
                 .build();
         feedLikeRepository.save(feedLike);
-    }
-
-    public void dislikeFeed(Long id, User user) {
-        Feed feed = findFeed(id);
-        Optional<FeedLike> feedLikeOptional = feedLikeRepository.findByUserAndFeed(user, feed);
-        if(feedLikeOptional.isPresent()) {
-            feedLikeRepository.delete(feedLikeOptional.get());
-        }else {
-            throw new IllegalArgumentException("해당 게시글에 취소할 수 있는 좋아요가 없습니다.");
-        }
+        return "성공";
     }
 
     public Feed findFeed(Long id) {
