@@ -1,9 +1,16 @@
 package com.example.petback.user.entity;
 
-// import com.example.petback.hospital.entity.Hospital;
+
+import com.example.petback.hospital.entity.Hospital;
+
+import com.example.petback.chat.entity.ChatMessage;
+import com.example.petback.notification.entity.Notification;
 import com.example.petback.user.enums.UserRoleEnum;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @NoArgsConstructor
@@ -11,6 +18,8 @@ import lombok.*;
 @Getter
 @Setter
 @Builder
+@Table(name = "users")
+@EqualsAndHashCode(of = "id")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,8 +37,15 @@ public class User {
     private String imageUrl;
 
     @Enumerated(value = EnumType.STRING)
-    private UserRoleEnum role;
+    @Builder.Default
+    private UserRoleEnum role= UserRoleEnum.USER;
 
-//    @OneToOne(mappedBy = "user")
-//    private Hospital hospital;
+    @Builder.Default
+    @OneToMany(mappedBy = "user")
+    private List<Hospital> hospital = new ArrayList<>();
+
+
+    @Builder.Default
+    @OneToMany(mappedBy = "user", orphanRemoval = true)
+    private List<ChatMessage> chatMessages = new ArrayList<>();
 }
