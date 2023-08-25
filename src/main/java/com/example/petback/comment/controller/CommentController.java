@@ -20,16 +20,17 @@ import java.util.concurrent.RejectedExecutionException;
 public class CommentController {
     private final CommentService  commentService;
 
-    // 코멘트 생성
-    @PostMapping("/")
-    public CommentResponseDto createComment(@RequestBody CommentRequestDto commentRequestDto,
-                                            @RequestParam Long feedId,
-                                            @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return commentService.createComment(commentRequestDto, userDetails.getUser(),feedId);
+    // 댓글 생성
+    @PostMapping("/{id}")
+    public ResponseEntity createComment(@RequestBody CommentRequestDto requestDto,
+                                        @PathVariable Long id,
+                                        @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        CommentResponseDto commentResponseDto = commentService.createComment(requestDto, id, userDetails.getUser());
+        return ResponseEntity.ok().body(commentResponseDto);
     }
 
 
-
+    // 댓글 수정
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponseDto> updateComment(@AuthenticationPrincipal UserDetailsImpl userDetails,
                                                         @PathVariable Long id,
