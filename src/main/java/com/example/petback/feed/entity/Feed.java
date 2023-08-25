@@ -47,6 +47,6 @@ public class Feed {
     private List<Comment> comments = new ArrayList<>();
 
     @Builder.Default
-    @OneToMany(mappedBy = "feed", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "feed", orphanRemoval = true)
     private List<FeedLike> feedLikes = new ArrayList<>();
 }

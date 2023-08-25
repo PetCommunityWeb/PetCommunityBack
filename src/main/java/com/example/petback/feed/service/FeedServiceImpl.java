@@ -56,7 +56,6 @@ public class FeedServiceImpl implements FeedService {
         if (!(user.getRole().equals(UserRoleEnum.ADMIN) || username.equals(user.getUsername()))) {
             throw new RejectedExecutionException();
         }
-        // @setter말고 따로 set메서드를 만드는 것이 좋은가?
         feed.setTitle(requestDto.getTitle());
         feed.setContent(requestDto.getContent());
         return FeedResponseDto.of(feed);
@@ -71,7 +70,8 @@ public class FeedServiceImpl implements FeedService {
             throw new RejectedExecutionException();
         } else feedRepository.delete(feed);
     }
-
+    
+    // 피드 좋아요
     public String likeFeed(Long id, User user) {
         Feed feed = findFeed(id);
         if (feed.getUser().equals(user)) {
