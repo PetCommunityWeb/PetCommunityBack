@@ -23,6 +23,9 @@ public class SignupRequestDto {
 
     private String imageUrl;
 
+    @Builder.Default
+    private UserRoleEnum role = UserRoleEnum.USER;
+
     @Email
     @NotBlank
     private String email;
