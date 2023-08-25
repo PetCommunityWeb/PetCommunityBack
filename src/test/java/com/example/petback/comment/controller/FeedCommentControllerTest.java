@@ -70,11 +70,9 @@ public class FeedCommentControllerTest {
         Feed feed = feedRepository.findByTitle("테스트피드제목").orElseThrow();
         CommentRequestDto commentRequestDto = CommentRequestDto.builder()
                 .content("테스트코멘트")
-                .feedId(1L)
-                .username("테스트맨")
                 .build();
 
-        mockMvc.perform(post("/api/comments/?feedId=" + feed.getId())
+        mockMvc.perform(post("/api/comments/" + feed.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .header(JwtUtil.AUTHORIZATION_HEADER, accessToken)
                         .content(objectMapper.writeValueAsString(commentRequestDto))
@@ -122,9 +120,11 @@ public class FeedCommentControllerTest {
     }
 
     private Feed createTestFeed() {
-       return feedRepository.save(Feed.builder()
+        return feedRepository.save(Feed.builder()
+
                 .title("테스트피드제목")
                 .content("테스트피드내용")
+                .imageUrl("imagUrl")
                 .user(user)
                 .build());
 

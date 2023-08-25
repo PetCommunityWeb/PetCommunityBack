@@ -12,7 +12,7 @@ public interface CommentService {
     CommentResponseDto createComment(CommentRequestDto requestDto, Long id, User user);
 
     // 코멘트 수정
-    CommentResponseDto updateComment(Long id, CommentRequestDto requestDto, User user);
+    void updateComment(Long id, CommentRequestDto requestDto, User user);
 
     // 코멘트 삭제
     void deleteComment(Long id, User user);
