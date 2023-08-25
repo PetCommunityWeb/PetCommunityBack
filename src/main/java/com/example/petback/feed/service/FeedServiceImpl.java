@@ -52,8 +52,6 @@ public class FeedServiceImpl implements FeedService {
     @Override
     public void updateFeed(Long id, FeedRequestDto requestDto, User user) {
         Feed feed = findFeed(id);
-        System.out.println(feed.getUser().getId());
-        System.out.println(user.getId());
         if (!feed.getUser().equals(user)) {
             throw new IllegalArgumentException("피드 작성자만 수정할 수 있습니다.");
         }
