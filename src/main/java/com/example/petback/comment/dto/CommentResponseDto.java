@@ -9,11 +9,13 @@ import lombok.Getter;
 public class CommentResponseDto {
 
     private Long id;
+    private String username;
     private String content;
 
     public static CommentResponseDto of(Comment comment) {
         return CommentResponseDto.builder()
                 .id(comment.getId())
+                .username(comment.getUser().getUsername())
                 .content(comment.getContent())
                 .build();
 
