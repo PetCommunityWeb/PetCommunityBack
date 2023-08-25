@@ -71,18 +71,7 @@ public class FeedController {
     // 피드 좋아요
     @PostMapping("/{id}/likes")
     public ResponseEntity likeFeed(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable Long id){
-        feedService.likeFeed(id, userDetails.getUser());
-        return ResponseEntity.ok().body(new ApiResponseDto("게시글 좋아요 성공", HttpStatus.OK.value()));
-    }
-
-    @DeleteMapping("/{id}/likes")
-    public ResponseEntity<ApiResponseDto> dislikeFeed(@AuthenticationPrincipal UserDetailsImpl userDetails,
-                                                      @PathVariable Long id) {
-        try {
-            feedService.dislikeFeed(id, userDetails.getUser());
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(new ApiResponseDto(e.getMessage(), HttpStatus.BAD_REQUEST.value()));
-        }
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body(new ApiResponseDto("게시글 좋아요 취소 성공", HttpStatus.ACCEPTED.value()));
+        String result = feedService.likeFeed(id, userDetails.getUser());
+        return ResponseEntity.ok().body(new ApiResponseDto(result, HttpStatus.OK.value()));
     }
 }
