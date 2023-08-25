@@ -15,6 +15,6 @@ public interface CommentService {
     CommentResponseDto updateComment(Long id, CommentRequestDto requestDto, User user);
 
     // 코멘트 삭제
-    void deleteComment(Long commentId, Long feedId, User user);
+    void deleteComment(Long id, User user);
 
 }

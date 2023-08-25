@@ -1,6 +1,6 @@
-package com.example.petback.comment.entity;
+package com.example.petback.tip.entity;
 
-import com.example.petback.feed.entity.Feed;
+
 import com.example.petback.user.entity.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -9,32 +9,29 @@ import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 @Entity
-@Table(name = "comments")
 @Getter
 @Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Where(clause = "is_deleted = false") // softdelete
-@SQLDelete(sql = "UPDATE comment SET is_deleted = true WHERE id = ?")
-public class Comment {
+@Where(clause = "is_deleted = false")
+@SQLDelete(sql  = "UPDATE tip SET is_deleted = true WHERE id = ?")
+public class Tip {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NotNull
-    private String content;
-    private String username;
+    private String title;
 
-    @ManyToOne
-    @JoinColumn
-    private Feed feed;
+    @NotNull
+    private String content;
+
+    @Builder.Default
+    private boolean isDeleted = Boolean.FALSE;
 
     @ManyToOne
     @JoinColumn
     private User user;
-
-    @Builder.Default
-    private boolean isDeleted = Boolean.FALSE;
 }

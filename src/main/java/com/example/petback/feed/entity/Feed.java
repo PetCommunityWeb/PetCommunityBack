@@ -49,5 +49,4 @@ public class Feed {
     @Builder.Default
     @OneToMany(mappedBy = "feed", cascade = CascadeType.REMOVE)
     private List<FeedLike> feedLikes = new ArrayList<>();
-
 }

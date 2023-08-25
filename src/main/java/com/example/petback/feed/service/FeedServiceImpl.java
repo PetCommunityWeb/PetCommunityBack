@@ -35,21 +35,21 @@ public class FeedServiceImpl implements FeedService {
 
     //피드 전체 조회
     @Transactional(readOnly = true)
-//    @Override
+    @Override
     public List<FeedResponseDto> selectFeeds() {
         return feedRepository.findAll().stream().map(FeedResponseDto::of).toList();
     }
 
     //피드 상세 조회
     @Transactional(readOnly = true)
-//    @Override
+    @Override
     public FeedResponseDto selectFeed(Long id) {
         Feed feed = findFeed(id);
         return FeedResponseDto.of(feed);
     }
 
     //피드 수정
-//    @Override
+    @Override
     public FeedResponseDto updateFeed(Long id, FeedRequestDto requestDto, User user) {
         String username = findFeed(id).getUser().getUsername();
         Feed feed = findFeed(id);
@@ -63,7 +63,7 @@ public class FeedServiceImpl implements FeedService {
     }
 
     //피드 삭제
-//    @Override
+    @Override
     public void deleteFeed(Long id, User user) {
         String username = findFeed(id).getUser().getUsername();
         Feed feed = findFeed(id);

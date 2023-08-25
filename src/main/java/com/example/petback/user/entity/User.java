@@ -1,5 +1,6 @@
 package com.example.petback.user.entity;
 
+
 import com.example.petback.hospital.entity.Hospital;
 
 import com.example.petback.chat.entity.ChatMessage;
@@ -31,6 +32,8 @@ public class User {
     private String password;
     private String email;
     private String nickname;
+
+    @Column
     private String imageUrl;
 
     @Enumerated(value = EnumType.STRING)
@@ -40,6 +43,7 @@ public class User {
     @Builder.Default
     @OneToMany(mappedBy = "user")
     private List<Hospital> hospital = new ArrayList<>();
+
 
     @Builder.Default
     @OneToMany(mappedBy = "user", orphanRemoval = true)
