@@ -6,12 +6,14 @@ import lombok.Getter;
 
 @Getter
 public class ProfileResponseDto {
+    private Long id;
     private String nickname;
     private String imageUrl;
     private String email;
     private UserRoleEnum role;
 
     public ProfileResponseDto(User user) {
+        this.id = user.getId();
         this.nickname = user.getNickname();
         this.imageUrl = user.getImageUrl();
         this.email = user.getEmail();

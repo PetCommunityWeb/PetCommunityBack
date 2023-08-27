@@ -14,18 +14,21 @@ import java.util.stream.Collectors;
 @Builder
 @Getter
 public class HospitalResponseDto {
+    private Long id;
     private String name;
     private String introduction;
     private String imageUrl;
     private double latitude;
     private double longitude;
-    private Address address;
+    private String address;
     private String phoneNumber;
+    private String ownerEmail;
     private List<SpeciesEnum> speciesEnums;
     private List<SubjectEnum> subjectEnums;
 
     public static HospitalResponseDto of(Hospital hospital){
         return HospitalResponseDto.builder()
+                .id(hospital.getId())
                 .name(hospital.getName())
                 .introduction(hospital.getIntroduction())
                 .imageUrl(hospital.getImageUrl())
@@ -33,6 +36,7 @@ public class HospitalResponseDto {
                 .longitude(hospital.getLongitude())
                 .address(hospital.getAddress())
                 .phoneNumber(hospital.getPhoneNumber())
+                .ownerEmail(hospital.getUser().getEmail())
                 .speciesEnums(
                         hospital.getHospitalSpecies().stream()
                                 .map(hospitalSpecies -> hospitalSpecies.getSpecies().getName())

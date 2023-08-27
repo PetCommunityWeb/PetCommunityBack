@@ -21,7 +21,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Where(clause = "is_deleted = false") // !!!!
-@SQLDelete(sql = "UPDATE feed SET is_deleted = true WHERE id = ?")
+@SQLDelete(sql = "UPDATE feeds SET is_deleted = true WHERE id = ?")
 public class Feed {
 
     @Id

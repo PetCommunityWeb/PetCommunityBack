@@ -4,6 +4,7 @@ import com.example.petback.common.security.UserDetailsImpl;
 import com.example.petback.hospital.dto.HospitalRequestDto;
 import com.example.petback.hospital.dto.HospitalResponseDto;
 import com.example.petback.hospital.service.HospitalService;
+import com.example.petback.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -21,6 +22,12 @@ public class HospitalController {
     public ResponseEntity createHospital(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody HospitalRequestDto requestDto){
         HospitalResponseDto responseDto = hospitalService.createHospital(userDetails.getUser(), requestDto);
         return ResponseEntity.ok().body(responseDto);
+    }
+
+    @GetMapping("/my-hospitals")
+    public ResponseEntity selectMyHospitals(@AuthenticationPrincipal UserDetailsImpl userDetails){
+        List<HospitalResponseDto> responseDtos = hospitalService.selectMyHospitals(userDetails.getUser());
+        return ResponseEntity.ok().body(responseDtos);
     }
 
     @GetMapping
