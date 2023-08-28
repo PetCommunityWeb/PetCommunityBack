@@ -3,6 +3,7 @@ package com.example.petback.reservation.entity;
 import com.example.petback.hospital.entity.Hospital;
 import com.example.petback.reservation.ReservationStatusEnum;
 import com.example.petback.reservationslot.entity.ReservationSlot;
+import com.example.petback.review.entity.Review;
 import com.example.petback.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -30,7 +31,8 @@ public class Reservation {
     private Hospital hospital;
     @ManyToOne(fetch = FetchType.LAZY)
     private ReservationSlot reservationSlot;
-
+    @OneToOne(mappedBy = "reservation")
+    private Review review;
     public void cancle() {
         this.reservationStatus = ReservationStatusEnum.예약취소;
         this.reservationSlot.setReserved(false);

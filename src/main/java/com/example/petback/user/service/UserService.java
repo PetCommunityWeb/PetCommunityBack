@@ -19,6 +19,8 @@ public interface UserService {
 
     // 회원 정보 수정
     void updateProfile(ProfileRequestDto requestDto, User user);
+  
+    ProfileResponseDto selectMyProfile(User user);
 
     // 회원 탈퇴
     void deleteProfile(User user, Long id);

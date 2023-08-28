@@ -18,6 +18,7 @@ public class ReviewResponseDto {
     private String imageUrl;
 
     public static ReviewResponseDto of(Review review) {
+        if (review == null) return null;
         return ReviewResponseDto.builder()
                 .id((review.getId()))
                 .title(review.getTitle())

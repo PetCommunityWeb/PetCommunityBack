@@ -14,4 +14,6 @@ public interface HospitalService {
     HospitalResponseDto updateHospital(User user, Long id, HospitalRequestDto requestDto);
     Hospital findHospital(Long id);
     void deleteHospital(User user, Long id);
+
+    List<HospitalResponseDto> selectMyHospitals(User user);
 }

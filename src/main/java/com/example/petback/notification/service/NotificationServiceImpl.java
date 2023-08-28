@@ -47,7 +47,7 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Transactional
-    @Scheduled(fixedRate = 60000)
+    @Scheduled(fixedRate = 60000 * 10)
     public void checkReservation() {
         log.info("스케쥴러 실행");
         LocalDateTime later = LocalDateTime.now().plusMinutes(6);

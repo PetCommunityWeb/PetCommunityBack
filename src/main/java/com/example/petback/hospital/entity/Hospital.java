@@ -20,7 +20,7 @@ import java.util.Set;
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
 @Where(clause = "is_deleted = false")
-@SQLDelete(sql = "UPDATE hospital SET is_deleted = true WHERE id = ?")
+@SQLDelete(sql = "UPDATE hospitals SET is_deleted = true WHERE id = ?")
 public class Hospital {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,8 +31,7 @@ public class Hospital {
     private String imageUrl;
     private double latitude;
     private double longitude;
-    @Embedded
-    private Address address;
+    private String address;
     private String phoneNumber;
     @Builder.Default
     private boolean isDeleted = Boolean.FALSE;
@@ -85,7 +84,7 @@ public class Hospital {
         return this;
     }
 
-    public Hospital updateAddress(Address address) {
+    public Hospital updateAddress(String address) {
         this.address = address;
         return this;
     }

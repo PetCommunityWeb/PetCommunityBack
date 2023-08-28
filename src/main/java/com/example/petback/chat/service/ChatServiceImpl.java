@@ -35,7 +35,12 @@ public class ChatServiceImpl implements ChatService{
 
     @Override
     public RoomDto selectRoomById(String roomId) {
-        return chatRooms.get(roomId);
+        ChatRoom room = chatRoomRepository.findByUuid(roomId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 채팅방이 존재하지 않습니다."));
+        return RoomDto.builder()
+                .roomId(room.getUuid())
+                .name(room.getRoomName())
+                .build();
     }
 
     @Override

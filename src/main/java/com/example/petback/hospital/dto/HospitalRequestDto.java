@@ -23,7 +23,7 @@ public class HospitalRequestDto {
     private String imageUrl;
     private double latitude;
     private double longitude;
-    private Address address;
+    private String address;
     private String phoneNumber;
     private List<SpeciesEnum> speciesEnums;
     private List<SubjectEnum> subjectEnums;

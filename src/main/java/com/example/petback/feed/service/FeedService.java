@@ -19,15 +19,13 @@ public interface FeedService {
     FeedResponseDto selectFeed(Long id);
 
     //수정
-    FeedResponseDto updateFeed(Long id, FeedRequestDto requestDto, User user);
+    void updateFeed(Long id, FeedRequestDto requestDto, User user);
 
     //삭제
     void deleteFeed(Long id, User user);
 
     Feed findFeed(Long id);
 
-    void likeFeed(Long id, User user);
+    String likeFeed(Long id, User user);
 
-
-    void dislikeFeed(Long id, User user);
 }

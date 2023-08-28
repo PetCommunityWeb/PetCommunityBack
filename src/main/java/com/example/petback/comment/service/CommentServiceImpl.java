@@ -21,50 +21,40 @@ import java.util.concurrent.RejectedExecutionException;
 @Transactional
 public class CommentServiceImpl implements CommentService {
     private final CommentRepository commentRepository;
-    private final UserRepository userRepository;
     private final FeedService feedService;
-    private final FeedRepository feedRepository;
 
-    // 코멘트 생성
+    // 댓글 생성
     @Override
-    public CommentResponseDto createComment(CommentRequestDto requestDto, User user, Long id) {
-        Feed feed = feedRepository.findById(id).orElseThrow(()
-                -> new IllegalArgumentException("존재하지 않는 피드입니다."));
-
-        Comment comment = requestDto.toEntity();
-        comment.setUser(user);
-        comment.setFeed(feed);
+    public CommentResponseDto createComment(CommentRequestDto requestDto, Long id, User user) {
+        Feed feed = feedService.findFeed(id);
+        Comment comment = requestDto.toEntity(feed, user);
         commentRepository.save(comment);
         return CommentResponseDto.of(comment);
     }
 
-    // 코멘트 수정
+    // 댓글 수정
     @Override
-    public CommentResponseDto updateComment(Long id, CommentRequestDto requestDto, User user) {
-        String username = findComment(id).getUser().getUsername();
+    public void updateComment(Long id, CommentRequestDto requestDto, User user) {
         Comment comment = findComment(id);
-        if (!(user.getRole().equals(UserRoleEnum.ADMIN) || username.equals(user.getUsername()))) {
-            throw new RejectedExecutionException();
+        if (!comment.getUser().equals(user)) {
+            throw new IllegalArgumentException("댓글 작성자만 수정할 수 있습니다.");
         }
-        comment.setContent(requestDto.getContent());
-        return CommentResponseDto.of(comment);
-
+        comment.updateContent(requestDto.getContent());
     }
 
-    //코멘트 삭제
+    // 댓글 삭제
     @Override
     public void deleteComment(Long id, User user) {
-        Comment comment = commentRepository.findById(id).orElseThrow();
-
-        if (!user.getRole().equals(UserRoleEnum.ADMIN) && !comment.getUser().equals(user)) {
-            throw new RejectedExecutionException();
+        Comment comment = findComment(id);
+        if (!comment.getUser().equals(user)) {
+            throw new IllegalArgumentException("댓글 작성자만 삭제할 수 있습니다.");
         }
         commentRepository.delete(comment);
     }
 
     private Comment findComment(Long id) {
         return commentRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("코멘트가 존재하지 않습니다."));
+                .orElseThrow(() -> new IllegalArgumentException("댓글이 존재하지 않습니다."));
 
     }
 

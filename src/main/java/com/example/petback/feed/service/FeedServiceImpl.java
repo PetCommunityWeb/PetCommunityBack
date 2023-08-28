@@ -23,31 +23,24 @@ import java.util.concurrent.RejectedExecutionException;
 @Transactional
 public class FeedServiceImpl implements FeedService {
     private final FeedRepository feedRepository;
-    private final UserRepository userRepository;
     private final FeedLikeRepository feedLikeRepository;
 
-    //피드 생성
+    // 피드 생성
     @Override
     public FeedResponseDto createFeed(FeedRequestDto requestDto, User user) {
-        Feed feed = requestDto.toEntity();
-        feed.setUser(user);
+        Feed feed = requestDto.toEntity(user);
         feedRepository.save(feed);
-//        return FeedResponseDto.of(feed);
-        return FeedResponseDto.builder()
-                .id(feed.getId())
-                .title(feed.getTitle())
-                .content(feed.getContent())
-                .build();
+        return FeedResponseDto.of(feed);
     }
 
-    //피드 전체 조회
+    // 피드 전체 조회
     @Transactional(readOnly = true)
     @Override
     public List<FeedResponseDto> selectFeeds() {
         return feedRepository.findAll().stream().map(FeedResponseDto::of).toList();
     }
 
-    //피드 상세 조회
+    // 피드 상세 조회
     @Transactional(readOnly = true)
     @Override
     public FeedResponseDto selectFeed(Long id) {
@@ -55,48 +48,44 @@ public class FeedServiceImpl implements FeedService {
         return FeedResponseDto.of(feed);
     }
 
-    //피드 수정
+    // 피드 수정
     @Override
-    public FeedResponseDto updateFeed(Long id, FeedRequestDto requestDto, User user) {
-        String username = findFeed(id).getUser().getUsername();
+    public void updateFeed(Long id, FeedRequestDto requestDto, User user) {
         Feed feed = findFeed(id);
-        if (!(user.getRole().equals(UserRoleEnum.ADMIN) || username.equals(user.getUsername()))) {
-            throw new RejectedExecutionException();
+        if (!feed.getUser().equals(user)) {
+            throw new IllegalArgumentException("피드 작성자만 수정할 수 있습니다.");
         }
-        // @setter말고 따로 set메서드를 만드는 것이 좋은가?
-        feed.setTitle(requestDto.getTitle());
-        feed.setContent(requestDto.getContent());
-        return FeedResponseDto.of(feed);
+        feed.update(requestDto.getTitle(), requestDto.getContent(), requestDto.getImageUrl());
     }
 
-    //피드 삭제
+    // 피드 삭제
     @Override
     public void deleteFeed(Long id, User user) {
-        String username = findFeed(id).getUser().getUsername();
         Feed feed = findFeed(id);
-        if (!(user.getRole().equals(UserRoleEnum.ADMIN) || username.equals(user.getUsername()))) {
-            throw new RejectedExecutionException();
-        } else feedRepository.delete(feed);
+        if (!feed.getUser().equals(user)) {
+            throw new IllegalArgumentException("피드 작성자만 삭제할 수 있습니다.");
+        }
+        feedRepository.delete(feed);
     }
-
-    public void likeFeed(Long id, User user) {
+    
+    // 피드 좋아요
+    @Override
+    public String likeFeed(Long id, User user) {
         Feed feed = findFeed(id);
+        if (feed.getUser().equals(user)) {
+            throw new IllegalArgumentException("본인 피드에 좋아요 누를 수 없습니다.");
+        }
         if (feedLikeRepository.existsByUserAndFeed(user, feed)) {
-            throw new DuplicateRequestException("이미 좋아요 한 피드 입니다.");
-        } else {
-            FeedLike feedLike = new FeedLike(user, feed);
-            feedLikeRepository.save(feedLike);
+            FeedLike feedLike = feedLikeRepository.findByUserAndFeed(user, feed).get();
+            feedLikeRepository.delete(feedLike);
+            return "취소";
         }
-    }
-
-    public void dislikeFeed(Long id, User user) {
-        Feed feed = findFeed(id);
-        Optional<FeedLike> feedLikeOptional = feedLikeRepository.findByUserAndFeed(user, feed);
-        if(feedLikeOptional.isPresent()) {
-            feedLikeRepository.delete(feedLikeOptional.get());
-        }else {
-            throw new IllegalArgumentException("해당 게시글에 취소할 수 있는 좋아요가 없습니다.");
-        }
+        FeedLike feedLike = FeedLike.builder()
+                .user(user)
+                .feed(feed)
+                .build();
+        feedLikeRepository.save(feedLike);
+        return "성공";
     }
 
     public Feed findFeed(Long id) {

@@ -4,9 +4,7 @@ package com.example.petback.feed.entity;
 import com.example.petback.comment.entity.Comment;
 import com.example.petback.user.entity.User;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import lombok.*;
-import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
@@ -16,23 +14,25 @@ import java.util.List;
 @Entity
 @Table(name = "feeds")
 @Getter
-@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Where(clause = "is_deleted = false") // !!!!
-@SQLDelete(sql = "UPDATE feed SET is_deleted = true WHERE id = ?")
+@Where(clause = "is_deleted = false")
+@SQLDelete(sql = "UPDATE feeds SET is_deleted = true WHERE id = ?")
 public class Feed {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
+    @Column(nullable = false)
     private String title;
 
-    @NotNull
+    @Column(nullable = false)
     private String content;
+
+    @Column(nullable = false)
+    private String imageUrl;
 
     @Builder.Default
     private boolean isDeleted = Boolean.FALSE;
@@ -46,11 +46,13 @@ public class Feed {
     private List<Comment> comments = new ArrayList<>();
 
     @Builder.Default
-    @OneToMany(mappedBy = "feed", orphanRemoval = true, cascade = CascadeType.REMOVE)
-    private List<FeedLike> feedLikes = new ArrayList<>();  //좋아요 수?
+    @OneToMany(mappedBy = "feed", orphanRemoval = true)
+    private List<FeedLike> feedLikes = new ArrayList<>();
 
+    public void update(String title, String content, String imageUrl) {
+        this.title = title;
+        this.content = content;
+        this.imageUrl = imageUrl;
+    }
 
-    //    @OneToMany
-//    @JoinColumn
-//    private List<Comment> comments;
 }

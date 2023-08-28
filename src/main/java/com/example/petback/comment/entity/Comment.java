@@ -11,12 +11,11 @@ import org.hibernate.annotations.Where;
 @Entity
 @Table(name = "comments")
 @Getter
-@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Where(clause = "is_deleted = false") // softdelete
-@SQLDelete(sql = "UPDATE comment SET is_deleted = true WHERE id = ?")
+@SQLDelete(sql = "UPDATE comments SET is_deleted = true WHERE id = ?")
 public class Comment {
 
     @Id
@@ -37,4 +36,8 @@ public class Comment {
 
     @Builder.Default
     private boolean isDeleted = Boolean.FALSE;
+
+    public void updateContent(String content) {
+        this.content = content;
+    }
 }

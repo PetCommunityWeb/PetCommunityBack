@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -48,10 +49,9 @@ public class ReservationSlotServiceImpl implements ReservationSlotService{
 
     // 예약 슬롯 조회
     @Override
-
-    public List<SelectReservationSlotResponseDto> selectSlots(SelectReservationSlotRequestDto requestDto) {
+    public List<SelectReservationSlotResponseDto> selectSlots(Long hospitalId, LocalDate date) {
         return reservationSlotRepository
-                .findAllByHospital_IdAndDate(requestDto.getHospitalId(), requestDto.getDate())
+                .findAllByHospital_IdAndDate(hospitalId, date)
                 .stream().map(SelectReservationSlotResponseDto::of).toList();
     }
 }
