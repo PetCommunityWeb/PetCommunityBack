@@ -2,6 +2,7 @@ package com.example.petback.reservation.dto;
 
 import com.example.petback.reservation.ReservationStatusEnum;
 import com.example.petback.reservation.entity.Reservation;
+import com.example.petback.review.dto.ReviewResponseDto;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -18,9 +19,11 @@ public class ReservationResponseDto {
     private ReservationStatusEnum status;
     private LocalDate date;
     private LocalTime startTime;
+    private ReviewResponseDto review;
 
     public static ReservationResponseDto of(Reservation reservation){
         return ReservationResponseDto.builder()
+                .review(ReviewResponseDto.of(reservation.getReview()))
                 .reservationNum(reservation.getReservationNum())
                 .username(reservation.getUser().getUsername())
                 .hospitalName(reservation.getHospital().getName())
