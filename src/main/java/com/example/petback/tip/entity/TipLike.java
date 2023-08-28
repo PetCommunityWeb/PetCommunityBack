@@ -2,14 +2,16 @@ package com.example.petback.tip.entity;
 
 import com.example.petback.user.entity.User;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 @Entity
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "tip_like")
 public class TipLike {
     @Id
@@ -20,7 +22,7 @@ public class TipLike {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY) // 지연 로딩
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL) // 지연 로딩
     @JoinColumn(name = "tip_id")
     private Tip tip;
 

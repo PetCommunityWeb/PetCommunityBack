@@ -11,12 +11,14 @@ public class TipResponseDto {
     private Long id;
     private String title;
     private String content;
+    private String imageUrl;
 
     public static TipResponseDto of(Tip tip) {
         return TipResponseDto.builder()
                 .id(tip.getId())
                 .title(tip.getTitle())
                 .content(tip.getContent())
+                .imageUrl(tip.getImageUrl())
                 .build();
 
     }

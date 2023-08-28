@@ -63,5 +63,11 @@ public class UserController {
         }
     }
 
+
     // 회원 탈퇴
+    @DeleteMapping("/profile/{id}")
+    public ResponseEntity deleteProfile(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable Long id) {
+        userService.deleteProfile(userDetails.getUser(), id);
+        return ResponseEntity.ok().body("삭제가 완료되었습니다.");
+    }
 }

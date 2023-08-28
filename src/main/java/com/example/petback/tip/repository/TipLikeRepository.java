@@ -8,4 +8,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface TipLikeRepository extends JpaRepository<TipLike, Long> {
 
     TipLike findByUserAndTip(User user, Tip tip);
+
 }

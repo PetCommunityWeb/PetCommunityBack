@@ -4,6 +4,8 @@ package com.example.petback.user.entity;
 import com.example.petback.user.enums.UserRoleEnum;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 @Entity
 @NoArgsConstructor
@@ -11,6 +13,9 @@ import lombok.*;
 @Getter
 @Setter
 @Builder
+@Table(name = "users")
+@Where(clause = "is_deleted = false")
+@SQLDelete(sql  = "UPDATE users SET is_deleted = true WHERE id = ?")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,6 +28,9 @@ public class User {
     private String password;
     private String email;
     private String nickname;
+
+    @Builder.Default
+    private boolean isDeleted = Boolean.FALSE;
 
     @Column
     private String imageUrl;
