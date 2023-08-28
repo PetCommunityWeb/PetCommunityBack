@@ -20,37 +20,30 @@ import java.util.concurrent.RejectedExecutionException;
 public class CommentController {
     private final CommentService  commentService;
 
-    // 코멘트 생성
-    @PostMapping("/")
-    public CommentResponseDto createComment(@RequestBody CommentRequestDto commentRequestDto,
-                                            @RequestParam Long feedId,
-                                            @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return commentService.createComment(commentRequestDto, userDetails.getUser(),feedId);
+    // 댓글 생성
+    @PostMapping("/{id}")
+    public ResponseEntity createComment(@RequestBody CommentRequestDto requestDto,
+                                        @PathVariable Long id,
+                                        @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        CommentResponseDto commentResponseDto = commentService.createComment(requestDto, id, userDetails.getUser());
+        return ResponseEntity.ok().body(commentResponseDto);
     }
 
 
-
+    // 댓글 수정
     @PutMapping("/{id}")
-    public ResponseEntity<ApiResponseDto> updateComment(@AuthenticationPrincipal UserDetailsImpl userDetails,
+    public ResponseEntity updateComment(@AuthenticationPrincipal UserDetailsImpl userDetails,
                                                         @PathVariable Long id,
                                                         @RequestBody CommentRequestDto requestDto) {
-        try {
-            CommentResponseDto result = commentService.updateComment(id, requestDto, userDetails.getUser());
-            return ResponseEntity.ok().body(new ApiResponseDto("수정이 완료되었습니다", HttpStatus.OK.value()));
-        } catch (RejectedExecutionException e) {
-            return ResponseEntity.badRequest().body(new ApiResponseDto("작성자만 수정할 수 있습니다", HttpStatus.BAD_REQUEST.value()));
-
-        }
+        commentService.updateComment(id, requestDto, userDetails.getUser());
+        return ResponseEntity.ok().body(new ApiResponseDto("댓글이 수정 되었습니다.", HttpStatus.OK.value()));
     }
-
+    
+    // 댓글 삭제
     @DeleteMapping("/{id}")
-    public ResponseEntity<ApiResponseDto> deleteComment(@AuthenticationPrincipal UserDetailsImpl userDetails,
+    public ResponseEntity deleteComment(@AuthenticationPrincipal UserDetailsImpl userDetails,
                                                         @PathVariable Long id) {
-        try{
         commentService.deleteComment(id, userDetails.getUser());
-            return ResponseEntity.ok().body(new ApiResponseDto("삭제 되었습니다." , HttpStatus.OK.value()));
-        } catch (RejectedExecutionException c) {
-            return ResponseEntity.badRequest().body(new ApiResponseDto("작성자만 삭제할 수 있습니다.", HttpStatus.BAD_REQUEST.value()));
-        }
+        return ResponseEntity.ok().body(new ApiResponseDto("댓글이 삭제 되었습니다." , HttpStatus.OK.value()));
     }
 }

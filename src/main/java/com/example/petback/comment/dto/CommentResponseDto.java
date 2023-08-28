@@ -15,7 +15,7 @@ public class CommentResponseDto {
     public static CommentResponseDto of(Comment comment) {
         return CommentResponseDto.builder()
                 .id(comment.getId())
-                .username(comment.getUsername())
+                .username(comment.getUser().getUsername())
                 .content(comment.getContent())
                 .build();
 

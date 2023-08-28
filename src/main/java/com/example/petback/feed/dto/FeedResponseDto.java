@@ -14,17 +14,22 @@ public class FeedResponseDto {
     private Long id;
     private String title;
     private String content;
+    private String imageUrl;
+    private String username;
     private List<CommentResponseDto> comments;
-//    private List<FeedLike> feedLike;
-    private Integer likeCount;
+    private int likeCount;
+    private int commentCount;
 
     public static FeedResponseDto of(Feed feed) {
         return FeedResponseDto.builder()
                 .id(feed.getId())
                 .title(feed.getTitle())
                 .content(feed.getContent())
-                .likeCount(feed.getFeedLikes().size())
+                .imageUrl(feed.getImageUrl())
+                .username(feed.getUser().getUsername())
                 .comments(feed.getComments().stream().map(CommentResponseDto::of).toList())
+                .likeCount(feed.getFeedLikes().size())
+                .commentCount(feed.getComments().size())
                 .build();
     }
 }

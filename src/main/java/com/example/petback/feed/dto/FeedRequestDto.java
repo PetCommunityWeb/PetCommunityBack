@@ -1,6 +1,7 @@
 package com.example.petback.feed.dto;
 
 import com.example.petback.feed.entity.Feed;
+import com.example.petback.user.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -12,16 +13,16 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class FeedRequestDto {
 
-    private Long id;
     private String title;
     private String content;
+    private String imageUrl;
 
-    // 이건 어디에쓸까요?
-    public Feed toEntity() {
+    public Feed toEntity(User user) {
         return Feed.builder()
-                .id(id)
                 .title(title)
                 .content(content)
+                .imageUrl(imageUrl)
+                .user(user)
                 .build();
     }
 }

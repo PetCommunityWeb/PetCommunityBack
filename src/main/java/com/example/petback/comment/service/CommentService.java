@@ -9,10 +9,10 @@ import java.util.List;
 public interface CommentService {
 
     // 코멘트 작성
-    CommentResponseDto createComment(CommentRequestDto requestDto, User user, Long id);
+    CommentResponseDto createComment(CommentRequestDto requestDto, Long id, User user);
 
     // 코멘트 수정
-    CommentResponseDto updateComment(Long id, CommentRequestDto requestDto, User user);
+    void updateComment(Long id, CommentRequestDto requestDto, User user);
 
     // 코멘트 삭제
     void deleteComment(Long id, User user);

@@ -11,7 +11,6 @@ import org.hibernate.annotations.Where;
 @Entity
 @Table(name = "comments")
 @Getter
-@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -37,4 +36,8 @@ public class Comment {
 
     @Builder.Default
     private boolean isDeleted = Boolean.FALSE;
+
+    public void updateContent(String content) {
+        this.content = content;
+    }
 }
