@@ -62,11 +62,12 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-aop'
 
     // for test
-    testImplementation 'junit:junit:4.13.1'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
     testImplementation 'com.h2database:h2'
 
+    // webSocket
+    implementation 'org.springframework.boot:spring-boot-starter-websocket'
 }
 
 tasks.named('test') {
