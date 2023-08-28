@@ -59,14 +59,10 @@ public class UserController {
 
 
     // 회원정보 수정
-    @PutMapping("/profile/{id}")
+    @PutMapping("/profile")
     public ResponseEntity<ApiResponseDto> updateProfile(@RequestBody ProfileRequestDto profileRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        try {
             userService.updateProfile(profileRequestDto, userDetails.getUser());
             return ResponseEntity.ok().body(new ApiResponseDto("프로필 수정 성공", HttpStatus.OK.value()));
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(new ApiResponseDto("본인의 계정만 수정할 수 있습니다.", HttpStatus.BAD_REQUEST.value()));
-        }
     }
 
     // 회원 탈퇴
