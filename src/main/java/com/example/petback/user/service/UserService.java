@@ -50,14 +50,14 @@ public class UserService {
     }
 
     // 회원정보 전체 조회
-    @Transactional
+    @Transactional(readOnly = true)
     public List<ProfileResponseDto> selectProfiles() {
         return userRepository.findAll().stream().map(ProfileResponseDto::new).toList();
     }
 
 
     // 회원정보 상세 조회
-    @Transactional
+    @Transactional(readOnly = true)
     public ProfileResponseDto selectProfile(Long id) {
         User user = userRepository.findById(id).orElseThrow(
                 () -> new IllegalArgumentException("사용자를 찾을 수 없습니다.")
@@ -67,7 +67,6 @@ public class UserService {
     }
 
     // 회원정보 수정 (닉네임, 프로필 사진)
-    @Transactional
     public void updateProfile(ProfileRequestDto requestDto, User user) {
         User userProfile = userRepository.findById(user.getId()).orElseThrow(
                 () -> new IllegalArgumentException("해당 사용자가 존재하지 않습니다.")
@@ -75,6 +74,11 @@ public class UserService {
         userProfile.setNickname(requestDto.getNickname());
         userProfile.setImageUrl(requestDto.getImageUrl());
 
+    }
+
+    @Transactional(readOnly = true)
+    public ProfileResponseDto selectMyProfile(User user) {
+        return new ProfileResponseDto(user);
     }
 
     // 회원 탈퇴

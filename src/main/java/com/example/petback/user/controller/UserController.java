@@ -7,6 +7,7 @@ import com.example.petback.user.dto.LoginRequestDto;
 import com.example.petback.user.dto.ProfileRequestDto;
 import com.example.petback.user.dto.ProfileResponseDto;
 import com.example.petback.user.dto.SignupRequestDto;
+import com.example.petback.user.entity.User;
 import com.example.petback.user.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -35,6 +36,11 @@ public class UserController {
         return ResponseEntity.status(201).body(new ApiResponseDto("회원가입 성공", HttpStatus.CREATED.value()));
     }
 
+    @GetMapping("/my-profile")
+    public ResponseEntity selectMyProfile(@AuthenticationPrincipal UserDetailsImpl userDetails){
+        ProfileResponseDto responseDto = userService.selectMyProfile(userDetails.getUser());
+        return ResponseEntity.ok().body(responseDto);
+    }
 
     // 회원정보 전체 조회
     @GetMapping("/profile")
@@ -53,14 +59,10 @@ public class UserController {
 
 
     // 회원정보 수정
-    @PutMapping("/profile/{id}")
+    @PutMapping("/profile")
     public ResponseEntity<ApiResponseDto> updateProfile(@RequestBody ProfileRequestDto profileRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        try {
             userService.updateProfile(profileRequestDto, userDetails.getUser());
             return ResponseEntity.ok().body(new ApiResponseDto("프로필 수정 성공", HttpStatus.OK.value()));
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(new ApiResponseDto("본인의 계정만 수정할 수 있습니다.", HttpStatus.BAD_REQUEST.value()));
-        }
     }
 
     // 회원 탈퇴

@@ -5,6 +5,7 @@ import com.example.petback.reservationslot.dto.SelectReservationSlotRequestDto;
 import com.example.petback.reservationslot.dto.SelectReservationSlotResponseDto;
 import com.example.petback.user.entity.User;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface ReservationSlotService {
@@ -15,5 +16,5 @@ public interface ReservationSlotService {
     void deleteSlot(User user, Long slotId);
 
     // 예약 슬롯 조회
-    List<SelectReservationSlotResponseDto> selectSlots(SelectReservationSlotRequestDto requestDto);
+    List<SelectReservationSlotResponseDto> selectSlots(Long hospitalId, LocalDate date);
 }

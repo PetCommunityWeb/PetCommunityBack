@@ -42,6 +42,12 @@ public class HospitalServiceImpl implements HospitalService{
         return HospitalResponseDto.of(hospital);
     }
 
+    @Override
+    public List<HospitalResponseDto> selectMyHospitals(User user) {
+        List<Hospital> hospitals = hospitalRepository.findAllByUser(user);
+        return hospitals.stream().map(HospitalResponseDto::of).toList();
+    }
+
     @Transactional(readOnly = true)
     public List<HospitalResponseDto> selectAllHospitals() {
         List<Hospital> hospitals = hospitalRepository.findAll();
