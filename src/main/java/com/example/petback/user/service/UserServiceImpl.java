@@ -45,6 +45,11 @@ public class UserServiceImpl implements UserService {
         return userRepository.findAll().stream().map(ProfileResponseDto::new).toList();
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public ProfileResponseDto selectMyProfile(User user) {
+        return new ProfileResponseDto(user);
+    }
 
     // 회원정보 상세 조회
     @Override
