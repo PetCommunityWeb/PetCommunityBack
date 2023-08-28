@@ -15,6 +15,7 @@ import org.hibernate.annotations.Where;
 @NoArgsConstructor
 @AllArgsConstructor
 @Where(clause = "is_deleted = false")
+@Table(name = "tip")
 @SQLDelete(sql  = "UPDATE tip SET is_deleted = true WHERE id = ?")
 public class Tip {
 
@@ -27,6 +28,9 @@ public class Tip {
 
     @NotNull
     private String content;
+
+    @Column
+    private String imageUrl;
 
     @Builder.Default
     private boolean isDeleted = Boolean.FALSE;

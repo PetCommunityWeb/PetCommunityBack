@@ -78,7 +78,7 @@ public class TipContorller {
         } catch (DuplicateRequestException e) {
             return ResponseEntity.badRequest().body(new ApiResponseDto(e.getMessage(), HttpStatus.BAD_REQUEST.value()));
         }
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body(new ApiResponseDto("팁 좋아요 성공", HttpStatus.OK.value()));
+        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponseDto("팁 좋아요 성공", HttpStatus.OK.value()));
     }
 
     // 팁 좋아요 취소

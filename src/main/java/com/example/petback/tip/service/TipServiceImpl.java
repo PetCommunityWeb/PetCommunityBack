@@ -71,6 +71,7 @@ public class TipServiceImpl implements TipService {
 
         tip.setTitle(requestDto.getTitle());
         tip.setContent(requestDto.getContent());
+        tip.setImageUrl(requestDto.getImageUrl());
 
         return TipResponseDto.of(tip);
     }
@@ -83,6 +84,7 @@ public class TipServiceImpl implements TipService {
     }
 
     // 팁 좋아요
+    @Override
     public void likeTip(UserDetailsImpl userDetails, Long id) {
         User user = userDetails.getUser();
 
@@ -92,9 +94,6 @@ public class TipServiceImpl implements TipService {
 
         Tip tip = tipRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("팁 게시글을 찾을 수 없습니다."));
 
-        if (user.getId().equals(tip.getUser().getId())) {
-            throw new RejectedExecutionException("본인의 팁 게시글엔 좋아요를 할 수 없습니다.");
-        }
 
         TipLike tipLike = tipLikeRepository.findByUserAndTip(user, tip);
         if (tipLike != null) {
@@ -105,6 +104,7 @@ public class TipServiceImpl implements TipService {
 
 
     // 팁 좋아요 취소
+    @Override
     public void deleteLikeTip(UserDetailsImpl userDetails, Long id) {
         User user = userDetails.getUser();
 

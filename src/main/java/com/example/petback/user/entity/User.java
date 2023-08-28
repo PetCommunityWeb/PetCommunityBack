@@ -1,16 +1,11 @@
 package com.example.petback.user.entity;
 
-
-import com.example.petback.hospital.entity.Hospital;
-
-import com.example.petback.chat.entity.ChatMessage;
-import com.example.petback.notification.entity.Notification;
+// import com.example.petback.hospital.entity.Hospital;
 import com.example.petback.user.enums.UserRoleEnum;
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.util.ArrayList;
-import java.util.List;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 @Entity
 @NoArgsConstructor
@@ -19,7 +14,8 @@ import java.util.List;
 @Setter
 @Builder
 @Table(name = "users")
-@EqualsAndHashCode(of = "id")
+@Where(clause = "is_deleted = false")
+@SQLDelete(sql  = "UPDATE users SET is_deleted = true WHERE id = ?")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,19 +29,15 @@ public class User {
     private String email;
     private String nickname;
 
+    @Builder.Default
+    private boolean isDeleted = Boolean.FALSE;
+
     @Column
     private String imageUrl;
 
     @Enumerated(value = EnumType.STRING)
-    @Builder.Default
-    private UserRoleEnum role= UserRoleEnum.USER;
+    private UserRoleEnum role;
 
-    @Builder.Default
-    @OneToMany(mappedBy = "user")
-    private List<Hospital> hospital = new ArrayList<>();
-
-
-    @Builder.Default
-    @OneToMany(mappedBy = "user", orphanRemoval = true)
-    private List<ChatMessage> chatMessages = new ArrayList<>();
+//    @OneToOne(mappedBy = "user")
+//    private Hospital hospital;
 }
