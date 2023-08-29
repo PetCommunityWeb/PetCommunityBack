@@ -6,6 +6,7 @@ import com.example.petback.user.dto.SignupRequestDto;
 import com.example.petback.user.entity.User;
 
 import java.util.List;
+import java.util.Map;
 
 public interface UserService {
     // 회원가입
@@ -26,4 +27,6 @@ public interface UserService {
     void deleteProfile(User user, Long id);
 
     User findUser(Long id);
+
+    Map<String, String> refreshToken(String refreshToken);
 }

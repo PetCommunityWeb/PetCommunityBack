@@ -5,6 +5,7 @@ import com.example.petback.common.security.JwtAuthenticationFilter;
 import com.example.petback.common.security.JwtAuthorizationFilter;
 import com.example.petback.common.security.UserDetailsServiceImpl;
 import com.example.petback.user.service.RefreshTokenService;
+import com.example.petback.user.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
@@ -31,6 +32,7 @@ public class WebSecurityConfig {
     private final AuthenticationConfiguration authenticationConfiguration;
     private final ObjectMapper objectMapper;
     private final RefreshTokenService refreshTokenService;
+    private final UserService userService;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -44,7 +46,7 @@ public class WebSecurityConfig {
 
     @Bean
     public JwtAuthorizationFilter jwtAuthorizationFilter() {
-        return new JwtAuthorizationFilter(jwtUtil, userDetailsService, objectMapper);
+        return new JwtAuthorizationFilter(jwtUtil, userDetailsService, objectMapper, userService);
     }
 
     public JwtAuthenticationFilter jwtAuthenticationFilter() throws Exception {

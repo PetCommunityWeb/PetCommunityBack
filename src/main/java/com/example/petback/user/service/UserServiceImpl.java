@@ -1,17 +1,22 @@
 package com.example.petback.user.service;
 
+import com.example.petback.common.jwt.JwtUtil;
 import com.example.petback.user.dto.ProfileRequestDto;
 import com.example.petback.user.dto.ProfileResponseDto;
 import com.example.petback.user.dto.SignupRequestDto;
 import com.example.petback.user.entity.User;
 import com.example.petback.user.enums.UserRoleEnum;
+import com.example.petback.user.repository.RefreshTokenRepository;
 import com.example.petback.user.repository.UserRepository;
+import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -19,6 +24,8 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final RefreshTokenService refreshTokenService;
+    private final JwtUtil jwtUtil;
 
     // 회원 가입
     @Override
@@ -86,7 +93,25 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회원입니다."));
     }
 
+    @Override
+    public Map<String, String> refreshToken(String refreshToken) {
+        Claims claims = jwtUtil.getUserInfoFromToken(refreshToken);
+        Long userId = claims.get("userId", Long.class);
+        User user = userRepository.findById(userId).get();
+        Map<String, String> tokens = new HashMap<>();
+        if (!jwtUtil.validateToken(refreshToken)) {
+            refreshTokenService.deleteRefreshToken(refreshToken);
+            String newRefreshToken = jwtUtil.createRefreshToken();
+            refreshTokenService.saveRefreshToken(newRefreshToken, user.getId());
+            String newToken = jwtUtil.createToken(user.getUsername(), user.getRole(), user.getId());
 
-
-    //
+            tokens.put("accessToken", newToken);
+            tokens.put("refreshToken", newRefreshToken);
+            return tokens;
+        }
+        String newToken = jwtUtil.createToken(user.getUsername(), user.getRole(), user.getId());
+        tokens.put("accessToken", newToken);
+        tokens.put("refreshToken", refreshToken); // 기존 refreshToken 유효하므로 그대로 반환
+        return tokens;
+    }
 }

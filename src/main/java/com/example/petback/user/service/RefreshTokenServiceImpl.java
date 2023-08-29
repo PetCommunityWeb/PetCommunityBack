@@ -11,8 +11,16 @@ import org.springframework.transaction.annotation.Transactional;
 public class RefreshTokenServiceImpl implements RefreshTokenService{
     private final RefreshTokenRepository refreshTokenRepository;
 
+    @Override
     @Transactional
     public void saveRefreshToken(String refreshToken, Long userId) {
         refreshTokenRepository.save(new RefreshToken(refreshToken, userId));
+    }
+
+    @Override
+    @Transactional
+    public void deleteRefreshToken(String token) {
+        RefreshToken refreshToken = refreshTokenRepository.findByRefreshToken(token);
+        refreshTokenRepository.delete(refreshToken);
     }
 }

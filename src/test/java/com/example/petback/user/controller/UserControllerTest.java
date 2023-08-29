@@ -152,7 +152,7 @@ class UserControllerTest {
                 .role(UserRoleEnum.USER)
                 .build();
         userRepository.save(user);
-        accessToken = jwtUtil.createToken("test1", UserRoleEnum.USER);
+        accessToken = jwtUtil.createToken("test1", UserRoleEnum.USER, user.getId());
 
         User user2 = User.builder()
                 .username("test2")
@@ -162,7 +162,7 @@ class UserControllerTest {
                 .role(UserRoleEnum.USER)
                 .build();
         userRepository.save(user2);
-        accessToken = jwtUtil.createToken("test2", UserRoleEnum.USER);
+        accessToken = jwtUtil.createToken("test2", UserRoleEnum.USER, user.getId());
 
 
         // when
@@ -192,7 +192,7 @@ class UserControllerTest {
                 .role(UserRoleEnum.USER)
                 .build();
         userRepository.save(user);
-        accessToken = jwtUtil.createToken("test1", UserRoleEnum.USER);
+        accessToken = jwtUtil.createToken("test1", UserRoleEnum.USER, user.getId());
 
         // when
         Optional<User> user1 = userRepository.findById(user.getId());
@@ -231,7 +231,7 @@ class UserControllerTest {
                 .imageUrl("test1.jpg")
                 .build();
         userRepository.save(user);
-        accessToken = jwtUtil.createToken("test123", UserRoleEnum.USER);
+        accessToken = jwtUtil.createToken("test123", UserRoleEnum.USER, user.getId());
 
         return user.getId();
     }

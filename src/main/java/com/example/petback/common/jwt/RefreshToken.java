@@ -5,7 +5,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
 
 @Getter
-@RedisHash(value = "refreshToken", timeToLive = 300) // 300초
+@RedisHash(value = "refreshToken", timeToLive = 777600) // 9일, 유효기간보다 조금 더 길게
 public class RefreshToken {
     @Id
     private String refreshToken;

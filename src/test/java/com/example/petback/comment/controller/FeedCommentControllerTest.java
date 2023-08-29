@@ -60,7 +60,7 @@ public class FeedCommentControllerTest {
                 .imageUrl("test.jpg")
                 .build();
         userRepository.save(user);
-        accessToken = jwtUtil.createToken("testman", UserRoleEnum.USER);
+        accessToken = jwtUtil.createToken("testman", UserRoleEnum.USER, user.getId());
     }
 
     @Test

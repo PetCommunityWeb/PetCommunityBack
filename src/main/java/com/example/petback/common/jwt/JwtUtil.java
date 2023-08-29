@@ -28,7 +28,8 @@ public class JwtUtil {
     // Token 식별자
     public static final String BEARER_PREFIX = "Bearer ";
     // accessToken 만료시간
-    private final long TOKEN_TIME = 60 * 60 * 1000L * 24; // 하루
+//    private final long TOKEN_TIME = 60 * 60 * 1000L * 24; // 하루
+    private final long TOKEN_TIME = 20 * 1000L; // 20초
     // refreshToken 만료시간
     private final long REFRESH_TOKEN_TIME = 60 * 60 * 1000L * 24 * 7; // 일주일
 
@@ -44,13 +45,14 @@ public class JwtUtil {
     }
 
     // 토큰 생성
-    public String createToken(String username, UserRoleEnum role) {
+    public String createToken(String username, UserRoleEnum role, Long userId) {
         Date date = new Date();
 
         return BEARER_PREFIX +
                 Jwts.builder()
                         .setSubject(username) // 사용자 식별자값(ID)
                         .claim(AUTHORIZATION_KEY, role) // 사용자 권한
+                        .claim("userId", userId)
                         .setExpiration(new Date(date.getTime() + TOKEN_TIME)) // 만료 시간
                         .setIssuedAt(date) // 발급일
                         .signWith(key, signatureAlgorithm) // 암호화 알고리즘
@@ -67,7 +69,7 @@ public class JwtUtil {
                 .compact();
     }
 
-    // header 토큰을 가져오기 Keys.hmacShaKeyFor(bytes);
+    // header에서 accessToken 가져오기
     public String resolveToken(HttpServletRequest request) {
         String bearerToken= request.getHeader(AUTHORIZATION_HEADER);
         if(StringUtils.hasText(bearerToken) && bearerToken.startsWith(BEARER_PREFIX)){
@@ -76,11 +78,11 @@ public class JwtUtil {
         return null;
     }
 
-    // header 에서 JWT 가져오기
-    public String getJwtFromHeader(HttpServletRequest request) {
-        String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
-        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(BEARER_PREFIX)) {
-            return bearerToken.substring(7);
+    // header에서 refreshToken 가져오기
+    public String resolveRefreshToken(HttpServletRequest request) {
+        String token = request.getHeader(REFRESH_HEADER);
+        if(StringUtils.hasText(token)){
+            return token;
         }
         return null;
     }
