@@ -4,6 +4,7 @@ import com.example.petback.common.jwt.JwtUtil;
 import com.example.petback.common.security.JwtAuthenticationFilter;
 import com.example.petback.common.security.JwtAuthorizationFilter;
 import com.example.petback.common.security.UserDetailsServiceImpl;
+import com.example.petback.user.service.RefreshTokenService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
@@ -25,11 +26,12 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 @EnableMethodSecurity(securedEnabled = true)
 public class WebSecurityConfig {
-    // 테스트1
     private final JwtUtil jwtUtil;
     private final UserDetailsServiceImpl userDetailsService;
     private final AuthenticationConfiguration authenticationConfiguration;
     private final ObjectMapper objectMapper;
+    private final RefreshTokenService refreshTokenService;
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -46,7 +48,7 @@ public class WebSecurityConfig {
     }
 
     public JwtAuthenticationFilter jwtAuthenticationFilter() throws Exception {
-        JwtAuthenticationFilter filter = new JwtAuthenticationFilter(jwtUtil);
+        JwtAuthenticationFilter filter = new JwtAuthenticationFilter(jwtUtil, refreshTokenService);
         filter.setAuthenticationManager(authenticationManager(authenticationConfiguration));
         return filter;
     }
@@ -74,12 +76,6 @@ public class WebSecurityConfig {
 
         );
 
-//        http.formLogin((formLogin) ->
-//                formLogin
-//                        .loginPage("/api/users/login-page").permitAll()
-//                        .loginProcessingUrl("/api/users/login").permitAll()
-//                        .defaultSuccessUrl("/")//로그인 성공 시 이동될 경로
-//        );
         // 필터 관리
         http.addFilterBefore(jwtAuthorizationFilter(), JwtAuthenticationFilter.class);
         http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);

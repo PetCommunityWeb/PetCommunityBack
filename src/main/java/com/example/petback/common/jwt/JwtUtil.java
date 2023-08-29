@@ -21,12 +21,16 @@ import java.util.Date;
 public class JwtUtil {
     // Header KEY 값
     public static final String AUTHORIZATION_HEADER = "Authorization";
+    // RefreshToken KEY 값
+    public static final String REFRESH_HEADER = "RefreshToken";
     // 사용자 권한 값의 KEY
     public static final String AUTHORIZATION_KEY = "auth";
     // Token 식별자
     public static final String BEARER_PREFIX = "Bearer ";
-    // 토큰 만료시간
-    private final long TOKEN_TIME = 60 * 60 * 1000L * 24 * 7; // 일주일
+    // accessToken 만료시간
+    private final long TOKEN_TIME = 60 * 60 * 1000L * 24; // 하루
+    // refreshToken 만료시간
+    private final long REFRESH_TOKEN_TIME = 60 * 60 * 1000L * 24 * 7; // 일주일
 
     @Value("${jwt.secret.key}") // Base64 Encode 한 SecretKey
     private String secretKey;
@@ -52,7 +56,16 @@ public class JwtUtil {
                         .signWith(key, signatureAlgorithm) // 암호화 알고리즘
                         .compact();
     }
-
+    
+    // refreshToken 발급
+    public String createRefreshToken() {
+        Date date = new Date();
+        return Jwts.builder()
+                .setIssuedAt(date)
+                .setExpiration(new Date(date.getTime() + REFRESH_TOKEN_TIME))
+                .signWith(key, signatureAlgorithm)
+                .compact();
+    }
 
     // header 토큰을 가져오기 Keys.hmacShaKeyFor(bytes);
     public String resolveToken(HttpServletRequest request) {
