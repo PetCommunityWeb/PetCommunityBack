@@ -50,29 +50,19 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         log.info("로그인 성공");
         String username = ((UserDetailsImpl) authResult.getPrincipal()).getUsername();
         UserRoleEnum role = ((UserDetailsImpl) authResult.getPrincipal()).getUser().getRole();
-
         String token = jwtUtil.createToken(username, role);
         response.addHeader(JwtUtil.AUTHORIZATION_HEADER, token);
-        ApiResponseDto apiResponseDto = new ApiResponseDto();
-        apiResponseDto.setMsg("로그인 성공");
-        apiResponseDto.setStatusCode(HttpStatus.OK.value());
-        response.setStatus(HttpStatus.OK.value());
-        response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
-        String json = new ObjectMapper().writeValueAsString(apiResponseDto);
-        response.getWriter().write(json);
     }
+
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException {
         log.info("로그인 실패");
         ApiResponseDto apiResponseDto = new ApiResponseDto("로그인 실패", HttpStatus.BAD_REQUEST.value());
-
         response.setStatus(HttpStatus.BAD_REQUEST.value());
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
         String json = new ObjectMapper().writeValueAsString(apiResponseDto);
         response.getWriter().write(json);
-
     }
 
 }
