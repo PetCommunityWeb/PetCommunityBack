@@ -14,6 +14,7 @@ import org.hibernate.annotations.Where;
 @Setter
 @Builder
 @Table(name = "users")
+@EqualsAndHashCode(of = "id")
 @Where(clause = "is_deleted = false")
 @SQLDelete(sql  = "UPDATE users SET is_deleted = true WHERE id = ?")
 public class User {
