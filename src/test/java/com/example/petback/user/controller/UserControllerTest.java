@@ -1,8 +1,6 @@
 package com.example.petback.user.controller;
 
 import com.example.petback.common.jwt.JwtUtil;
-import com.example.petback.tip.dto.TipRequestDto;
-import com.example.petback.tip.entity.Tip;
 import com.example.petback.user.dto.ProfileRequestDto;
 import com.example.petback.user.dto.ProfileResponseDto;
 import com.example.petback.user.dto.SignupRequestDto;
@@ -10,7 +8,6 @@ import com.example.petback.user.entity.User;
 import com.example.petback.user.enums.UserRoleEnum;
 import com.example.petback.user.repository.UserRepository;
 import com.example.petback.user.service.UserService;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import org.assertj.core.api.Assertions;
@@ -22,33 +19,23 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.config.Profiles;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.test.web.servlet.*;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.assertj.core.api.FactoryBasedNavigableListAssert.assertThat;
-import static org.junit.Assert.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doReturn;
-import static org.springframework.http.RequestEntity.get;
-import static org.springframework.http.RequestEntity.post;
-import static org.springframework.test.web.client.match.MockRestRequestMatchers.jsonPath;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.StatusResultMatchersExtensionsKt.isEqualTo;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -84,27 +71,29 @@ class UserControllerTest {
     public void init() {
         mockMvc = MockMvcBuilders.standaloneSetup(userController).build();
     }
-        private SignupRequestDto signupRequestDto() {
-            return SignupRequestDto.builder()
-                    .username("test1234")
-                    .password(passwordEncoder.encode("test1234."))
-                    .role(UserRoleEnum.USER)
-                    .nickname("테스트")
-                    .email("test1234@test.com")
-                    .imageUrl("test.jpg")
-                    .build();
-        }
 
-        private User user() {
-            return User.builder()
-                    .username("test1234")
-                    .password(passwordEncoder.encode("test1234."))
-                    .role(UserRoleEnum.USER)
-                    .nickname("테스트")
-                    .email("test1234@test.com")
-                    .imageUrl("test.jpg")
-                    .build();
-        }
+    private SignupRequestDto signupRequestDto() {
+        return SignupRequestDto.builder()
+                .username("test1234")
+                .password(passwordEncoder.encode("test1234."))
+                .role(UserRoleEnum.USER)
+                .nickname("테스트")
+                .email("test1234@test.com")
+                .imageUrl("test.jpg")
+                .build();
+    }
+
+    private User user() {
+        return User.builder()
+                .username("test1234")
+                .password(passwordEncoder.encode("test1234."))
+                .role(UserRoleEnum.USER)
+                .nickname("테스트")
+                .email("test1234@test.com")
+                .imageUrl("test.jpg")
+                .build();
+    }
+
     @DisplayName("회원가입 성공")
     @Test
     public void signUpSuccess() throws Exception {
@@ -119,8 +108,8 @@ class UserControllerTest {
         // when
         ResultActions resultActions = mockMvc.perform(
                 MockMvcRequestBuilders.post("/api/users/signup")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(new Gson().toJson(requestDto)));
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(new Gson().toJson(requestDto)));
 
         // then
         resultActions.andExpect(status().isCreated());
@@ -144,7 +133,7 @@ class UserControllerTest {
 ////        SignupRequestDto user3 = new SignupRequestDto(); user3.setUsername("test3");
 ////        SignupRequestDto user4 = new SignupRequestDto(); user4.setUsername("test4");
 
-       User user = User.builder()
+        User user = User.builder()
                 .username("test1")
                 .password(passwordEncoder.encode("test1234."))
                 .email("test@test.com")

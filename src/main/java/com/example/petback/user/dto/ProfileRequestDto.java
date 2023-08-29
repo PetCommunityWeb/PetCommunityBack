@@ -11,5 +11,6 @@ public class ProfileRequestDto {
     private String username;
     private String nickname;
     private String imageUrl;
+    private String introduction;
 
 }

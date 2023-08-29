@@ -29,6 +29,7 @@ public class User {
     private String password;
     private String email;
     private String nickname;
+    private String introduction;
 
     @Builder.Default
     private boolean isDeleted = Boolean.FALSE;

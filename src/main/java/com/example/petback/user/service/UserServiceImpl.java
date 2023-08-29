@@ -69,7 +69,7 @@ public class UserServiceImpl implements UserService {
         );
         userProfile.setNickname(requestDto.getNickname());
         userProfile.setImageUrl(requestDto.getImageUrl());
-
+        userProfile.setIntroduction(requestDto.getIntroduction());
     }
 
     // 회원 탈퇴
