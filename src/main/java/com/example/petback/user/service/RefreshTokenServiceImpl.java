@@ -17,10 +17,4 @@ public class RefreshTokenServiceImpl implements RefreshTokenService{
         refreshTokenRepository.save(new RefreshToken(refreshToken, userId));
     }
 
-    @Override
-    @Transactional
-    public void deleteRefreshToken(String token) {
-        RefreshToken refreshToken = refreshTokenRepository.findByRefreshToken(token);
-        refreshTokenRepository.delete(refreshToken);
-    }
 }
