@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class ReviewResponseDto {
     private Long id;
+    private String nickname;
     private String title;
     private String content;
     private int rate;
@@ -21,6 +22,7 @@ public class ReviewResponseDto {
         if (review == null) return null;
         return ReviewResponseDto.builder()
                 .id((review.getId()))
+                .nickname(review.getUser().getNickname())
                 .title(review.getTitle())
                 .content(review.getContent())
                 .rate(review.getRate())
