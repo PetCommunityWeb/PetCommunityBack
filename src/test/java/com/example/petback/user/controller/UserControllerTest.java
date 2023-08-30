@@ -71,27 +71,29 @@ class UserControllerTest {
     public void init() {
         mockMvc = MockMvcBuilders.standaloneSetup(userController).build();
     }
-        private SignupRequestDto signupRequestDto() {
-            return SignupRequestDto.builder()
-                    .username("test1234")
-                    .password(passwordEncoder.encode("test1234."))
-                    .role(UserRoleEnum.USER)
-                    .nickname("테스트")
-                    .email("test1234@test.com")
-                    .imageUrl("test.jpg")
-                    .build();
-        }
 
-        private User user() {
-            return User.builder()
-                    .username("test1234")
-                    .password(passwordEncoder.encode("test1234."))
-                    .role(UserRoleEnum.USER)
-                    .nickname("테스트")
-                    .email("test1234@test.com")
-                    .imageUrl("test.jpg")
-                    .build();
-        }
+    private SignupRequestDto signupRequestDto() {
+        return SignupRequestDto.builder()
+                .username("test1234")
+                .password(passwordEncoder.encode("test1234."))
+                .role(UserRoleEnum.USER)
+                .nickname("테스트")
+                .email("test1234@test.com")
+                .imageUrl("test.jpg")
+                .build();
+    }
+
+    private User user() {
+        return User.builder()
+                .username("test1234")
+                .password(passwordEncoder.encode("test1234."))
+                .role(UserRoleEnum.USER)
+                .nickname("테스트")
+                .email("test1234@test.com")
+                .imageUrl("test.jpg")
+                .build();
+    }
+
     @DisplayName("회원가입 성공")
     @Test
     public void signUpSuccess() throws Exception {
@@ -106,8 +108,8 @@ class UserControllerTest {
         // when
         ResultActions resultActions = mockMvc.perform(
                 MockMvcRequestBuilders.post("/api/users/signup")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(new Gson().toJson(requestDto)));
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(new Gson().toJson(requestDto)));
 
         // then
         resultActions.andExpect(status().isCreated());
@@ -131,7 +133,7 @@ class UserControllerTest {
 ////        SignupRequestDto user3 = new SignupRequestDto(); user3.setUsername("test3");
 ////        SignupRequestDto user4 = new SignupRequestDto(); user4.setUsername("test4");
 
-       User user = User.builder()
+        User user = User.builder()
                 .username("test1")
                 .password(passwordEncoder.encode("test1234."))
                 .email("test@test.com")
