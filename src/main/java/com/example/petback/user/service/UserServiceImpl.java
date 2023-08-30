@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
@@ -95,7 +96,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Map<String, String> refreshToken(String refreshToken) {
-        RefreshToken redisToken = refreshTokenRepository.findById(refreshToken).get(); // 무조건 @Id로만 찾기
+        RefreshToken redisToken = refreshTokenRepository.findById(refreshToken)
+            .orElseThrow(() -> new NoSuchElementException("refreshToken이 만료되었습니다.")); // 무조건 @Id로만 찾기
         Long userId = redisToken.getUserId();
         User user = userRepository.findById(userId).get();
         Map<String, String> tokens = new HashMap<>();
