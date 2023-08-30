@@ -4,9 +4,12 @@ import com.example.petback.common.advice.ApiResponseDto;
 import com.example.petback.common.jwt.JwtUtil;
 import com.example.petback.user.dto.LoginRequestDto;
 import com.example.petback.user.enums.UserRoleEnum;
+import com.example.petback.user.repository.RefreshTokenRepository;
+import com.example.petback.user.service.RefreshTokenService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -21,9 +24,11 @@ import java.io.IOException;
 @Slf4j(topic = "로그인 및 JWT 생성")
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     private final JwtUtil jwtUtil;
+    private final RefreshTokenService refreshTokenService;
 
-    public JwtAuthenticationFilter(JwtUtil jwtUtil) {
+    public JwtAuthenticationFilter(JwtUtil jwtUtil, RefreshTokenService refreshTokenService) {
         this.jwtUtil = jwtUtil;
+        this.refreshTokenService = refreshTokenService;
         setFilterProcessesUrl("/api/users/login");
     }
 
@@ -50,8 +55,11 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         log.info("로그인 성공");
         String username = ((UserDetailsImpl) authResult.getPrincipal()).getUsername();
         UserRoleEnum role = ((UserDetailsImpl) authResult.getPrincipal()).getUser().getRole();
-        String token = jwtUtil.createToken(username, role);
+        String token = jwtUtil.createToken(username, role, ((UserDetailsImpl) authResult.getPrincipal()).getUser().getId());
+        String refreshToken = jwtUtil.createRefreshToken();
+        refreshTokenService.saveRefreshToken(refreshToken, ((UserDetailsImpl) authResult.getPrincipal()).getUser().getId());
         response.addHeader(JwtUtil.AUTHORIZATION_HEADER, token);
+        response.addHeader(JwtUtil.REFRESH_HEADER, refreshToken);
     }
 
     @Override

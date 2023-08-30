@@ -75,18 +75,18 @@ class ReservationControllerTest {
                 .imageUrl("test.jpg")
                 .build();
         userRepository.save(user);
-        accessToken = jwtUtil.createToken("user", UserRoleEnum.USER);
+        accessToken = jwtUtil.createToken("user", UserRoleEnum.USER, user.getId());
     }
 
     private void createTestHospital() {
         hospital = hospitalRepository.save(Hospital.builder()
                 .name("테스트병원")
                 .introduction("테스트 병원입니다.")
-                .address(Address.builder()
+                .address(String.valueOf(Address.builder()
                         .city("서울시")
                         .street("테스트길")
                         .zipcode("123-456")
-                        .build())
+                        .build()))
                 .imageUrl("abc.jpg")
                 .latitude(127.4451)
                 .longitude(37.4485)

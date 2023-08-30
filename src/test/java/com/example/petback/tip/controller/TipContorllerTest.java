@@ -59,7 +59,7 @@ class TipContorllerTest {
                 .role(UserRoleEnum.USER)
                 .build();
         userRepository.save(user);
-        accessToken = jwtUtil.createToken("tiptest1", UserRoleEnum.USER);
+        accessToken = jwtUtil.createToken("tiptest1", UserRoleEnum.USER, user.getId());
     }
 
     @Test
