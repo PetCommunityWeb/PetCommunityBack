@@ -199,8 +199,8 @@ class UserControllerTest {
                 .nickname("회원정보수정테스트")
                 .imageUrl("test.jpg")
                 .build();
-//        accessToken = jwtUtil.createToken("test123", UserRoleEnum.USER);
-        mockMvc.perform(put("/api/users/profile/" + user.getId())
+        accessToken = jwtUtil.createToken("test123", UserRoleEnum.USER, user.getId());
+        mockMvc.perform(put("/api/users/profile")
                         .contentType(MediaType.APPLICATION_JSON)
                         .header(JwtUtil.AUTHORIZATION_HEADER, accessToken)
                         .content(objectMapper.writeValueAsString(updateProfileRequestDto))
