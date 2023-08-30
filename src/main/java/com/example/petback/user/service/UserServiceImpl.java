@@ -76,7 +76,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteProfile(User user, Long id) {
         User user1 = findUser(id);
-        if (!user.equals(user1.getId())) throw new IllegalArgumentException("탈퇴 권한이 없습니다.");
+        if (!user.equals(user1)) throw new IllegalArgumentException("탈퇴 권한이 없습니다.");
         userRepository.delete(user1);
     }
 

@@ -1,6 +1,7 @@
 package com.example.petback.user.entity;
 
 // import com.example.petback.hospital.entity.Hospital;
+
 import com.example.petback.user.enums.UserRoleEnum;
 import jakarta.persistence.*;
 import lombok.*;
@@ -16,7 +17,7 @@ import org.hibernate.annotations.Where;
 @Table(name = "users")
 @EqualsAndHashCode(of = "id")
 @Where(clause = "is_deleted = false")
-@SQLDelete(sql  = "UPDATE users SET is_deleted = true WHERE id = ?")
+@SQLDelete(sql = "UPDATE users SET is_deleted = true WHERE id = ?")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

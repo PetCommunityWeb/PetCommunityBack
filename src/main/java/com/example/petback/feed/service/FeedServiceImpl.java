@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.RejectedExecutionException;
@@ -39,6 +40,15 @@ public class FeedServiceImpl implements FeedService {
     public List<FeedResponseDto> selectFeeds() {
         return feedRepository.findAll().stream().map(FeedResponseDto::of).toList();
     }
+
+    //내가 쓴 피드만 조회
+    @Transactional
+    @Override
+    public List<FeedResponseDto> selectFeedsByUser(User user) {
+
+        return feedRepository.findByUser(user).stream().map(FeedResponseDto::of).toList();
+    }
+
 
     // 피드 상세 조회
     @Transactional(readOnly = true)
