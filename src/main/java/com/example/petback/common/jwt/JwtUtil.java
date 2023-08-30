@@ -22,14 +22,14 @@ public class JwtUtil {
     // Header KEY 값
     public static final String AUTHORIZATION_HEADER = "Authorization";
     // RefreshToken KEY 값
-    public static final String REFRESH_HEADER = "RefreshToken";
+    public static final String REFRESH_HEADER = "refreshToken";
     // 사용자 권한 값의 KEY
     public static final String AUTHORIZATION_KEY = "auth";
     // Token 식별자
     public static final String BEARER_PREFIX = "Bearer ";
     // accessToken 만료시간
-//    private final long TOKEN_TIME = 60 * 60 * 1000L * 24; // 하루
-    private final long TOKEN_TIME = 20 * 1000L; // 20초
+    private final long TOKEN_TIME = 60 * 60 * 1000L * 24; // 하루
+    // private final long TOKEN_TIME = 20 * 1000L; // 20초
     // refreshToken 만료시간
     private final long REFRESH_TOKEN_TIME = 60 * 60 * 1000L * 24 * 7; // 일주일
 
@@ -75,7 +75,7 @@ public class JwtUtil {
         if(StringUtils.hasText(bearerToken) && bearerToken.startsWith(BEARER_PREFIX)){
             return bearerToken.substring(7);
         }
-        return null;
+        return request.getHeader(AUTHORIZATION_HEADER);
     }
 
     // header에서 refreshToken 가져오기
@@ -94,8 +94,6 @@ public class JwtUtil {
             return true;
         } catch (SecurityException | MalformedJwtException e) {
             log.error("Invalid JWT signature, 유효하지 않는 JWT 서명 입니다.");
-        } catch (ExpiredJwtException e) {
-            log.error("Expired JWT token, 만료된 JWT token 입니다.");
         } catch (UnsupportedJwtException e) {
             log.error("Unsupported JWT token, 지원되지 않는 JWT 토큰 입니다.");
         } catch (IllegalArgumentException e) {
@@ -106,6 +104,7 @@ public class JwtUtil {
 
     // 토큰에서 사용자 정보 가져오기
     public Claims getUserInfoFromToken(String token) {
-        return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
+        Claims claims =  Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
+        return claims;
     }
 }
