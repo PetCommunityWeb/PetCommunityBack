@@ -70,11 +70,4 @@ public class UserController {
         userService.deleteProfile(userDetails.getUser(), id);
         return ResponseEntity.ok().body("삭제가 완료되었습니다.");
     }
-
-    // 토큰 재발급
-    @PostMapping("/token")
-    public Map<String, String> refreshToken(@RequestBody TokenRequestDto tokenRequestDto) {
-        Map<String, String> tokens = userService.refreshToken(tokenRequestDto.getRefreshToken());
-        return tokens;
-    }
 }
