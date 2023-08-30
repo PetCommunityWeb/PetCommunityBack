@@ -32,7 +32,6 @@ public class WebSecurityConfig {
     private final AuthenticationConfiguration authenticationConfiguration;
     private final ObjectMapper objectMapper;
     private final RefreshTokenService refreshTokenService;
-    private final UserService userService;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -46,7 +45,7 @@ public class WebSecurityConfig {
 
     @Bean
     public JwtAuthorizationFilter jwtAuthorizationFilter() {
-        return new JwtAuthorizationFilter(jwtUtil, userDetailsService, objectMapper, userService);
+        return new JwtAuthorizationFilter(jwtUtil, userDetailsService, objectMapper);
     }
 
     public JwtAuthenticationFilter jwtAuthenticationFilter() throws Exception {
