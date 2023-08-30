@@ -11,11 +11,13 @@ import java.time.LocalDateTime;
 public class ChatMessageResponseDto {
     private Long messageId;
     private String message;
+    private String sender;
     private LocalDateTime time;
 
     public static ChatMessageResponseDto of (ChatMessage chatMessage) {
         return ChatMessageResponseDto.builder()
                 .messageId(chatMessage.getId())
+                .sender(chatMessage.getUser().getUsername())
                 .message(chatMessage.getMessage())
                 .time(chatMessage.getTime())
                 .build();

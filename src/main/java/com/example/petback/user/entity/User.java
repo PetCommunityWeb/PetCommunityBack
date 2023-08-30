@@ -39,6 +39,4 @@ public class User {
     @Enumerated(value = EnumType.STRING)
     private UserRoleEnum role;
 
-//    @OneToOne(mappedBy = "user")
-//    private Hospital hospital;
 }

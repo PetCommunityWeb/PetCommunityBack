@@ -25,9 +25,9 @@ public class Reservation {
     @Enumerated(value = EnumType.STRING)
     private ReservationStatusEnum reservationStatus;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private User user;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Hospital hospital;
     @ManyToOne(fetch = FetchType.LAZY)
     private ReservationSlot reservationSlot;
