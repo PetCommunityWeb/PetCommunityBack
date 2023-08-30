@@ -34,6 +34,12 @@ public class FeedController {
         List<FeedResponseDto> responseDtos = feedService.selectFeeds();
         return ResponseEntity.ok().body(responseDtos);
     }
+    //내가 쓴 피드 조회
+    @GetMapping("/my-feeds")
+    public ResponseEntity selectFeeds(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+        List<FeedResponseDto> responseDtos = feedService.selectFeedsByUser(userDetails.getUser());
+        return ResponseEntity.ok().body(responseDtos);
+    }
 
     //피드 상세 조회
     @GetMapping("/{id}")

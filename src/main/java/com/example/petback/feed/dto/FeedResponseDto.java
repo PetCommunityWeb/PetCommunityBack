@@ -4,11 +4,13 @@ import com.example.petback.comment.dto.CommentResponseDto;
 import com.example.petback.feed.entity.Feed;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.util.List;
 
 @Builder
 @Getter
+@Setter
 public class FeedResponseDto {
 
     private Long id;
