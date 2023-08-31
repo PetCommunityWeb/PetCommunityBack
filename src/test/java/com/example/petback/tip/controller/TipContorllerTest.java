@@ -100,16 +100,6 @@ class TipControllerTest {
         return tip.getId();
     }
 
-    void createTestTipLike() {
-//        Long id = createTestTip();
-//        Tip tip = tipRepository.findById(id)
-//                        .orElseThrow();
-//        tipLikeRepository.save(TipLike.builder()
-//                .user(user)
-//                .tip(tip)
-//                .build());
-    }
-
     @Test
     void selectTip() throws Exception {
         Long id = createTestTip();
