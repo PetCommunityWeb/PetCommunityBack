@@ -2,9 +2,11 @@ package com.example.petback.user.service;
 
 import com.example.petback.common.jwt.JwtUtil;
 import com.example.petback.common.jwt.RefreshToken;
+import com.example.petback.feed.entity.Feed;
 import com.example.petback.user.dto.ProfileRequestDto;
 import com.example.petback.user.dto.ProfileResponseDto;
 import com.example.petback.user.dto.SignupRequestDto;
+import com.example.petback.user.dto.UserDto;
 import com.example.petback.user.entity.User;
 import com.example.petback.user.enums.UserRoleEnum;
 import com.example.petback.user.repository.RefreshTokenRepository;
@@ -14,10 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.NoSuchElementException;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -81,11 +80,21 @@ public class UserServiceImpl implements UserService {
     }
 
     // 회원 탈퇴
+    @Transactional
     @Override
     public void deleteProfile(User user, Long id) {
-        User user1 = findUser(id);
-        if (!user.equals(user1)) throw new IllegalArgumentException("탈퇴 권한이 없습니다.");
-        userRepository.delete(user1);
+        User userToDelete = findUser(id);
+        if (!user.equals(userToDelete)) {
+            throw new IllegalArgumentException("탈퇴 권한이 없습니다.");
+        }
+
+        List<Feed> feeds = userToDelete.getFeeds();
+        for (Feed feed : feeds) {
+            feed.setDeleted(true);
+        }
+
+        userToDelete.setDeleted(true);
+        userRepository.save(userToDelete);
     }
 
     @Override
@@ -97,7 +106,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public Map<String, String> refreshToken(String refreshToken) {
         RefreshToken redisToken = refreshTokenRepository.findById(refreshToken)
-            .orElseThrow(() -> new NoSuchElementException("refreshToken이 만료되었습니다.")); // 무조건 @Id로만 찾기
+                .orElseThrow(() -> new NoSuchElementException("refreshToken이 만료되었습니다.")); // 무조건 @Id로만 찾기
         Long userId = redisToken.getUserId();
         User user = userRepository.findById(userId).get();
         Map<String, String> tokens = new HashMap<>();

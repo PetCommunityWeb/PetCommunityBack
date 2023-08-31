@@ -19,6 +19,7 @@ public class FeedResponseDto {
     private String imageUrl;
     private String username;
     private List<CommentResponseDto> comments;
+
     private int likeCount;
     private int commentCount;
 

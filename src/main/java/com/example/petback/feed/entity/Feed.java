@@ -37,6 +37,7 @@ public class Feed {
     @Builder.Default
     private boolean isDeleted = Boolean.FALSE;
 
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn
     private User user;
@@ -55,4 +56,7 @@ public class Feed {
         this.imageUrl = imageUrl;
     }
 
+    public void setDeleted(boolean isDeleted) {
+        this.isDeleted = Boolean.TRUE;
+    }
 }
