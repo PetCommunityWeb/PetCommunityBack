@@ -41,6 +41,13 @@ jobs:
         cd ./src/main/resources
         touch ./application.yml
         echo "${{secrets.CD_APPLICATION_YML}}" > ./application.yml
+        cd ..
+        cd ..
+        cd ..
+        mkdir ./src/test/resources
+        cd ./src/test/resources
+        touch ./application.yml
+        echo "${{secrets.APPLICATION_YML}}" > ./application.yml
       shell: bash
 
     # Make gradlew executable
