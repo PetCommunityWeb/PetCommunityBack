@@ -39,7 +39,7 @@ jobs:
       run: |
         cd ./src/main/resources
         touch ./application.yml
-        echo "${{secrets.APPLICATION_YML}}" > ./application.yml
+        echo "${{secrets.CD_APPLICATION_YML}}" > ./application.yml
       shell: bash
 
     # Make gradlew executable
