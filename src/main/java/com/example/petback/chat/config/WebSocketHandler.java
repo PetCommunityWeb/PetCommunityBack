@@ -2,6 +2,7 @@ package com.example.petback.chat.config;
 
 import com.example.petback.chat.dto.MessageDto;
 import com.example.petback.chat.dto.RoomDto;
+import com.example.petback.chat.entity.ChatMessage;
 import com.example.petback.chat.entity.ChatRoom;
 import com.example.petback.chat.repository.ChatMessageRepository;
 import com.example.petback.chat.repository.ChatRoomRepository;
@@ -67,7 +68,8 @@ public class WebSocketHandler extends TextWebSocketHandler {
 
         User user = userRepository.findByUsername(messageDto.getSender()).get();
         ChatRoom chatRoom = chatRoomRepository.findByUuid(roomId).get();
-        chatMessageRepository.save(messageDto.toEntity(user, chatRoom));
+        ChatMessage chatMessage = messageDto.toEntity(user, chatRoom);
+        chatMessageRepository.save(chatMessage);
 
         // 모든 해당 채팅방의 사용자에게 메시지 전송
         for (WebSocketSession roomSession : roomSessionsMap.get(roomId)) {

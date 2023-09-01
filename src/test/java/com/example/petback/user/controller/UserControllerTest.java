@@ -153,7 +153,6 @@ class UserControllerTest {
                 .build();
         userRepository.save(user);
         accessToken = jwtUtil.createToken("test1", UserRoleEnum.USER, user.getId());
-        System.out.println("ID는" + user.getId());
         mockMvc.perform(MockMvcRequestBuilders.get("/api/users/profile/" + user.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .header(JwtUtil.AUTHORIZATION_HEADER, accessToken)
