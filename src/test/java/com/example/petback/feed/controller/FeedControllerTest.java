@@ -38,8 +38,6 @@ public class FeedControllerTest {
     @Autowired
     private FeedRepository feedRepository;
     @Autowired
-    private FeedLikeRepository feedLikeRepository;
-    @Autowired
     private PasswordEncoder passwordEncoder;
     @Autowired
     private JwtUtil jwtUtil;

@@ -3,10 +3,7 @@ package com.example.petback.species.entity;
 import com.example.petback.hospitalspecies.entity.HospitalSpecies;
 import com.example.petback.species.SpeciesEnum;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 import java.util.Map;
@@ -15,7 +12,7 @@ import java.util.Set;
 @Entity
 @Table(name = "species")
 @Builder
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Getter
 public class Species {

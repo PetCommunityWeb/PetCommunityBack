@@ -10,7 +10,7 @@ import java.util.Map;
 
 public interface UserService {
     // 회원가입
-    Long signUp(SignupRequestDto requestDto);
+    void signUp(SignupRequestDto requestDto);
 
     // 회원 전체 조회
     List<ProfileResponseDto> selectProfiles();

@@ -2,6 +2,7 @@ package com.example.petback.user.entity;
 
 // import com.example.petback.hospital.entity.Hospital;
 
+import com.example.petback.user.dto.ProfileRequestDto;
 import com.example.petback.user.enums.UserRoleEnum;
 import jakarta.persistence.*;
 import lombok.*;
@@ -9,10 +10,9 @@ import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 @Entity
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Getter
-@Setter
 @Builder
 @Table(name = "users")
 @EqualsAndHashCode(of = "id")
@@ -41,4 +41,9 @@ public class User {
     @Enumerated(value = EnumType.STRING)
     private UserRoleEnum role;
 
+    public void updateProfile(ProfileRequestDto requestDto) {
+        this.nickname = requestDto.getNickname();
+        this.imageUrl = requestDto.getImageUrl();
+        this.introduction = requestDto.getIntroduction();
+    }
 }

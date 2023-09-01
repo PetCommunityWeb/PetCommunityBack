@@ -7,7 +7,6 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 @Getter
-@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -18,8 +17,6 @@ public class SignupRequestDto {
     private String password;
     @NotBlank
     private String nickname;
-
-    private String imageUrl;
 
     @Builder.Default
     private UserRoleEnum role = UserRoleEnum.USER;
@@ -38,7 +35,6 @@ public class SignupRequestDto {
                 .password(password)
                 .email(email)
                 .nickname(nickname)
-                .imageUrl(imageUrl)
                 .role(role)
                 .build();
     }
