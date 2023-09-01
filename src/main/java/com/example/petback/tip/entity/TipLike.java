@@ -10,7 +10,7 @@ import org.hibernate.annotations.Where;
 @Getter
 @Setter
 @Builder
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Table(name = "tip_like")
 public class TipLike {

@@ -6,17 +6,14 @@ import com.example.petback.reservationslot.entity.ReservationSlot;
 import com.example.petback.review.entity.Review;
 import com.example.petback.user.entity.User;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.mapping.ToOne;
 
 @Entity
 @Table(name = "reservations")
 @Builder
 @AllArgsConstructor
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class Reservation {
     @Id

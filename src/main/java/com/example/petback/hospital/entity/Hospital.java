@@ -20,7 +20,7 @@ import java.util.Set;
 @Table(name = "hospitals")
 @Builder
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
 @Where(clause = "is_deleted = false")
