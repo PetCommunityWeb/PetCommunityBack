@@ -1,7 +1,6 @@
 package com.example.petback.user.service;
 
 import com.example.petback.chat.entity.ChatMessage;
-import com.example.petback.chat.entity.ChatRoom;
 import com.example.petback.comment.entity.Comment;
 import com.example.petback.common.jwt.JwtUtil;
 import com.example.petback.common.jwt.RefreshToken;
@@ -13,9 +12,7 @@ import com.example.petback.review.entity.Review;
 import com.example.petback.user.dto.ProfileRequestDto;
 import com.example.petback.user.dto.ProfileResponseDto;
 import com.example.petback.user.dto.SignupRequestDto;
-import com.example.petback.user.dto.UserDto;
 import com.example.petback.user.entity.User;
-import com.example.petback.user.enums.UserRoleEnum;
 import com.example.petback.user.repository.RefreshTokenRepository;
 import com.example.petback.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +20,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
@@ -77,6 +77,11 @@ public class UserServiceImpl implements UserService {
     }
 
     // 회원 탈퇴
+    // User 의 경우
+    //  피드, 피드 댓글, 피드 좋아요, 채팅방 메시지, 예약, 리뷰 > 탈퇴시 지워짐
+    // owner 의 경우
+    // 병원 > 탈퇴시 지워짐 species , subjects는?
+
     @Transactional
     @Override
     public void deleteProfile(User user, Long id) {
@@ -84,11 +89,7 @@ public class UserServiceImpl implements UserService {
         if (!user.equals(userToDelete)) {
             throw new IllegalArgumentException("탈퇴 권한이 없습니다.");
         }
-        // User 의 경우
-        // 피드, 피드 댓글, 피드 좋아요, 채팅방 메시지, 예약, 리뷰 > 탈퇴시 지워짐
 
-        // owner 의 경우
-        // 병원 > 탈퇴시 지워짐 species , subjects는?
 
         // 채팅방, > 탈퇴시 안지워짐
         List<Comment> comments = userToDelete.getComments();
@@ -117,11 +118,11 @@ public class UserServiceImpl implements UserService {
         }
 
         List<Reservation> reservations = userToDelete.getReservations();
-        for(Reservation reservation : reservations) {
+        for (Reservation reservation : reservations) {
             reservation.setDeleted(true);
         }
         List<Review> reviews = userToDelete.getReviews();
-        for(Review review : reviews) {
+        for (Review review : reviews) {
             review.setDeleted(true);
         }
 
