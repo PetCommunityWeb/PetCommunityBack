@@ -16,7 +16,7 @@ import java.util.List;
 @Setter
 @Builder
 @AllArgsConstructor
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ReservationSlot {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

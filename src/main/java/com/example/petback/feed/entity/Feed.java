@@ -15,7 +15,7 @@ import java.util.List;
 @Table(name = "feeds")
 @Getter
 @Builder
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Where(clause = "is_deleted = false")
 @SQLDelete(sql = "UPDATE feeds SET is_deleted = true WHERE id = ?")

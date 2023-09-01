@@ -79,7 +79,6 @@ class UserControllerTest {
                 .role(UserRoleEnum.USER)
                 .nickname("테스트")
                 .email("test1234@test.com")
-                .imageUrl("test.jpg")
                 .build();
     }
 
@@ -99,11 +98,6 @@ class UserControllerTest {
     public void signUpSuccess() throws Exception {
         // given
         SignupRequestDto requestDto = signupRequestDto();
-        User user1 = new User();
-
-//        doReturn(user1).when(userService)
-//                .signUp(any(SignupRequestDto.class));
-
 
         // when
         ResultActions resultActions = mockMvc.perform(
@@ -113,26 +107,12 @@ class UserControllerTest {
 
         // then
         resultActions.andExpect(status().isCreated());
-//                .andExpect((ResultMatcher) jsonPath("email", user1.getEmail()).exists())
-//                .andExpect((ResultMatcher) jsonPath("username", user1.getUsername()).exists())
-//                .andExpect((ResultMatcher) jsonPath("nickname", user1.getNickname()).exists())
-//                .andExpect((ResultMatcher) jsonPath("imageUrl", user1.getImageUrl()).exists())
-//                .andExpect((ResultMatcher) jsonPath("password", user1.getPassword()).exists())
-//                .andExpect((ResultMatcher) jsonPath("role", user1.getRole()).exists());
-
     }
 
 
     @DisplayName("전체 사용자 조회")
     @Test
     void selectProfiles() throws Exception {
-
-//        // given
-////        SignupRequestDto user1 = new SignupRequestDto(); user1.setUsername("test1");
-////        SignupRequestDto user2 = new SignupRequestDto(); user2.setUsername("test2");
-////        SignupRequestDto user3 = new SignupRequestDto(); user3.setUsername("test3");
-////        SignupRequestDto user4 = new SignupRequestDto(); user4.setUsername("test4");
-
         User user = User.builder()
                 .username("test1")
                 .password(passwordEncoder.encode("test1234."))
@@ -153,13 +133,6 @@ class UserControllerTest {
         userRepository.save(user2);
         accessToken = jwtUtil.createToken("test2", UserRoleEnum.USER, user.getId());
 
-
-        // when
-//        userService.signUp(user1);
-//        userService.signUp(user2);
-//        userService.signUp(user3);
-//        userService.signUp(user4);
-
         List<ProfileResponseDto> findAll = userRepository.findAll().stream().map(ProfileResponseDto::new).toList();
 
         // then
@@ -169,10 +142,8 @@ class UserControllerTest {
 
 
     @Test
-    @DisplayName("특정 사용자 조회")
+    @DisplayName("상세 사용자 조회")
     void selectProfile() throws Exception {
-        // given
-        signUpSuccess();
         User user = User.builder()
                 .username("test1")
                 .password(passwordEncoder.encode("test1234."))
@@ -182,13 +153,13 @@ class UserControllerTest {
                 .build();
         userRepository.save(user);
         accessToken = jwtUtil.createToken("test1", UserRoleEnum.USER, user.getId());
-
-        // when
-        Optional<User> user1 = userRepository.findById(user.getId());
-
-        // then
-        Assertions.assertThat(user.getId());
-
+        System.out.println("ID는" + user.getId());
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/users/profile/" + user.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header(JwtUtil.AUTHORIZATION_HEADER, accessToken)
+                )
+                .andDo(print())
+                .andExpect(status().isOk());
     }
 
     @Test
@@ -228,17 +199,6 @@ class UserControllerTest {
     @Test
     void deleteProfile() throws Exception {
         Long id = createTestProfile();
-//        User user = User.builder()
-//                .username("test1")
-//                .password(passwordEncoder.encode("test1234."))
-//                .email("test@test.com")
-//                .nickname("테스트")
-//                .imageUrl("test1.jpg")
-//                .role(UserRoleEnum.USER)
-//                .build();
-//        userRepository.save(user);
-//        accessToken = jwtUtil.createToken("test1", UserRoleEnum.USER);
-//        User user1 = userRepository.findById(user().getId())
         User user = userRepository.findById(id)
                 .orElseThrow();
         mockMvc.perform(delete("/api/users/profile/" + user.getId())
@@ -248,7 +208,6 @@ class UserControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andReturn();
-
 
     }
 }

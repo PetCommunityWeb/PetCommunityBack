@@ -12,12 +12,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
+import lombok.*;
+import org.hibernate.mapping.ToOne;
 
 @Entity
 @Table(name = "reservations")
 @Builder
 @AllArgsConstructor
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Where(clause = "is_deleted = false")
 @SQLDelete(sql = "UPDATE reservations SET is_deleted = true WHERE id = ?")

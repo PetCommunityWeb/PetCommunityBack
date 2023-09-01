@@ -36,24 +36,17 @@ public class UserServiceImpl implements UserService {
 
     // 회원 가입
     @Override
-    public Long signUp(SignupRequestDto requestDto) {
+    public void signUp(SignupRequestDto requestDto) {
         String username = requestDto.getUsername();
         String password = passwordEncoder.encode(requestDto.getPassword());
         requestDto.setPassword(password);
-        String email = requestDto.getEmail();
-        UserRoleEnum role = requestDto.getRole();
-
         if (userRepository.findByUsername(username).isPresent()) {
             throw new IllegalArgumentException("이미 존재하는 아이디입니다.");
         }
-        User user = new User();
         userRepository.save(requestDto.toEntity());
-        return user.getId();
     }
 
-
     // 회원정보 전체 조회
-
     @Override
     public List<ProfileResponseDto> selectProfiles() {
         return userRepository.findAll().stream().map(ProfileResponseDto::new).toList();
@@ -72,18 +65,15 @@ public class UserServiceImpl implements UserService {
                 () -> new IllegalArgumentException("사용자를 찾을 수 없습니다.")
         );
         return new ProfileResponseDto(user);
-
     }
 
-    // 회원정보 수정 (닉네임, 프로필 사진)
+    // 회원정보 수정
     @Override
     public void updateProfile(ProfileRequestDto requestDto, User user) {
-        User userProfile = userRepository.findById(user.getId()).orElseThrow(
+        User dbUser = userRepository.findById(user.getId()).orElseThrow(
                 () -> new IllegalArgumentException("해당 사용자가 존재하지 않습니다.")
         );
-        userProfile.setNickname(requestDto.getNickname());
-        userProfile.setImageUrl(requestDto.getImageUrl());
-        userProfile.setIntroduction(requestDto.getIntroduction());
+        dbUser.updateProfile(requestDto);
     }
 
     // 회원 탈퇴

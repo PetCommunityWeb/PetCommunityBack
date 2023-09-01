@@ -12,7 +12,7 @@ import org.hibernate.annotations.Where;
 @Getter
 @Setter
 @Builder
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Where(clause = "is_deleted = false")
 @Table(name = "tip")

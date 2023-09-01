@@ -3,16 +3,13 @@ package com.example.petback.hospitalsubject.entity;
 import com.example.petback.hospital.entity.Hospital;
 import com.example.petback.subject.entity.Subject;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Table(name = "hospital_subjects")
 @Getter
 @Builder
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class HospitalSubject {
     @Id

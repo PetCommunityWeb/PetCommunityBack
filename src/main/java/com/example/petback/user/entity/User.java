@@ -10,6 +10,7 @@ import com.example.petback.feed.entity.FeedLike;
 import com.example.petback.hospital.entity.Hospital;
 import com.example.petback.reservation.entity.Reservation;
 import com.example.petback.review.entity.Review;
+import com.example.petback.user.dto.ProfileRequestDto;
 import com.example.petback.user.enums.UserRoleEnum;
 import jakarta.persistence.*;
 import lombok.*;
@@ -20,10 +21,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Getter
-@Setter
 @Builder
 @Table(name = "users")
 @EqualsAndHashCode(of = "id")
@@ -98,3 +98,9 @@ public class User {
     private List<ChatRoom> chatRooms = new ArrayList<>();
 
  }
+    public void updateProfile(ProfileRequestDto requestDto) {
+        this.nickname = requestDto.getNickname();
+        this.imageUrl = requestDto.getImageUrl();
+        this.introduction = requestDto.getIntroduction();
+    }
+}
