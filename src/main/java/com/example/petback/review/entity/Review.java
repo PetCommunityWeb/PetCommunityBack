@@ -3,10 +3,9 @@ package com.example.petback.review.entity;
 import com.example.petback.reservation.entity.Reservation;
 import com.example.petback.user.entity.User;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 @Entity
 @Table(name = "reviews")
@@ -14,6 +13,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 @Getter
+@Where(clause = "is_deleted = false")
+@SQLDelete(sql = "UPDATE reviews SET is_deleted = true WHERE id = ?")
 public class Review {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -47,5 +48,10 @@ public class Review {
     public Review updateImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
         return this;
+    }
+    @Builder.Default
+    private boolean isDeleted = Boolean.FALSE;
+    public void setDeleted(boolean isDeleted) {
+        this.isDeleted = Boolean.TRUE;
     }
 }

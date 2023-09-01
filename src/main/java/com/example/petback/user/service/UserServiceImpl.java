@@ -1,8 +1,15 @@
 package com.example.petback.user.service;
 
+import com.example.petback.chat.entity.ChatMessage;
+import com.example.petback.chat.entity.ChatRoom;
+import com.example.petback.comment.entity.Comment;
 import com.example.petback.common.jwt.JwtUtil;
 import com.example.petback.common.jwt.RefreshToken;
 import com.example.petback.feed.entity.Feed;
+import com.example.petback.feed.entity.FeedLike;
+import com.example.petback.hospital.entity.Hospital;
+import com.example.petback.reservation.entity.Reservation;
+import com.example.petback.review.entity.Review;
 import com.example.petback.user.dto.ProfileRequestDto;
 import com.example.petback.user.dto.ProfileResponseDto;
 import com.example.petback.user.dto.SignupRequestDto;
@@ -87,12 +94,48 @@ public class UserServiceImpl implements UserService {
         if (!user.equals(userToDelete)) {
             throw new IllegalArgumentException("탈퇴 권한이 없습니다.");
         }
+        // User 의 경우
+        // 피드, 피드 댓글, 피드 좋아요, 채팅방 메시지, 예약, 리뷰 > 탈퇴시 지워짐
+
+        // owner 의 경우
+        // 병원 > 탈퇴시 지워짐 species , subjects는?
+
+        // 채팅방, > 탈퇴시 안지워짐
+        List<Comment> comments = userToDelete.getComments();
+        for (Comment comment : comments) {
+            comment.setDeleted(true);
+        }
 
         List<Feed> feeds = userToDelete.getFeeds();
         for (Feed feed : feeds) {
             feed.setDeleted(true);
         }
 
+        List<FeedLike> feedLikes = userToDelete.getFeedLikes();
+        for (FeedLike feedLike : feedLikes) {
+            feedLike.setDeleted(true);
+        }
+
+        List<ChatMessage> chatMessages = userToDelete.getChatMessages();
+        for (ChatMessage chatMessage : chatMessages) {
+            chatMessage.setDeleted(true);
+        }
+
+        List<Hospital> hospitals = userToDelete.getHospitals();
+        for (Hospital hospital : hospitals) {
+            hospital.setDeleted(true);
+        }
+
+        List<Reservation> reservations = userToDelete.getReservations();
+        for(Reservation reservation : reservations) {
+            reservation.setDeleted(true);
+        }
+        List<Review> reviews = userToDelete.getReviews();
+        for(Review review : reviews) {
+            review.setDeleted(true);
+        }
+
+        userRepository.flush();
         userToDelete.setDeleted(true);
         userRepository.save(userToDelete);
     }

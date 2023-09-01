@@ -39,8 +39,10 @@ public class Hospital {
     private String phoneNumber;
     @Builder.Default
     private boolean isDeleted = Boolean.FALSE;
+
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
+
     @Builder.Default
     @OneToMany(mappedBy = "hospital", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<HospitalSpecies> hospitalSpecies = new HashSet<>();
@@ -48,6 +50,7 @@ public class Hospital {
     @Builder.Default
     @OneToMany(mappedBy = "hospital", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<HospitalSubject> hospitalSubjects = new HashSet<>();
+
     @Builder.Default
     @OneToMany(mappedBy = "hospital")
     private List<Reservation> reservations = new ArrayList<>();
@@ -99,5 +102,9 @@ public class Hospital {
     public Hospital updatePhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
         return this;
+    }
+
+    public void setDeleted(boolean isDeleted) {
+        this.isDeleted = Boolean.TRUE;
     }
 }

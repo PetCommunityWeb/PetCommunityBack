@@ -40,4 +40,7 @@ public class Comment {
     public void updateContent(String content) {
         this.content = content;
     }
+    public void setDeleted(boolean isDeleted) {
+        this.isDeleted = Boolean.TRUE;
+    }
 }

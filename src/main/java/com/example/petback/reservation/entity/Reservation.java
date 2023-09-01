@@ -10,7 +10,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.mapping.ToOne;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 @Entity
 @Table(name = "reservations")
@@ -18,6 +19,8 @@ import org.hibernate.mapping.ToOne;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
+@Where(clause = "is_deleted = false")
+@SQLDelete(sql = "UPDATE reservations SET is_deleted = true WHERE id = ?")
 public class Reservation {
     @Id
     private String reservationNum;
@@ -33,6 +36,13 @@ public class Reservation {
     private ReservationSlot reservationSlot;
     @OneToOne(mappedBy = "reservation")
     private Review review;
+
+    @Builder.Default
+    private boolean isDeleted = Boolean.FALSE;
+
+    public void setDeleted(boolean isDeleted) {
+        this.isDeleted = Boolean.TRUE;
+    }
     public void cancle() {
         this.reservationStatus = ReservationStatusEnum.예약취소;
         this.reservationSlot.setReserved(false);
