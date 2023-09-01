@@ -65,7 +65,7 @@ public class User {
     @Builder.Default
     private List<FeedLike> feedLikes = new ArrayList<>();
 
-//    @OneToMany(cascade = CascadeType.REMOVE)
+    //    @OneToMany(cascade = CascadeType.REMOVE)
 //    @Builder.Default
 //    private List<Tip> tips = new ArrayList<>();
 //
@@ -85,19 +85,18 @@ public class User {
     @Builder.Default
     private List<Reservation> reservations = new ArrayList<>();
 
-    @OneToMany(mappedBy="user",cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     @Builder.Default
     private List<Review> reviews = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user" ,cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     @Builder.Default
     private List<ChatMessage> chatMessages = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user" ,cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     @Builder.Default
     private List<ChatRoom> chatRooms = new ArrayList<>();
 
- }
     public void updateProfile(ProfileRequestDto requestDto) {
         this.nickname = requestDto.getNickname();
         this.imageUrl = requestDto.getImageUrl();
