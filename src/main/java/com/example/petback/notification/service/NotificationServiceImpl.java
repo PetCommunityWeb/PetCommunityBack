@@ -28,7 +28,7 @@ public class NotificationServiceImpl implements NotificationService {
     @Override
     @Transactional(readOnly = true)
     public List<NotificationResponseDto> selectNotifications(User user) {
-        return notificationRepository.findByReservation_User(user).stream().map(NotificationResponseDto::of).toList();
+        return notificationRepository.findByReservation_UserOrderByCreatedAtDesc(user).stream().map(NotificationResponseDto::of).toList();
     }
 
     @Override
@@ -44,6 +44,14 @@ public class NotificationServiceImpl implements NotificationService {
         return notificationRepository.findById(id).orElseThrow(
                 () -> new IllegalArgumentException("알림이 존재하지 않습니다.")
         );
+    }
+
+    @Override
+    @Transactional
+    public void readNotification(Long id, User user) {
+        Notification notification = notificationRepository.findById(id).orElseThrow(
+                () -> new IllegalArgumentException("알림이 존재하지 않습니다."));
+        notification.read();
     }
 
     @Transactional
