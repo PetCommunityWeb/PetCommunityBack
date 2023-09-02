@@ -12,6 +12,6 @@ import java.util.NoSuchElementException;
 public class GlobalExceptionHandler {
     @ExceptionHandler({IllegalArgumentException.class, NoSuchElementException.class})
     public ResponseEntity illegalExceptionHandler(Exception ex) {
-        return ResponseEntity.ok().body(new ApiResponseDto(ex.getMessage(), HttpStatus.BAD_REQUEST.value()));
+        return ResponseEntity.badRequest().body(new ApiResponseDto(ex.getMessage(), HttpStatus.BAD_REQUEST.value()));
     }
 }

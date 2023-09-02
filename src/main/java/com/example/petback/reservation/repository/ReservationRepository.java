@@ -10,7 +10,5 @@ import java.util.List;
 
 public interface ReservationRepository extends JpaRepository<Reservation, String> {
     List<Reservation> findByReservationSlot_StartTimeBetween(LocalTime startTimeStart, LocalTime startTimeEnd);
-    List<Reservation> findByReservationSlot_StartTimeBefore(LocalTime startTime);
-    List<Reservation> findByUser(User user);
-    List<Reservation> findAllByUser(User user);
+    List<Reservation> findAllByUserOrderByReservationSlotDateDescReservationSlotStartTimeDesc(User user);
 }
