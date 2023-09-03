@@ -125,12 +125,13 @@ public class FeedControllerTest {
     @Test
     @DisplayName("피드 좋아요 테스트")
     void likeFeed() throws Exception {
+        // 본인 피드 좋아요 불가
         mockMvc.perform(post("/api/feeds/" + feed.getId() + "/likes")
                         .contentType(MediaType.ALL)
                         .header(JwtUtil.AUTHORIZATION_HEADER, accessToken)
                 )
                 .andDo(print())
-                .andExpect(status().isOk());
+                .andExpect(status().isBadRequest());
 
     }
 
