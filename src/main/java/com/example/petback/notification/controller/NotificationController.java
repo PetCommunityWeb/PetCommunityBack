@@ -29,4 +29,10 @@ public class NotificationController {
         notificationService.deleteNotification(notificationId, userDetails.getUser());
         return ResponseEntity.ok().body("알림 삭제가 완료되었습니다.");
     }
+
+    @PutMapping("/{notificationId}")
+    public ResponseEntity readNotification(@PathVariable Long notificationId, @AuthenticationPrincipal UserDetailsImpl userDetails){
+        notificationService.readNotification(notificationId, userDetails.getUser());
+        return ResponseEntity.ok().body("알림을 읽었습니다.");
+    }
 }

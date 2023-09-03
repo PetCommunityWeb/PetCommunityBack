@@ -13,4 +13,5 @@ public interface NotificationService {
 
     Notification findNotification(Long notificationId);
 
+    void readNotification(Long notificationId, User user);
 }

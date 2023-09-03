@@ -1,6 +1,5 @@
 package com.example.petback.common.config;
 
-import com.amazonaws.HttpMethod;
 import com.example.petback.common.jwt.JwtUtil;
 import com.example.petback.common.security.JwtAuthenticationFilter;
 import com.example.petback.common.security.JwtAuthorizationFilter;
@@ -12,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -69,6 +69,7 @@ public class WebSecurityConfig {
                 authorizeHttpRequests
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll() // resources 접근 허용 설정
                         .requestMatchers("/api/users/**").permitAll() //
+                        .requestMatchers(HttpMethod.GET, "/api/hospitals/**").permitAll()
                         .requestMatchers("/ws/**").permitAll() // ws에서 접속하는 websocket 권한 허용
                         .requestMatchers("/api/chats").permitAll() // 채팅방 조회를 위한 권한 허용
                         .requestMatchers("/api/chat").permitAll() // 채팅방 조회를 위한 권한 허용

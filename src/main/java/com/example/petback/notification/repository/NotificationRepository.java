@@ -8,4 +8,5 @@ import java.util.List;
 
 public interface NotificationRepository extends JpaRepository<Notification, Long> {
     List<Notification> findByReservation_User(User user);
+    List<Notification> findByReservation_UserOrderByCreatedAtDesc(User user);
 }

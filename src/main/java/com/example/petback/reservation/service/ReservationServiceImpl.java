@@ -80,7 +80,7 @@ public class ReservationServiceImpl implements ReservationService{
     @Override
     @Transactional(readOnly = true)
     public List<ReservationResponseDto> selectAllReservations(User user) {
-        return reservationRepository.findAllByUser(user).stream().map(ReservationResponseDto::of).toList();
+        return reservationRepository.findAllByUserOrderByReservationSlotDateDescReservationSlotStartTimeDesc(user).stream().map(ReservationResponseDto::of).toList();
     }
 
     @Override
