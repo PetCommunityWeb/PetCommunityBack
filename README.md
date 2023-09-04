@@ -35,7 +35,7 @@
 <img src="https://img.shields.io/badge/Linux-FCC624?style=flat&logo=linux&logoColor=black">
 </div>
 
-#### Etc ⛓️
+#### Etc
 
 <div>
 <img src="https://img.shields.io/badge/Github-181717?style=flat&logo=github&logoColor=white">
