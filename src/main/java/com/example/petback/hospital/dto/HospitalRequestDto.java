@@ -1,6 +1,7 @@
 package com.example.petback.hospital.dto;
 
 import com.example.petback.common.domain.Address;
+import com.example.petback.hospital.OperatingDay;
 import com.example.petback.hospital.entity.Hospital;
 import com.example.petback.species.SpeciesEnum;
 import com.example.petback.subject.SubjectEnum;
@@ -12,6 +13,7 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Builder
@@ -27,6 +29,8 @@ public class HospitalRequestDto {
     private String phoneNumber;
     private List<SpeciesEnum> speciesEnums;
     private List<SubjectEnum> subjectEnums;
+    private Set<OperatingDay> operatingDays;
+
     public Hospital toEntity(){
         return Hospital.builder()
                 .name(name)
@@ -36,6 +40,7 @@ public class HospitalRequestDto {
                 .longitude(longitude)
                 .address(address)
                 .phoneNumber(phoneNumber)
+                .operatingDays(operatingDays)  // 추가된 부분
                 .build();
     }
 }

@@ -22,7 +22,7 @@ public class ChatRoom {
     @Column
     private String roomName;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 
     @Builder.Default

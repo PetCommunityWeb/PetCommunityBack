@@ -26,7 +26,7 @@ public class ReservationSlot {
     private LocalTime startTime;
     private boolean isReserved;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Hospital hospital;
 
     @Builder.Default

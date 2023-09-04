@@ -35,7 +35,7 @@ public class Tip {
     @Builder.Default
     private boolean isDeleted = Boolean.FALSE;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn
     private User user;
 }
