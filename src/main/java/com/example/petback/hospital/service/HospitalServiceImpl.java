@@ -113,7 +113,8 @@ public class HospitalServiceImpl implements HospitalService{
                 .updateLatitude(requestDto.getLatitude())
                 .updateLongitude(requestDto.getLongitude())
                 .updateAddress(requestDto.getAddress())
-                .updatePhoneNumber(requestDto.getPhoneNumber());
+                .updatePhoneNumber(requestDto.getPhoneNumber())
+                .updateOperatingDays(requestDto.getOperatingDays());
         return HospitalResponseDto.of(hospital);
     }
 

@@ -1,12 +1,10 @@
 package com.example.petback.hospital.entity;
 
-import com.example.petback.common.domain.Address;
 import com.example.petback.hospital.OperatingDay;
 import com.example.petback.hospitalspecies.entity.HospitalSpecies;
 import com.example.petback.hospitalsubject.entity.HospitalSubject;
 import com.example.petback.reservation.entity.Reservation;
 import com.example.petback.reservationslot.entity.ReservationSlot;
-import com.example.petback.review.entity.Review;
 import com.example.petback.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
@@ -117,6 +115,11 @@ public class Hospital {
 
     public Hospital updatePhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+        return this;
+    }
+
+    public Hospital updateOperatingDays(Set<OperatingDay> operatingDays) {
+        this.operatingDays = operatingDays;
         return this;
     }
 
