@@ -68,7 +68,7 @@ class TipControllerTest {
                 .title("테스트")
                 .content("테스트입니다.")
                 .build();
-        mockMvc.perform(post("/api/tips")
+        mockMvc.perform(post("/api/tips/create")
                         .contentType(MediaType.APPLICATION_JSON)
                         .header(JwtUtil.AUTHORIZATION_HEADER, accessToken)
                         .content(objectMapper.writeValueAsString(tipRequestDto))

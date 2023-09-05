@@ -2,6 +2,7 @@ package com.example.petback.hospital.controller;
 
 import com.example.petback.common.domain.Address;
 import com.example.petback.common.jwt.JwtUtil;
+import com.example.petback.hospital.OperatingDay;
 import com.example.petback.hospital.dto.HospitalRequestDto;
 import com.example.petback.hospital.entity.Hospital;
 import com.example.petback.hospital.repository.HospitalRepository;
@@ -22,6 +23,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -83,6 +86,7 @@ class HospitalControllerTest {
                 .subjectEnums(
                         Arrays.asList(SubjectEnum.내과, SubjectEnum.정형외과)
                 )
+                .operatingDays(Set.of(OperatingDay.MONDAY,OperatingDay.TUESDAY))
                 .build();
         mockMvc.perform(post("/api/hospitals")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -141,6 +145,7 @@ class HospitalControllerTest {
                 .subjectEnums(
                         Arrays.asList(SubjectEnum.외과, SubjectEnum.정형외과)
                 )
+                .operatingDays(Set.of(OperatingDay.MONDAY,OperatingDay.TUESDAY))
                 .build();
         mockMvc.perform(put("/api/hospitals/1")
                         .contentType(MediaType.APPLICATION_JSON)
