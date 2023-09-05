@@ -25,7 +25,7 @@ public class TipContorller {
     private final UserService userService;
 
     // 팁 작성
-    @PostMapping("")
+    @PostMapping("/create")
     public TipResponseDto createTip(@RequestBody TipRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return tipService.createTip(requestDto, userDetails.getUser());
     }

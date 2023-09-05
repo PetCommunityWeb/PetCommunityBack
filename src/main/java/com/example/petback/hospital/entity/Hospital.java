@@ -1,10 +1,10 @@
 package com.example.petback.hospital.entity;
 
-import com.example.petback.common.domain.Address;
+import com.example.petback.hospital.OperatingDay;
 import com.example.petback.hospitalspecies.entity.HospitalSpecies;
 import com.example.petback.hospitalsubject.entity.HospitalSubject;
 import com.example.petback.reservation.entity.Reservation;
-import com.example.petback.review.entity.Review;
+import com.example.petback.reservationslot.entity.ReservationSlot;
 import com.example.petback.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
@@ -51,9 +51,19 @@ public class Hospital {
     @OneToMany(mappedBy = "hospital", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<HospitalSubject> hospitalSubjects = new HashSet<>();
 
+    @ElementCollection(targetClass = OperatingDay.class, fetch = FetchType.LAZY)
+    @Enumerated(EnumType.STRING)
+    @CollectionTable(name = "hospital_operating_days", joinColumns = @JoinColumn(name = "hospital_id"))
     @Builder.Default
-    @OneToMany(mappedBy = "hospital")
+    private Set<OperatingDay> operatingDays = new HashSet<>();
+
+    @Builder.Default
+    @OneToMany(mappedBy = "hospital",  cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Reservation> reservations = new ArrayList<>();
+
+    @Builder.Default
+    @OneToMany(mappedBy = "hospital", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ReservationSlot> reservationSlots = new ArrayList<>();
 
     public void setUser(User user) {
         this.user = user;
@@ -64,6 +74,10 @@ public class Hospital {
     public void addHospitalSubject(HospitalSubject hospitalSubject) {
         this.hospitalSubjects.add(hospitalSubject);
     }
+    public void setReservationSlots(List<ReservationSlot> reservationSlots) {
+        this.reservationSlots = reservationSlots;
+    }
+
     public void resetHospitalSpecies(){
         this.hospitalSpecies.clear();
         this.hospitalSubjects.clear();
@@ -104,7 +118,12 @@ public class Hospital {
         return this;
     }
 
-    public void setDeleted(boolean isDeleted) {
+    public Hospital updateOperatingDays(Set<OperatingDay> operatingDays) {
+        this.operatingDays = operatingDays;
+        return this;
+    }
+
+    public void setDeleted() {
         this.isDeleted = Boolean.TRUE;
     }
 }

@@ -1,11 +1,13 @@
 package com.example.petback.hospital.service;
 
+import com.example.petback.hospital.OperatingDay;
 import com.example.petback.hospital.dto.HospitalRequestDto;
 import com.example.petback.hospital.dto.HospitalResponseDto;
 import com.example.petback.hospital.entity.Hospital;
 import com.example.petback.hospital.repository.HospitalRepository;
 import com.example.petback.hospitalspecies.entity.HospitalSpecies;
 import com.example.petback.hospitalsubject.entity.HospitalSubject;
+import com.example.petback.reservationslot.entity.ReservationSlot;
 import com.example.petback.species.SpeciesEnum;
 import com.example.petback.species.entity.Species;
 import com.example.petback.species.repository.SpeciesRepository;
@@ -18,7 +20,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -38,8 +44,39 @@ public class HospitalServiceImpl implements HospitalService{
         List<SubjectEnum> subjectEnums = requestDto.getSubjectEnums();
         addSpecies(hospital, speciesEnums);
         addSubjects(hospital, subjectEnums);
+
+
+        List<ReservationSlot> reservationSlots = createDefaultReservationSlots(hospital);
+        hospital.setReservationSlots(reservationSlots);
+
         hospitalRepository.save(hospital);
         return HospitalResponseDto.of(hospital);
+    }
+
+    private List<ReservationSlot> createDefaultReservationSlots(Hospital hospital) {
+        LocalDate today = LocalDate.now();
+        LocalDate endDate = today.plusMonths(2); // 2달간의 예약슬롯 추가
+        List<ReservationSlot> slots = new ArrayList<>();
+        Set<OperatingDay> operatingDays = hospital.getOperatingDays();
+
+        while (!today.isAfter(endDate)) {
+            OperatingDay dayOfWeek = OperatingDay.valueOf(today.getDayOfWeek().name());
+            if (operatingDays.contains(dayOfWeek)) {  // 선택된 요일에만 슬롯 생성
+                LocalTime time = LocalTime.of(9, 0); // 시작 시간은 오전 9시
+                for (int i = 0; i < 9; i++) { // 9시부터 5시까지
+                    ReservationSlot slot = ReservationSlot.builder()
+                            .date(today)
+                            .startTime(time)
+                            .isReserved(false)
+                            .hospital(hospital)
+                            .build();
+                    slots.add(slot);
+                    time = time.plusHours(1);
+                }
+            }
+            today = today.plusDays(1);
+        }
+        return slots;
     }
 
     @Override
@@ -76,7 +113,8 @@ public class HospitalServiceImpl implements HospitalService{
                 .updateLatitude(requestDto.getLatitude())
                 .updateLongitude(requestDto.getLongitude())
                 .updateAddress(requestDto.getAddress())
-                .updatePhoneNumber(requestDto.getPhoneNumber());
+                .updatePhoneNumber(requestDto.getPhoneNumber())
+                .updateOperatingDays(requestDto.getOperatingDays());
         return HospitalResponseDto.of(hospital);
     }
 

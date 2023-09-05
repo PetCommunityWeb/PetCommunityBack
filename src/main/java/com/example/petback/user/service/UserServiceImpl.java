@@ -114,7 +114,7 @@ public class UserServiceImpl implements UserService {
 
         List<Hospital> hospitals = userToDelete.getHospitals();
         for (Hospital hospital : hospitals) {
-            hospital.setDeleted(true);
+            hospital.setDeleted();
         }
 
         List<Reservation> reservations = userToDelete.getReservations();
