@@ -25,11 +25,11 @@ public class JwtUtil {
     public static final String REFRESH_HEADER = "refreshToken";
     // 사용자 권한 값의 KEY
     public static final String AUTHORIZATION_KEY = "auth";
-    // Token 식별자
+    // Token 식별자ㄱ
     public static final String BEARER_PREFIX = "Bearer ";
     // accessToken 만료시간
-    private final long TOKEN_TIME = 60 * 60 * 1000L * 24; // 하루
-    // private final long TOKEN_TIME = 20 * 1000L; // 20초
+//    private final long TOKEN_TIME = 60 * 60 * 1000L * 24; // 하루
+     private final long TOKEN_TIME = 5 * 60 * 1000L; // 5분
     // refreshToken 만료시간
     private final long REFRESH_TOKEN_TIME = 60 * 60 * 1000L * 24 * 7; // 일주일
 
