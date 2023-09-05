@@ -12,6 +12,8 @@ public class TipResponseDto {
     private String title;
     private String content;
     private String imageUrl;
+    private int likeCount;
+
 
     public static TipResponseDto of(Tip tip) {
         return TipResponseDto.builder()
@@ -19,6 +21,7 @@ public class TipResponseDto {
                 .title(tip.getTitle())
                 .content(tip.getContent())
                 .imageUrl(tip.getImageUrl())
+                .likeCount(tip.getTipLikes().size())
                 .build();
 
     }
