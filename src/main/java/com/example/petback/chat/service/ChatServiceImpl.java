@@ -71,7 +71,7 @@ public class ChatServiceImpl implements ChatService{
 
     @Override
     @Transactional(readOnly = true)
-    // @Cacheable(value = "chatRooms")
+    @Cacheable(value = "chatRooms")
     public ChatRoomListResponseDto selectRooms() {
         return ChatRoomListResponseDto.builder()
                 .chatRoomResponseDtoList(chatRoomRepository.findAll().stream().map(ChatRoomResponseDto::of).toList())
