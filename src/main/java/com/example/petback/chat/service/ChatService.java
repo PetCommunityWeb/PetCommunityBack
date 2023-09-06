@@ -1,5 +1,6 @@
 package com.example.petback.chat.service;
 
+import com.example.petback.chat.dto.ChatRoomListResponseDto;
 import com.example.petback.chat.dto.ChatRoomResponseDto;
 import com.example.petback.chat.dto.RoomDto;
 import org.springframework.web.socket.WebSocketSession;
@@ -14,7 +15,7 @@ public interface ChatService {
 
     ChatRoomResponseDto selectRoom(String uuid);
 
-    List<ChatRoomResponseDto> selectRooms();
+    ChatRoomListResponseDto selectRooms();
 
     <T> void sendMessage(WebSocketSession session, T message);
 }
