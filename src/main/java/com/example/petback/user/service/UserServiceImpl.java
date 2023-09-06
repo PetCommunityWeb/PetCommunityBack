@@ -90,46 +90,35 @@ public class UserServiceImpl implements UserService {
             throw new IllegalArgumentException("탈퇴 권한이 없습니다.");
         }
 
-
         // 채팅방, > 탈퇴시 안지워짐
-        List<Comment> comments = userToDelete.getComments();
-        for (Comment comment : comments) {
-            comment.setDeleted(true);
-        }
+        userToDelete.getComments().forEach(comment -> comment.setDeleted(true));
+        userToDelete.getFeeds().forEach(feed -> feed.setDeleted(true));
+        userToDelete.getFeedLikes().forEach(feedLike -> feedLike.setDeleted(true));
+        userToDelete.getChatMessages().forEach(chatMessage -> chatMessage.setDeleted(true));
+        userToDelete.getHospitals().forEach(Hospital::setDeleted);
+        userToDelete.getReservations().forEach(reservation -> reservation.setDeleted(true));
+        userToDelete.getReviews().forEach(review -> review.setDeleted(true));
 
-        List<Feed> feeds = userToDelete.getFeeds();
-        for (Feed feed : feeds) {
-            feed.setDeleted(true);
-        }
-
-        List<FeedLike> feedLikes = userToDelete.getFeedLikes();
-        for (FeedLike feedLike : feedLikes) {
-            feedLike.setDeleted(true);
-        }
-
-        List<ChatMessage> chatMessages = userToDelete.getChatMessages();
-        for (ChatMessage chatMessage : chatMessages) {
-            chatMessage.setDeleted(true);
-        }
-
-        List<Hospital> hospitals = userToDelete.getHospitals();
-        for (Hospital hospital : hospitals) {
-            hospital.setDeleted();
-        }
-
-        List<Reservation> reservations = userToDelete.getReservations();
-        for (Reservation reservation : reservations) {
-            reservation.setDeleted(true);
-        }
-        List<Review> reviews = userToDelete.getReviews();
-        for (Review review : reviews) {
-            review.setDeleted(true);
-        }
-
+        // UserRepository 를 통해 변경 사항을 저장
         userRepository.flush();
+
+        // User 엔티티의 삭제 상태 설정 및 저장
         userToDelete.setDeleted(true);
         userRepository.save(userToDelete);
     }
+
+    //회원탈퇴 시 삭제된 데이터 복구
+    @Override
+    @Transactional
+    public void restoreProfile(User user, Long id) {
+        User userToRestore = userRepository.findById(id).orElse(null);
+        if (userToRestore != null) {
+            // user 엔티티 복구
+            userToRestore.restore();
+            userRepository.save(userToRestore);
+        }
+    }
+
 
     @Override
     public User findUser(Long id) {
@@ -149,4 +138,6 @@ public class UserServiceImpl implements UserService {
         tokens.put("refreshToken", refreshToken); // 기존 refreshToken 유효하므로 그대로 반환
         return tokens;
     }
+
+
 }

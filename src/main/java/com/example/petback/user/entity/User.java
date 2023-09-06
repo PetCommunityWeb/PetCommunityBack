@@ -47,6 +47,11 @@ public class User {
     @Builder.Default
     private boolean isDeleted = Boolean.FALSE;
 
+    //삭제 데이터 복구용 메싸드
+    public void restore() {
+        this.isDeleted = false;
+    }
+
     @Column
     private String imageUrl;
 

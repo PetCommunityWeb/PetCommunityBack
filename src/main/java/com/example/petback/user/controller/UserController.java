@@ -70,4 +70,11 @@ public class UserController {
         userService.deleteProfile(userDetails.getUser(), id);
         return ResponseEntity.ok().body("삭제가 완료되었습니다.");
     }
+    //회원 탈퇴후 복구
+//    @PostMapping("profile/{id}/restore")
+//    public ResponseEntity<String> restoreUser(@PathVariable Long id) {
+//        User currentUser = getCurrentUser();
+//        userService.restoreProfile(currentUser, id);
+//        return ResponseEntity.ok("복구되었습니다.");
+//    }
 }
