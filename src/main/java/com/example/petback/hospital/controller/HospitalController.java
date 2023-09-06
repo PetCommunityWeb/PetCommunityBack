@@ -1,11 +1,13 @@
 package com.example.petback.hospital.controller;
 
 import com.example.petback.common.security.UserDetailsImpl;
+import com.example.petback.hospital.dto.HospitalListResponseDto;
 import com.example.petback.hospital.dto.HospitalRequestDto;
 import com.example.petback.hospital.dto.HospitalResponseDto;
 import com.example.petback.hospital.service.HospitalService;
 import com.example.petback.user.entity.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -26,13 +28,13 @@ public class HospitalController {
 
     @GetMapping("/my-hospitals")
     public ResponseEntity selectMyHospitals(@AuthenticationPrincipal UserDetailsImpl userDetails){
-        List<HospitalResponseDto> responseDtos = hospitalService.selectMyHospitals(userDetails.getUser());
+        HospitalListResponseDto responseDtos = hospitalService.selectMyHospitals(userDetails.getUser());
         return ResponseEntity.ok().body(responseDtos);
     }
 
     @GetMapping
     public ResponseEntity selectAllHospitals(){
-        List<HospitalResponseDto> responseDtos = hospitalService.selectAllHospitals();
+        HospitalListResponseDto responseDtos = hospitalService.selectAllHospitals();
         return ResponseEntity.ok().body(responseDtos);
     }
 
