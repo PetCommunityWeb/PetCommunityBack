@@ -1,13 +1,17 @@
 package com.example.petback.chat.service;
 
+import com.example.petback.chat.dto.ChatRoomListResponseDto;
 import com.example.petback.chat.dto.ChatRoomResponseDto;
 import com.example.petback.chat.dto.RoomDto;
 import com.example.petback.chat.entity.ChatRoom;
 import com.example.petback.chat.repository.ChatRoomRepository;
+import com.example.petback.user.repository.RefreshTokenRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.socket.TextMessage;
@@ -67,8 +71,12 @@ public class ChatServiceImpl implements ChatService{
 
     @Override
     @Transactional(readOnly = true)
-    public List<ChatRoomResponseDto> selectRooms() {
-        return chatRoomRepository.findAll().stream().map(ChatRoomResponseDto::of).toList();
+    // @Cacheable(value = "chatRooms")
+    public ChatRoomListResponseDto selectRooms() {
+        return ChatRoomListResponseDto.builder()
+                .chatRoomResponseDtoList(chatRoomRepository.findAll().stream().map(ChatRoomResponseDto::of).toList())
+                .build();
+
     }
 
     @Override
