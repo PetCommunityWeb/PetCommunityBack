@@ -18,6 +18,7 @@ import com.example.petback.subject.repository.SubjectRepository;
 import com.example.petback.user.entity.User;
 import com.example.petback.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,7 +37,7 @@ public class HospitalServiceImpl implements HospitalService{
     private final UserRepository userRepository;
     private final SpeciesRepository speciesRepository;
     private final SubjectRepository subjectRepository;
-    @Override
+    @CacheEvict(value = "allHospitals", allEntries = true)
     public HospitalResponseDto createHospital(User user, HospitalRequestDto requestDto) {
         user = userRepository.findById(user.getId())
                 .orElseThrow(() -> new IllegalArgumentException("유저 정보가 존재하지 않습니다."));
@@ -81,7 +82,7 @@ public class HospitalServiceImpl implements HospitalService{
         return slots;
     }
 
-    @Override
+    @Transactional(readOnly = true)
     @Cacheable(value = "myHospitals", key = "#user.id")
     public HospitalListResponseDto selectMyHospitals(User user) {
         List<Hospital> hospitals = hospitalRepository.findAllByUser(user);
@@ -106,6 +107,7 @@ public class HospitalServiceImpl implements HospitalService{
         return HospitalResponseDto.of(hospital);
     }
 
+    @CacheEvict(value = {"hospital", "allHospitals", "myHospitals"}, allEntries = true)
     public HospitalResponseDto updateHospital(User user, Long id, HospitalRequestDto requestDto) {
         Hospital hospital = findHospital(id);
         if (!user.equals(hospital.getUser())) throw new IllegalArgumentException("병원 수정 권한이 없습니다.");
@@ -127,14 +129,13 @@ public class HospitalServiceImpl implements HospitalService{
         return HospitalResponseDto.of(hospital);
     }
 
-    @Override
+    @CacheEvict(value = {"hospital", "allHospitals", "myHospitals"}, allEntries = true)
     public void deleteHospital(User user, Long id) {
         Hospital hospital = findHospital(id);
         if (!user.equals(hospital.getUser())) throw new IllegalArgumentException("병원 수정 권한이 없습니다.");
         hospitalRepository.delete(hospital);
     }
 
-    @Override
     public Hospital findHospital(Long id){
         return hospitalRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 병원입니다."));
