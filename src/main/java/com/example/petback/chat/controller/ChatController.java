@@ -5,6 +5,9 @@ import com.example.petback.chat.dto.RoomDto;
 import com.example.petback.chat.dto.RoomRequestDto;
 import com.example.petback.chat.service.ChatService;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.annotations.Cache;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,6 +26,7 @@ public class ChatController {
 
     // 채팅방 단일 조회
     @GetMapping("/chat")
+    // @Cacheable(value = "chatRoom")
     public ChatRoomResponseDto selectRoom(@RequestParam String uuid) {
         return chatService.selectRoom(uuid);
     }
@@ -30,6 +34,6 @@ public class ChatController {
     // 생성된 채팅방 전체조회
     @GetMapping("/chats")
     public List<ChatRoomResponseDto> selectRooms() {
-        return chatService.selectRooms();
+        return chatService.selectRooms().getChatRoomResponseDtoList();
     }
 }

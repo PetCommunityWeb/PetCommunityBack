@@ -21,20 +21,6 @@ public class RoomDto {
         this.name = name;
     }
 
-    public void handlerActions(WebSocketSession session, MessageDto messageDto, ChatService chatService) {
-        if (messageDto.getType().equals(MessageDto.MessageType.ENTER)) {
-            sessions.add(session);
-            messageDto.setMessage(messageDto.getSender() + "님이 입장했습니다.");
-        }
-        sendMessage(messageDto, chatService);
-
-    }
-
-    private <T> void sendMessage(T message, ChatService chatService) {
-        sessions.parallelStream()
-                .forEach(session -> chatService.sendMessage(session, message));
-    }
-
     public ChatRoom toEntity(String uuid, String roomName) {
         return ChatRoom.builder()
                 .uuid(uuid)

@@ -2,6 +2,7 @@ package com.example.petback.common.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+
 import org.springframework.boot.autoconfigure.cache.RedisCacheManagerBuilderCustomizer;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
@@ -13,20 +14,20 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 import java.time.Duration;
 
+
 @Configuration
 @EnableCaching
 public class CacheConfig {
-    // 하나의 저장소를 사용하는 경우
 
     @Bean
-    public RedisCacheConfiguration redisCacheConfiguration() {
+    public RedisCacheConfiguration redisCacheConfiguration(ObjectMapper mapper) {
         return RedisCacheConfiguration.defaultCacheConfig()
-                .entryTtl(Duration.ofSeconds(60))
-                .disableCachingNullValues()
-                .serializeKeysWith(
+                .entryTtl(Duration.ofSeconds(20)) // TTL 20초
+                .disableCachingNullValues() // null 값을 캐시하지 않도록 설정
+                .serializeKeysWith( // 키 직렬화 방법
                         RedisSerializationContext.SerializationPair.fromSerializer(new StringRedisSerializer())
                 )
-                .serializeValuesWith(
+                .serializeValuesWith( // 값 직렬화 방법
                         RedisSerializationContext.SerializationPair.fromSerializer(new GenericJackson2JsonRedisSerializer())
                 );
     }

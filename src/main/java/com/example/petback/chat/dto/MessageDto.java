@@ -19,7 +19,6 @@ public class MessageDto {
     public enum MessageType {
         ENTER, TALK // 입장, 메시지전달
     }
-
     private MessageType type;
     private String roomId;
     private String sender;
