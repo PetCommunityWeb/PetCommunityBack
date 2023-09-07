@@ -26,9 +26,11 @@ public interface UserService {
     // 회원 탈퇴
     void deleteProfile(User user, Long id);
     // 회원 탈퇴 복구
-    void restoreProfile(User user, Long id);
+    void restoreProfile(Long id);
 
     User findUser(Long id);
 
     Map<String, String> refreshToken(String refreshToken);
+
+    Long getUserIdByEmail(String email);
 }

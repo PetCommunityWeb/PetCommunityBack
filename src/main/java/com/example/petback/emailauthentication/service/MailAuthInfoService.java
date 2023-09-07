@@ -10,10 +10,11 @@ import java.time.Duration;
 @Service
 @RequiredArgsConstructor
 public class MailAuthInfoService {
-    // javamail 인증 정보 저장
-    private StringRedisTemplate redisTemplate;
+    // redis에 javamail 인증 정보 저장
+    private final StringRedisTemplate redisTemplate;
+    private final Duration DEFAULT_EXPIRE_DURATION = Duration.ofSeconds(60);
 
-    public String getData(String key) { // key를 통해 value 를 얻기
+    public String getData(String key) {
         ValueOperations<String, String> valueOperations = redisTemplate.opsForValue();
         return valueOperations.get(key);
     }
@@ -22,34 +23,25 @@ public class MailAuthInfoService {
         return Boolean.TRUE.equals(redisTemplate.hasKey(key));
     }
 
-    // 이메일 인증 코드 전송
-    public void setDateExpire(String key, String value, long duration) {
-        //duration 동안 key - value를 저장
+    public void save(String key, String value) {
         ValueOperations<String, String> valueOperations = redisTemplate.opsForValue();
-        Duration expireDuration = Duration.ofSeconds(duration);
-
-        //인증 코드 값을 value에 저장
-        valueOperations.set(key, value, expireDuration);
+        valueOperations.set(key, value, DEFAULT_EXPIRE_DURATION);
     }
 
     public void deleteData(String key) {
-        //데이터 삭제
         redisTemplate.delete(key);
     }
 
-    public void save(String key, String value, long duration) {
-        //duration 동안 (key, value)저장
-        ValueOperations<String, String> valueOperations = redisTemplate.opsForValue();
-        Duration expireDuration = Duration.ofSeconds(duration);
-
-        //인증 코드 값을 value에 저장
-        valueOperations.set(key, value, expireDuration);
+    public String getEmailVerificationCode(String email) {
+        return getData(email);
     }
 
-    // redis 에서 getEmail을 꺼내서 사용
-    public String getEmail(String key) {
-        ValueOperations<String, String> valueOperations = redisTemplate.opsForValue();
-        return valueOperations.get(key);
+    public void setEmailVerificationCode(String email, String code) {
+        save(email, code);
+    }
+
+    public void deleteEmailVerificationCode(String email) {
+        deleteData(email);
     }
 
 }

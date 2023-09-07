@@ -110,13 +110,25 @@ public class UserServiceImpl implements UserService {
     //회원탈퇴 시 삭제된 데이터 복구
     @Override
     @Transactional
-    public void restoreProfile(User user, Long id) {
-        User userToRestore = userRepository.findById(id).orElse(null);
-        if (userToRestore != null) {
-            // user 엔티티 복구
-            userToRestore.restore();
-            userRepository.save(userToRestore);
+    public void restoreProfile(Long id) {
+        User userToRestore = findUser(id);
+
+        // 복구 가능한 상태인지 확인
+        if (!userToRestore.isDeleted()) {
+            throw new IllegalArgumentException("이미 복구된 사용자입니다.");
         }
+        userToRestore.getComments().forEach(comment -> comment.setDeleted(false));
+        userToRestore.getFeeds().forEach(feed -> feed.setDeleted(false));
+        userToRestore.getFeedLikes().forEach(feedLike -> feedLike.setDeleted(false));
+        userToRestore.getChatMessages().forEach(chatMessage -> chatMessage.setDeleted(false));
+        userToRestore.getHospitals().forEach(Hospital::setDeleted);
+        userToRestore.getReservations().forEach(reservation -> reservation.setDeleted(false));
+        userToRestore.getReviews().forEach(review -> review.setDeleted(false));
+
+        // 복구 가능한 상태라면 삭제 상태를 false로 변경하고 저장
+        userToRestore.setDeleted(false);
+        userRepository.save(userToRestore);
+
     }
 
 
@@ -137,6 +149,16 @@ public class UserServiceImpl implements UserService {
         tokens.put("accessToken", newToken);
         tokens.put("refreshToken", refreshToken); // 기존 refreshToken 유효하므로 그대로 반환
         return tokens;
+    }
+
+    //softDelete된 데이터도 검색
+    @Override
+    public Long getUserIdByEmail(String email) {
+        User user = userRepository.findByEmailIgnoringSoftDelete(email);
+        if (user != null) {
+            return user.getId();
+        }
+        return null; // 사용자가 없는 경우
     }
 
 
