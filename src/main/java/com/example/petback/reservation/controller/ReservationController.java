@@ -1,6 +1,7 @@
 package com.example.petback.reservation.controller;
 
 import com.example.petback.common.security.UserDetailsImpl;
+import com.example.petback.reservation.dto.ReservationListResponseDto;
 import com.example.petback.reservation.dto.ReservationRequestDto;
 import com.example.petback.reservation.dto.ReservationResponseDto;
 import com.example.petback.reservation.service.ReservationService;
@@ -33,7 +34,8 @@ public class ReservationController {
 
     @GetMapping
     public ResponseEntity selectAllReservations(@AuthenticationPrincipal UserDetailsImpl userDetails){
-        List<ReservationResponseDto> responseDtos = reservationService.selectAllReservations(userDetails.getUser());
+        List<ReservationResponseDto> responseDtos = reservationService
+                .selectAllReservations(userDetails.getUser()).getReservationResponseDtos();
         return ResponseEntity.ok().body(responseDtos);
     }
 

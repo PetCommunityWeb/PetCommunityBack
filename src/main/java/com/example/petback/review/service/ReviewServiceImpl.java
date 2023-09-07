@@ -2,12 +2,16 @@ package com.example.petback.review.service;
 
 import com.example.petback.reservation.entity.Reservation;
 import com.example.petback.reservation.repository.ReservationRepository;
+import com.example.petback.review.dto.ReviewListResponseDto;
 import com.example.petback.review.dto.ReviewRequestDto;
 import com.example.petback.review.dto.ReviewResponseDto;
 import com.example.petback.review.entity.Review;
 import com.example.petback.review.repository.ReviewRepository;
 import com.example.petback.user.entity.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +25,11 @@ public class ReviewServiceImpl implements ReviewService {
     private final ReviewRepository reviewRepository;
 
     @Override
+    @Caching(evict = {
+            @CacheEvict(value = "myHospitals", key = "#user.id"),
+            @CacheEvict(value = "myReservations", key = "#user.id"),
+            @CacheEvict(value = "myReviews", key = "#user.id")
+    })
     public ReviewResponseDto createReview(User user, ReviewRequestDto requestDto) {
         String reservationNum = requestDto.getReservationNum();
         Reservation reservation = reservationRepository.findById(reservationNum).orElseThrow(() -> new IllegalArgumentException("해당 예약이 없습니다."));
@@ -31,12 +40,16 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public List<ReviewResponseDto> selectAllReviews(User user) {
+    @Cacheable(value = "myReviews", key = "#user.id")
+    public ReviewListResponseDto selectAllReviews(User user) {
         List<Review> reviews = reviewRepository.findAllByUser(user);
-        return reviews.stream().map(ReviewResponseDto::of).toList();
+        return ReviewListResponseDto.builder()
+                .reviewResponseDtos(reviews.stream().map(ReviewResponseDto::of).toList())
+                .build();
     }
 
     @Override
+    @Cacheable(value = "review", key="#id")
     public ReviewResponseDto selectReview(Long id) {
         Review review = reviewRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("해당 리뷰가 존재하지 않습니다."));
@@ -44,6 +57,12 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
+    @Caching(evict = {
+            @CacheEvict(value = "myHospitals", key = "#user.id"),
+            @CacheEvict(value = "myReservations", key = "#user.id"),
+            @CacheEvict(value = "myReviews", key = "#user.id"),
+            @CacheEvict(value = "review", key = "#id")
+    })
     public ReviewResponseDto updateReview(User user, Long id, ReviewRequestDto requestDto) {
         Review review = reviewRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("해당 리뷰가 존재하지 않습니다."));
@@ -56,6 +75,11 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
+    @Caching(evict = {
+            @CacheEvict(value = "myHospitals", key = "#user.id"),
+            @CacheEvict(value = "myReservations", key = "#user.id"),
+            @CacheEvict(value = "myReviews", key = "#user.id")
+    })
     public void deleteReview(User user, Long id) {
         Review review = reviewRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("해당 리뷰가 존재하지 않습니다."));

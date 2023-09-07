@@ -19,7 +19,8 @@ public class NotificationController {
     // 유저 알람 전체 조회
     @GetMapping
     public ResponseEntity selectNotifications(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        List<NotificationResponseDto> responseDtos = notificationService.selectNotifications(userDetails.getUser());
+        List<NotificationResponseDto> responseDtos = notificationService
+                .selectNotifications(userDetails.getUser()).getNotificationResponseDtos();
         return ResponseEntity.ok().body(responseDtos);
     }
 

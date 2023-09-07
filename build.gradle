@@ -30,6 +30,7 @@ dependencies {
     // security, validation
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-cache'
     implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
     implementation 'top.jfunc.json:Json-Gson:1.0'
     implementation 'top.jfunc.json:json-gson:1.8.3'
