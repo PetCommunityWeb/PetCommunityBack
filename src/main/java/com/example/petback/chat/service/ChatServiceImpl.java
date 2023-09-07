@@ -5,11 +5,13 @@ import com.example.petback.chat.dto.ChatRoomResponseDto;
 import com.example.petback.chat.dto.RoomDto;
 import com.example.petback.chat.entity.ChatRoom;
 import com.example.petback.chat.repository.ChatRoomRepository;
+import com.example.petback.user.entity.User;
 import com.example.petback.user.repository.RefreshTokenRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
@@ -49,7 +51,8 @@ public class ChatServiceImpl implements ChatService{
 
     @Override
     @Transactional
-    public RoomDto createRoom(String name) {
+    @CacheEvict(value = "chatRooms", allEntries = true)
+    public RoomDto createRoom(String name, User user) {
         String randomId = UUID.randomUUID().toString();
         RoomDto roomDto = RoomDto.builder()
                 .roomId(randomId)
@@ -57,7 +60,7 @@ public class ChatServiceImpl implements ChatService{
                 .build();
         chatRooms.put(randomId, roomDto);
 
-        ChatRoom chatRoom = roomDto.toEntity(randomId, name);
+        ChatRoom chatRoom = roomDto.toEntity(randomId, name, user);
         chatRoomRepository.save(chatRoom);
         return roomDto;
     }
@@ -85,8 +88,17 @@ public class ChatServiceImpl implements ChatService{
             session.sendMessage(new TextMessage(objectMapper.writeValueAsString(message)));
         } catch (IOException e) {
             log.error(e.getMessage(), e);
-            // throw new RuntimeException(e);
         }
     }
 
+    @Override
+    @Transactional
+    @CacheEvict(value = "chatRooms", allEntries = true)
+    public void deleteRoom(String uuid, User user) {
+        ChatRoom chatRoom = chatRoomRepository.findByUuid(uuid).get();
+        if (!user.equals(chatRoom.getUser())) {
+            throw new IllegalArgumentException("채팅방 관리자가 아닙니다.");
+        }
+        chatRoomRepository.deleteByUuid(uuid);
+    }
 }

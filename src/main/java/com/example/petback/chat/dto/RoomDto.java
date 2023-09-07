@@ -2,6 +2,7 @@ package com.example.petback.chat.dto;
 
 import com.example.petback.chat.entity.ChatRoom;
 import com.example.petback.chat.service.ChatService;
+import com.example.petback.user.entity.User;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.web.socket.WebSocketSession;
@@ -21,10 +22,11 @@ public class RoomDto {
         this.name = name;
     }
 
-    public ChatRoom toEntity(String uuid, String roomName) {
+    public ChatRoom toEntity(String uuid, String roomName, User user) {
         return ChatRoom.builder()
                 .uuid(uuid)
                 .roomName(roomName)
+                .user(user)
                 .build();
     }
 }

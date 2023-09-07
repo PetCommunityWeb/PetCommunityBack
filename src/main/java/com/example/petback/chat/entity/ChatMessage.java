@@ -16,9 +16,6 @@ import java.time.ZonedDateTime;
 @Setter
 @Builder
 @Table(name = "ChatMessages")
-@Where(clause = "is_deleted = false")
-@SQLDelete(sql = "UPDATE chat_messages SET is_deleted = true WHERE id = ?")
-
 public class ChatMessage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,13 +31,8 @@ public class ChatMessage {
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn
     private ChatRoom chatRoom;
 
     @Builder.Default
     private boolean isDeleted = Boolean.FALSE;
-
-    public void setDeleted(boolean isDeleted) {
-        this.isDeleted = Boolean.TRUE;
-    }
 }
