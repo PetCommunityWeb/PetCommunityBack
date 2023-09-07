@@ -107,11 +107,6 @@ public class UserServiceImpl implements UserService {
             feedLike.setDeleted(true);
         }
 
-        List<ChatMessage> chatMessages = userToDelete.getChatMessages();
-        for (ChatMessage chatMessage : chatMessages) {
-            chatMessage.setDeleted(true);
-        }
-
         List<Hospital> hospitals = userToDelete.getHospitals();
         for (Hospital hospital : hospitals) {
             hospital.setDeleted();
