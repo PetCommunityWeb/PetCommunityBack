@@ -1,5 +1,6 @@
 package com.example.petback.common.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.boot.autoconfigure.cache.RedisCacheManagerBuilderCustomizer;
 import org.springframework.cache.annotation.EnableCaching;
@@ -16,6 +17,7 @@ import java.time.Duration;
 @EnableCaching
 public class CacheConfig {
     // 하나의 저장소를 사용하는 경우
+
     @Bean
     public RedisCacheConfiguration redisCacheConfiguration() {
         return RedisCacheConfiguration.defaultCacheConfig()

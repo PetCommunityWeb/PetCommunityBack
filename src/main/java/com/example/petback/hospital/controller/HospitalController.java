@@ -28,13 +28,13 @@ public class HospitalController {
 
     @GetMapping("/my-hospitals")
     public ResponseEntity selectMyHospitals(@AuthenticationPrincipal UserDetailsImpl userDetails){
-        HospitalListResponseDto responseDtos = hospitalService.selectMyHospitals(userDetails.getUser());
+        List<HospitalResponseDto> responseDtos = hospitalService.selectMyHospitals(userDetails.getUser()).getHospitalResponseDtos();
         return ResponseEntity.ok().body(responseDtos);
     }
 
     @GetMapping
     public ResponseEntity selectAllHospitals(){
-        HospitalListResponseDto responseDtos = hospitalService.selectAllHospitals();
+        List<HospitalResponseDto> responseDtos = hospitalService.selectAllHospitals().getHospitalResponseDtos();
         return ResponseEntity.ok().body(responseDtos);
     }
 

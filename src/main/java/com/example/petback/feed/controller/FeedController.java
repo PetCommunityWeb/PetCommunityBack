@@ -2,6 +2,7 @@ package com.example.petback.feed.controller;
 
 import com.example.petback.common.advice.ApiResponseDto;
 import com.example.petback.common.security.UserDetailsImpl;
+import com.example.petback.feed.dto.FeedListResponseDto;
 import com.example.petback.feed.dto.FeedRequestDto;
 import com.example.petback.feed.dto.FeedResponseDto;
 import com.example.petback.feed.service.FeedService;
@@ -31,13 +32,13 @@ public class FeedController {
     //피드 전체 조회
     @GetMapping
     public ResponseEntity selectFeeds() {
-        List<FeedResponseDto> responseDtos = feedService.selectFeeds();
+        List<FeedResponseDto> responseDtos = feedService.selectFeeds().getFeedResponseDtos();
         return ResponseEntity.ok().body(responseDtos);
     }
     //내가 쓴 피드 조회
     @GetMapping("/my-feeds")
     public ResponseEntity selectFeeds(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        List<FeedResponseDto> responseDtos = feedService.selectFeedsByUser(userDetails.getUser());
+        List<FeedResponseDto> responseDtos = feedService.selectFeedsByUser(userDetails.getUser()).getFeedResponseDtos();
         return ResponseEntity.ok().body(responseDtos);
     }
 
