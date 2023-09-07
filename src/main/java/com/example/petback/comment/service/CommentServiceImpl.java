@@ -11,6 +11,8 @@ import com.example.petback.user.entity.User;
 import com.example.petback.user.enums.UserRoleEnum;
 import com.example.petback.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +27,10 @@ public class CommentServiceImpl implements CommentService {
 
     // 댓글 생성
     @Override
+    @Caching(evict = {
+            @CacheEvict(value = "feed", key = "#id"),
+            @CacheEvict(value = "allFeeds", allEntries = true)
+    })
     public CommentResponseDto createComment(CommentRequestDto requestDto, Long id, User user) {
         Feed feed = feedService.findFeed(id);
         Comment comment = requestDto.toEntity(feed, user);
@@ -34,6 +40,10 @@ public class CommentServiceImpl implements CommentService {
 
     // 댓글 수정
     @Override
+    @Caching(evict = {
+            @CacheEvict(value = "feed", key = "#id"),
+            @CacheEvict(value = "allFeeds", allEntries = true)
+    })
     public void updateComment(Long id, CommentRequestDto requestDto, User user) {
         Comment comment = findComment(id);
         if (!comment.getUser().equals(user)) {
@@ -44,6 +54,10 @@ public class CommentServiceImpl implements CommentService {
 
     // 댓글 삭제
     @Override
+    @Caching(evict = {
+            @CacheEvict(value = "feed", key = "#id"),
+            @CacheEvict(value = "allFeeds", allEntries = true)
+    })
     public void deleteComment(Long id, User user) {
         Comment comment = findComment(id);
         if (!comment.getUser().equals(user)) {
