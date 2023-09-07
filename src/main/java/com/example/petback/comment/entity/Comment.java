@@ -14,8 +14,7 @@ import org.hibernate.annotations.Where;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-@Where(clause = "is_deleted = false") // softdelete
-@SQLDelete(sql = "UPDATE comments SET is_deleted = true WHERE id = ?")
+@Where(clause = "is_deleted = false")
 public class Comment {
 
     @Id
