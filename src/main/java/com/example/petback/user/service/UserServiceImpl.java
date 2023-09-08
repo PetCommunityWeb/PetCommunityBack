@@ -112,7 +112,6 @@ public class UserServiceImpl implements UserService {
     public void restoreProfile(Long id) {
         User userToRestore = findUser(id);
 
-
         // 복구 가능한 상태인지 확인
         if (!userToRestore.isDeleted()) {
             throw new IllegalArgumentException("이미 복구된 사용자입니다.");
@@ -120,7 +119,6 @@ public class UserServiceImpl implements UserService {
         userToRestore.getComments().forEach(comment -> comment.setDeleted(false));
         userToRestore.getFeeds().forEach(feed -> feed.setDeleted(false));
         userToRestore.getFeedLikes().forEach(feedLike -> feedLike.setDeleted(false));
-        userToRestore.getChatMessages().forEach(chatMessage -> chatMessage.setDeleted(false));
         userToRestore.getHospitals().forEach(Hospital::setDeleted);
         userToRestore.getReservations().forEach(reservation -> reservation.setDeleted(false));
         userToRestore.getReviews().forEach(review -> review.setDeleted(false));
