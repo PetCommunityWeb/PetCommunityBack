@@ -1,11 +1,15 @@
 package com.example.petback.comment.dto;
 
 import com.example.petback.comment.entity.Comment;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Builder
 @Getter
+@NoArgsConstructor
+@AllArgsConstructor
 public class CommentResponseDto {
 
     private Long id;

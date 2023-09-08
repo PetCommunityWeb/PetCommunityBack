@@ -22,7 +22,6 @@ import org.hibernate.mapping.ToOne;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Where(clause = "is_deleted = false")
-@SQLDelete(sql = "UPDATE reservations SET is_deleted = true WHERE id = ?")
 public class Reservation {
     @Id
     private String reservationNum;

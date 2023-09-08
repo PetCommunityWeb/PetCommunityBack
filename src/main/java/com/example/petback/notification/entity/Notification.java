@@ -17,7 +17,6 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Where(clause = "is_deleted = false")
-@SQLDelete(sql = "UPDATE notifications SET is_deleted = true WHERE id = ?")
 public class Notification {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

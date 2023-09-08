@@ -24,7 +24,6 @@ import java.util.Set;
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
 @Where(clause = "is_deleted = false")
-@SQLDelete(sql = "UPDATE hospitals SET is_deleted = true WHERE id = ?")
 public class Hospital {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

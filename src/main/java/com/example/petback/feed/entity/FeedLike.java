@@ -12,7 +12,6 @@ import org.hibernate.annotations.Where;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Where(clause = "is_deleted = false")
-@SQLDelete(sql = "UPDATE feed_like SET is_deleted = true WHERE id = ?")
 public class FeedLike {
 
     @Id

@@ -90,8 +90,6 @@ public class UserServiceImpl implements UserService {
             throw new IllegalArgumentException("탈퇴 권한이 없습니다.");
         }
 
-
-        // 채팅방, > 탈퇴시 안지워짐
         List<Comment> comments = userToDelete.getComments();
         for (Comment comment : comments) {
             comment.setDeleted(true);

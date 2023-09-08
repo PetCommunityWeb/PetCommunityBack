@@ -135,7 +135,6 @@ public class FeedCommentControllerTest {
        return commentRepository.save(Comment.builder()
                 .feed(feed)
                 .user(user)
-                .username(user.getUsername())
                 .content("테스트코멘트내용")
                 .build());
     }

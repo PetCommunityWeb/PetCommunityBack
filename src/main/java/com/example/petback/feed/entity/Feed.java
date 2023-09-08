@@ -18,7 +18,6 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Where(clause = "is_deleted = false")
-@SQLDelete(sql = "UPDATE feeds SET is_deleted = true WHERE id = ?")
 public class Feed {
 
     @Id

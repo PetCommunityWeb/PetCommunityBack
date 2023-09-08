@@ -15,7 +15,6 @@ import lombok.*;
 @Builder
 @Getter
 @Where(clause = "is_deleted = false")
-@SQLDelete(sql = "UPDATE reviews SET is_deleted = true WHERE id = ?")
 public class Review {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
