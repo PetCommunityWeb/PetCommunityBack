@@ -1,20 +1,15 @@
 package com.example.petback.user.service;
 
-import com.example.petback.chat.entity.ChatMessage;
-import com.example.petback.comment.entity.Comment;
 import com.example.petback.common.jwt.JwtUtil;
 import com.example.petback.common.jwt.RefreshToken;
-import com.example.petback.feed.entity.Feed;
-import com.example.petback.feed.entity.FeedLike;
 import com.example.petback.hospital.entity.Hospital;
-import com.example.petback.reservation.entity.Reservation;
-import com.example.petback.review.entity.Review;
 import com.example.petback.user.dto.ProfileRequestDto;
 import com.example.petback.user.dto.ProfileResponseDto;
 import com.example.petback.user.dto.SignupRequestDto;
 import com.example.petback.user.entity.User;
 import com.example.petback.user.repository.RefreshTokenRepository;
 import com.example.petback.user.repository.UserRepository;
+import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -136,7 +131,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Map<String, String> refreshToken(String refreshToken) throws NoSuchElementException{
+    public Map<String, String> refreshToken(String refreshToken) throws NoSuchElementException {
         if (refreshToken == null) throw new NoSuchElementException("refreshToken이 만료되었습니다.");
         RefreshToken redisToken = refreshTokenRepository.findById(refreshToken)
                 .orElseThrow(() -> new NoSuchElementException("refreshToken이 만료되었습니다.")); // 무조건 @Id로만 찾기
@@ -152,10 +147,12 @@ public class UserServiceImpl implements UserService {
     //softDelete된 데이터도 검색
     @Override
     public Long getUserIdByEmail(String email) {
-        User user = userRepository.findByEmail(email).get();
+
+
+        User user = userRepository.findUserByEmailIgnoringSoftDelete(email);
         if (user != null) {
             return user.getId();
         }
-        return null; // 사용자가 없는 경우
+        return null;
     }
 }

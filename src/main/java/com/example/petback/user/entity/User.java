@@ -40,8 +40,10 @@ public class User {
 
     @Column(nullable = false)
     private String password;
-    @Column(nullable = false, unique = true)
+
+    @Column(name="email", nullable = false, unique = true)
     private String email;
+
     private String nickname;
     private String introduction;
 
