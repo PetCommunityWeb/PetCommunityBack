@@ -13,6 +13,7 @@ import com.example.petback.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Caching;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,6 +25,7 @@ import java.util.concurrent.RejectedExecutionException;
 public class CommentServiceImpl implements CommentService {
     private final CommentRepository commentRepository;
     private final FeedService feedService;
+    private final StringRedisTemplate stringRedisTemplate;
 
     // 댓글 생성
     @Override
@@ -40,29 +42,24 @@ public class CommentServiceImpl implements CommentService {
 
     // 댓글 수정
     @Override
-    @Caching(evict = {
-            @CacheEvict(value = "feed", key = "#id"),
-            @CacheEvict(value = "allFeeds", allEntries = true)
-    })
     public void updateComment(Long id, CommentRequestDto requestDto, User user) {
         Comment comment = findComment(id);
         if (!comment.getUser().equals(user)) {
             throw new IllegalArgumentException("댓글 작성자만 수정할 수 있습니다.");
         }
+        stringRedisTemplate.delete("feed::" + comment.getFeed().getId());
         comment.updateContent(requestDto.getContent());
     }
 
     // 댓글 삭제
     @Override
-    @Caching(evict = {
-            @CacheEvict(value = "feed", key = "#id"),
-            @CacheEvict(value = "allFeeds", allEntries = true)
-    })
+    @CacheEvict(value = "allFeeds", allEntries = true)
     public void deleteComment(Long id, User user) {
         Comment comment = findComment(id);
         if (!comment.getUser().equals(user)) {
             throw new IllegalArgumentException("댓글 작성자만 삭제할 수 있습니다.");
         }
+        stringRedisTemplate.delete("feed::" + comment.getFeed().getId());
         commentRepository.delete(comment);
     }
 
