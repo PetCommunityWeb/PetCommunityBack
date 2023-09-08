@@ -3,16 +3,13 @@ package com.example.petback.hospitalspecies.entity;
 import com.example.petback.hospital.entity.Hospital;
 import com.example.petback.species.entity.Species;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Getter
 @Entity
 @Table(name = "hospital_species")
 @Builder
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 //@Where(clause = "is_deleted = false")
 //@SQLDelete(sql = "UPDATE hospital_species SET is_deleted = true WHERE id = ?")

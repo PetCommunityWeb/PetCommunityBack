@@ -1,5 +1,6 @@
 package com.example.petback.reservation.service;
 
+import com.example.petback.reservation.dto.ReservationListResponseDto;
 import com.example.petback.reservation.dto.ReservationRequestDto;
 import com.example.petback.reservation.dto.ReservationResponseDto;
 import com.example.petback.user.entity.User;
@@ -13,7 +14,7 @@ public interface ReservationService {
 
     void deleteReservation(User user, String reservationNum);
 
-    List<ReservationResponseDto> selectAllReservations(User user);
+    ReservationListResponseDto selectAllReservations(User user);
 
     ReservationResponseDto selectReservation(User user, String reservationNum);
 }

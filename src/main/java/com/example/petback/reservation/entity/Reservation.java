@@ -10,14 +10,18 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
+import lombok.*;
 import org.hibernate.mapping.ToOne;
 
 @Entity
 @Table(name = "reservations")
 @Builder
 @AllArgsConstructor
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
+@Where(clause = "is_deleted = false")
 public class Reservation {
     @Id
     private String reservationNum;
@@ -25,14 +29,21 @@ public class Reservation {
     @Enumerated(value = EnumType.STRING)
     private ReservationStatusEnum reservationStatus;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private User user;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Hospital hospital;
     @ManyToOne(fetch = FetchType.LAZY)
     private ReservationSlot reservationSlot;
     @OneToOne(mappedBy = "reservation")
     private Review review;
+
+    @Builder.Default
+    private boolean isDeleted = Boolean.FALSE;
+
+    public void setDeleted(boolean isDeleted) {
+        this.isDeleted = Boolean.TRUE;
+    }
     public void cancle() {
         this.reservationStatus = ReservationStatusEnum.예약취소;
         this.reservationSlot.setReserved(false);

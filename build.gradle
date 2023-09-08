@@ -7,6 +7,11 @@ plugins {
 group = 'com.example'
 version = '0.0.1-SNAPSHOT'
 
+// -plain.jar 파일 생성 안하도록
+jar {
+    enabled = false
+}
+
 java {
     sourceCompatibility = '17'
 }
@@ -25,6 +30,7 @@ dependencies {
     // security, validation
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-cache'
     implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
     implementation 'top.jfunc.json:Json-Gson:1.0'
     implementation 'top.jfunc.json:json-gson:1.8.3'
@@ -70,6 +76,16 @@ dependencies {
 
     // webSocket
     implementation 'org.springframework.boot:spring-boot-starter-websocket'
+
+    // redis 구현체로 Lettuce 사용
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis:2.3.1.RELEASE'
+
+
+    // JavaMail -> 이메일 인증
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
+
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
+
 }
 
 tasks.named('test') {

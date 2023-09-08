@@ -19,7 +19,8 @@ public class NotificationController {
     // 유저 알람 전체 조회
     @GetMapping
     public ResponseEntity selectNotifications(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        List<NotificationResponseDto> responseDtos = notificationService.selectNotifications(userDetails.getUser());
+        List<NotificationResponseDto> responseDtos = notificationService
+                .selectNotifications(userDetails.getUser()).getNotificationResponseDtos();
         return ResponseEntity.ok().body(responseDtos);
     }
 
@@ -28,5 +29,11 @@ public class NotificationController {
     public ResponseEntity deleteNotification(@PathVariable Long notificationId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         notificationService.deleteNotification(notificationId, userDetails.getUser());
         return ResponseEntity.ok().body("알림 삭제가 완료되었습니다.");
+    }
+
+    @PutMapping("/{notificationId}")
+    public ResponseEntity readNotification(@PathVariable Long notificationId, @AuthenticationPrincipal UserDetailsImpl userDetails){
+        notificationService.readNotification(notificationId, userDetails.getUser());
+        return ResponseEntity.ok().body("알림을 읽었습니다.");
     }
 }

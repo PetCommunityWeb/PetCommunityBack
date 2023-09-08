@@ -6,10 +6,11 @@ import com.example.petback.user.dto.SignupRequestDto;
 import com.example.petback.user.entity.User;
 
 import java.util.List;
+import java.util.Map;
 
 public interface UserService {
     // 회원가입
-    Long signUp(SignupRequestDto requestDto);
+    void signUp(SignupRequestDto requestDto);
 
     // 회원 전체 조회
     List<ProfileResponseDto> selectProfiles();
@@ -24,6 +25,12 @@ public interface UserService {
 
     // 회원 탈퇴
     void deleteProfile(User user, Long id);
+    // 회원 탈퇴 복구
+    void restoreProfile(Long id);
 
     User findUser(Long id);
+
+    Map<String, String> refreshToken(String refreshToken);
+
+    Long getUserIdByEmail(String email);
 }

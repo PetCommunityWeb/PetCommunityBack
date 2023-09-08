@@ -8,6 +8,7 @@ import java.util.Optional;
 
 @Repository
 public interface ChatRoomRepository extends JpaRepository<ChatRoom, String> {
+    void deleteByUuid(String uuid);
     Optional<ChatRoom> findByUuid(String uuid);
 
 }

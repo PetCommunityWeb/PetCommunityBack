@@ -16,7 +16,7 @@ import java.util.List;
 @Setter
 @Builder
 @AllArgsConstructor
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ReservationSlot {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,7 +26,7 @@ public class ReservationSlot {
     private LocalTime startTime;
     private boolean isReserved;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Hospital hospital;
 
     @Builder.Default

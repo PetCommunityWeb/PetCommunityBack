@@ -2,13 +2,14 @@ package com.example.petback.feed.dto;
 
 import com.example.petback.comment.dto.CommentResponseDto;
 import com.example.petback.feed.entity.Feed;
-import lombok.Builder;
-import lombok.Getter;
+import lombok.*;
 
 import java.util.List;
 
 @Builder
 @Getter
+@AllArgsConstructor
+@NoArgsConstructor
 public class FeedResponseDto {
 
     private Long id;

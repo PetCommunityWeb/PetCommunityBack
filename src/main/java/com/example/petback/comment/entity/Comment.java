@@ -12,10 +12,9 @@ import org.hibernate.annotations.Where;
 @Table(name = "comments")
 @Getter
 @Builder
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-@Where(clause = "is_deleted = false") // softdelete
-@SQLDelete(sql = "UPDATE comments SET is_deleted = true WHERE id = ?")
+@Where(clause = "is_deleted = false")
 public class Comment {
 
     @Id
@@ -24,13 +23,12 @@ public class Comment {
 
     @NotNull
     private String content;
-    private String username;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn
     private Feed feed;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn
     private User user;
 
@@ -40,4 +38,7 @@ public class Comment {
     public void updateContent(String content) {
         this.content = content;
     }
+    public void setDeleted(boolean isDeleted) {
+        this.isDeleted = Boolean.TRUE;
+}
 }

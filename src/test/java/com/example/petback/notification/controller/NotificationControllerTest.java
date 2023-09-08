@@ -102,7 +102,7 @@ class NotificationControllerTest {
                 .imageUrl("test.jpg")
                 .build();
         userRepository.save(user);
-        accessToken = jwtUtil.createToken("user", UserRoleEnum.USER); // header에 key-value로 보내는 accessToken을 filter에서 처리하기 위함
+        accessToken = jwtUtil.createToken("user", UserRoleEnum.USER, user.getId()); // header에 key-value로 보내는 accessToken을 filter에서 처리하기 위함
     }
 
     private void createNotification() {

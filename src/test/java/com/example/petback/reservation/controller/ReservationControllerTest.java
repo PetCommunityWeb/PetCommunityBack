@@ -75,7 +75,7 @@ class ReservationControllerTest {
                 .imageUrl("test.jpg")
                 .build();
         userRepository.save(user);
-        accessToken = jwtUtil.createToken("user", UserRoleEnum.USER);
+        accessToken = jwtUtil.createToken("user", UserRoleEnum.USER, user.getId());
     }
 
     private void createTestHospital() {

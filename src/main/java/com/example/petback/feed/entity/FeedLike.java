@@ -3,12 +3,15 @@ package com.example.petback.feed.entity;
 import com.example.petback.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 @Entity
 @Getter
 @Builder
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
+@Where(clause = "is_deleted = false")
 public class FeedLike {
 
     @Id
@@ -16,12 +19,18 @@ public class FeedLike {
     @Column
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "feed_id")
     private Feed feed;
 
+    @Builder.Default
+    private boolean isDeleted = Boolean.FALSE;
+
+    public void setDeleted(boolean isDeleted) {
+        this.isDeleted = Boolean.TRUE;
+    }
 }

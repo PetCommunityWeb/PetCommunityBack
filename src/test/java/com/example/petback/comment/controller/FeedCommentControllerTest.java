@@ -60,7 +60,7 @@ public class FeedCommentControllerTest {
                 .imageUrl("test.jpg")
                 .build();
         userRepository.save(user);
-        accessToken = jwtUtil.createToken("testman", UserRoleEnum.USER);
+        accessToken = jwtUtil.createToken("testman", UserRoleEnum.USER, user.getId());
     }
 
     @Test
@@ -135,7 +135,6 @@ public class FeedCommentControllerTest {
        return commentRepository.save(Comment.builder()
                 .feed(feed)
                 .user(user)
-                .username(user.getUsername())
                 .content("테스트코멘트내용")
                 .build());
     }

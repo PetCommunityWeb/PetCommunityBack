@@ -28,7 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @Transactional
-class TipContorllerTest {
+class TipControllerTest {
     @Autowired
     MockMvc mockMvc;
     @Autowired
@@ -59,7 +59,7 @@ class TipContorllerTest {
                 .role(UserRoleEnum.USER)
                 .build();
         userRepository.save(user);
-        accessToken = jwtUtil.createToken("tiptest1", UserRoleEnum.USER);
+        accessToken = jwtUtil.createToken("tiptest1", UserRoleEnum.USER, user.getId());
     }
 
     @Test
@@ -68,7 +68,7 @@ class TipContorllerTest {
                 .title("테스트")
                 .content("테스트입니다.")
                 .build();
-        mockMvc.perform(post("/api/tips")
+        mockMvc.perform(post("/api/tips/create")
                         .contentType(MediaType.APPLICATION_JSON)
                         .header(JwtUtil.AUTHORIZATION_HEADER, accessToken)
                         .content(objectMapper.writeValueAsString(tipRequestDto))
@@ -98,16 +98,6 @@ class TipContorllerTest {
                 .build();
         tipRepository.save(tip);
         return tip.getId();
-    }
-
-    void createTestTipLike() {
-//        Long id = createTestTip();
-//        Tip tip = tipRepository.findById(id)
-//                        .orElseThrow();
-//        tipLikeRepository.save(TipLike.builder()
-//                .user(user)
-//                .tip(tip)
-//                .build());
     }
 
     @Test

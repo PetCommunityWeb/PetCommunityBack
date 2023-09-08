@@ -5,7 +5,10 @@ import com.example.petback.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLInsert;
 import org.hibernate.annotations.Where;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "notifications")
@@ -14,7 +17,6 @@ import org.hibernate.annotations.Where;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Where(clause = "is_deleted = false")
-@SQLDelete(sql = "UPDATE notification SET is_deleted = true WHERE id = ?")
 public class Notification {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,8 +25,17 @@ public class Notification {
     @Builder.Default
     private boolean isDeleted = Boolean.FALSE;
 
+    @Builder.Default
+    private boolean isRead = Boolean.FALSE;
+
+    @Builder.Default
+    private LocalDateTime createdAt = LocalDateTime.now();
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false)
     private Reservation reservation;
 
+    public void read() {
+        this.isRead = Boolean.TRUE;
+    }
 }

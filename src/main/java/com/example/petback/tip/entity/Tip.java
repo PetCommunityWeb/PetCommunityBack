@@ -16,7 +16,7 @@ import java.util.List;
 @Getter
 @Setter
 @Builder
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Where(clause = "is_deleted = false")
 @Table(name = "tip")
@@ -39,7 +39,7 @@ public class Tip {
     @Builder.Default
     private boolean isDeleted = Boolean.FALSE;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn
     private User user;
 

@@ -38,8 +38,6 @@ public class FeedControllerTest {
     @Autowired
     private FeedRepository feedRepository;
     @Autowired
-    private FeedLikeRepository feedLikeRepository;
-    @Autowired
     private PasswordEncoder passwordEncoder;
     @Autowired
     private JwtUtil jwtUtil;
@@ -127,12 +125,13 @@ public class FeedControllerTest {
     @Test
     @DisplayName("피드 좋아요 테스트")
     void likeFeed() throws Exception {
+        // 본인 피드 좋아요 불가
         mockMvc.perform(post("/api/feeds/" + feed.getId() + "/likes")
                         .contentType(MediaType.ALL)
                         .header(JwtUtil.AUTHORIZATION_HEADER, accessToken)
                 )
                 .andDo(print())
-                .andExpect(status().isOk());
+                .andExpect(status().isBadRequest());
 
     }
 
@@ -155,6 +154,6 @@ public class FeedControllerTest {
                 .imageUrl("test.jpg")
                 .build();
         userRepository.save(user);
-        accessToken = jwtUtil.createToken("user", UserRoleEnum.USER); // header에 key-value로 보내는 accessToken을 filter에서 처리하기 위함
+        accessToken = jwtUtil.createToken("user", UserRoleEnum.USER, user.getId()); // header에 key-value로 보내는 accessToken을 filter에서 처리하기 위함
     }
 }

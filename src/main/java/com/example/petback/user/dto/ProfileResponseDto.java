@@ -16,6 +16,7 @@ public class ProfileResponseDto {
     private String imageUrl;
     private String email;
     private UserRoleEnum role;
+    private String introduction;
 
     public ProfileResponseDto(User user) {
         this.id = user.getId();
@@ -24,5 +25,6 @@ public class ProfileResponseDto {
         this.imageUrl = user.getImageUrl();
         this.email = user.getEmail();
         this.role = user.getRole();
+        this.introduction=user.getIntroduction();
     }
 }

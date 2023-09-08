@@ -15,10 +15,9 @@ import java.util.List;
 @Table(name = "feeds")
 @Getter
 @Builder
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Where(clause = "is_deleted = false")
-@SQLDelete(sql = "UPDATE feeds SET is_deleted = true WHERE id = ?")
 public class Feed {
 
     @Id
@@ -36,6 +35,7 @@ public class Feed {
 
     @Builder.Default
     private boolean isDeleted = Boolean.FALSE;
+
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn
@@ -55,4 +55,7 @@ public class Feed {
         this.imageUrl = imageUrl;
     }
 
+    public void setDeleted(boolean isDeleted) {
+        this.isDeleted = Boolean.TRUE;
+    }
 }

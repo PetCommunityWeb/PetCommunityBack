@@ -3,6 +3,7 @@ package com.example.petback.reservation.service;
 import com.example.petback.hospital.entity.Hospital;
 import com.example.petback.hospital.service.HospitalService;
 import com.example.petback.reservation.ReservationStatusEnum;
+import com.example.petback.reservation.dto.ReservationListResponseDto;
 import com.example.petback.reservation.dto.ReservationRequestDto;
 import com.example.petback.reservation.dto.ReservationResponseDto;
 import com.example.petback.reservation.entity.Reservation;
@@ -11,8 +12,12 @@ import com.example.petback.reservation.repository.ReservationRepository;
 import com.example.petback.reservationslot.entity.ReservationSlot;
 import com.example.petback.reservationslot.repository.ReservationSlotRepository;
 import com.example.petback.user.entity.User;
+import io.lettuce.core.RedisClient;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionSynchronization;
@@ -34,6 +39,9 @@ public class ReservationServiceImpl implements ReservationService{
 
     @Override
     @Transactional
+    @Caching(evict = {
+            @CacheEvict(value = "myReservations", key =" #user.id")
+    })
     public ReservationResponseDto createReservation(User user, ReservationRequestDto requestDto) {
         Hospital hospital = hospitalService.findHospital(requestDto.getHospitalId());
         Optional<ReservationSlot> optionalSlot = reservationSlotRepository
@@ -68,6 +76,10 @@ public class ReservationServiceImpl implements ReservationService{
 
     @Override
     @Transactional
+    @Caching(evict = {
+            @CacheEvict(value = "myReservations", key = "#user.id"),
+            @CacheEvict(value = "reservation", key = "#user.id + '_' + #reservationNum")
+    })
     public void deleteReservation(User user, String reservationNum) {
         Reservation reservation = reservationRepository.findById(reservationNum)
                 .orElseThrow(() -> new IllegalArgumentException("해당 예약이 존재하지 않습니다."));
@@ -79,18 +91,24 @@ public class ReservationServiceImpl implements ReservationService{
 
     @Override
     @Transactional(readOnly = true)
-    public List<ReservationResponseDto> selectAllReservations(User user) {
-        return reservationRepository.findAllByUser(user).stream().map(ReservationResponseDto::of).toList();
+    @Cacheable(value = "myReservations", key = "#user.id")
+    public ReservationListResponseDto selectAllReservations(User user) {
+        return ReservationListResponseDto.builder()
+                .reservationResponseDtos(reservationRepository.findAllByUserOrderByReservationSlotDateDescReservationSlotStartTimeDesc(user)
+                        .stream()
+                        .map(ReservationResponseDto::of)
+                        .toList())
+                .build();
     }
 
     @Override
     @Transactional(readOnly = true)
+    @Cacheable(value = "reservation", key = "#user.id + '_' + #reservationNum")
     public ReservationResponseDto selectReservation(User user, String reservationNum) {
         Reservation reservation = reservationRepository.findById(reservationNum)
                 .orElseThrow(()->new IllegalArgumentException("해당 예약이 존재하지 않습니다."));
         if (!(user.equals(reservation.getUser()) || user.equals(reservation.getHospital().getUser()))) throw new IllegalArgumentException("해당 예약에 대한 권한이 없습니다.");
         return ReservationResponseDto.of(reservation);
     }
-
 
 }

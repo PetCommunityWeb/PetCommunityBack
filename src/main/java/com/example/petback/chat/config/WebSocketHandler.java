@@ -1,16 +1,20 @@
 package com.example.petback.chat.config;
 
 import com.example.petback.chat.dto.MessageDto;
-import com.example.petback.chat.dto.RoomDto;
+import com.example.petback.chat.entity.ChatMessage;
 import com.example.petback.chat.entity.ChatRoom;
 import com.example.petback.chat.repository.ChatMessageRepository;
 import com.example.petback.chat.repository.ChatRoomRepository;
 import com.example.petback.chat.service.ChatService;
 import com.example.petback.user.entity.User;
 import com.example.petback.user.repository.UserRepository;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.socket.CloseStatus;
@@ -19,6 +23,8 @@ import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -28,10 +34,10 @@ import java.util.concurrent.ConcurrentHashMap;
 @Component
 public class WebSocketHandler extends TextWebSocketHandler {
     private final ObjectMapper objectMapper;
-    private final ChatService chatService;
     private final ChatMessageRepository chatMessageRepository;
     private final UserRepository userRepository;
     private final ChatRoomRepository chatRoomRepository;
+    private final StringRedisTemplate redisTemplate;
 
     // 각 채팅방 별로 WebSocket 세션을 저장하는 맵
     private Map<String, Set<WebSocketSession>> roomSessionsMap = new ConcurrentHashMap<>();
@@ -67,7 +73,22 @@ public class WebSocketHandler extends TextWebSocketHandler {
 
         User user = userRepository.findByUsername(messageDto.getSender()).get();
         ChatRoom chatRoom = chatRoomRepository.findByUuid(roomId).get();
-        chatMessageRepository.save(messageDto.toEntity(user, chatRoom));
+        ChatMessage chatMessage = messageDto.toEntity(user, chatRoom);
+        chatMessageRepository.save(chatMessage);
+
+//        // Redis에서 기존의 메시지 목록을 가져온다
+//        ValueOperations<String, String> valueOperations = redisTemplate.opsForValue();
+//        String existingMessagesJson = valueOperations.get("chatroom:" + roomId);
+//
+//        // 기존 메시지 목록에 새 메시지를 추가
+//        List<MessageDto> existingMessages = existingMessagesJson == null ?
+//                new ArrayList<>() :
+//                objectMapper.readValue(existingMessagesJson, new TypeReference<List<MessageDto>>() {});
+//
+//        existingMessages.add(messageDto);
+//
+//        // Redis에 업데이트된 메시지 목록을 저장
+//        valueOperations.set("chatroom:" + roomId, objectMapper.writeValueAsString(existingMessages));
 
         // 모든 해당 채팅방의 사용자에게 메시지 전송
         for (WebSocketSession roomSession : roomSessionsMap.get(roomId)) {

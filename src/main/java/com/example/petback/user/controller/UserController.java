@@ -3,10 +3,7 @@ package com.example.petback.user.controller;
 import com.example.petback.common.advice.ApiResponseDto;
 import com.example.petback.common.security.UserDetailsImpl;
 import com.example.petback.tip.dto.TipResponseDto;
-import com.example.petback.user.dto.LoginRequestDto;
-import com.example.petback.user.dto.ProfileRequestDto;
-import com.example.petback.user.dto.ProfileResponseDto;
-import com.example.petback.user.dto.SignupRequestDto;
+import com.example.petback.user.dto.*;
 import com.example.petback.user.entity.User;
 import com.example.petback.user.service.UserService;
 import jakarta.validation.Valid;
@@ -20,6 +17,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @RestController
@@ -56,8 +54,6 @@ public class UserController {
         return ResponseEntity.ok().body(responseDto);
     }
 
-
-
     // 회원정보 수정
     @PutMapping("/profile")
     public ResponseEntity<ApiResponseDto> updateProfile(@RequestBody ProfileRequestDto profileRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
@@ -65,11 +61,31 @@ public class UserController {
             return ResponseEntity.ok().body(new ApiResponseDto("프로필 수정 성공", HttpStatus.OK.value()));
     }
 
-
     // 회원 탈퇴
     @DeleteMapping("/profile/{id}")
     public ResponseEntity deleteProfile(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable Long id) {
         userService.deleteProfile(userDetails.getUser(), id);
         return ResponseEntity.ok().body("삭제가 완료되었습니다.");
     }
+
+    @PostMapping("/profile/restore")
+    public ResponseEntity<String> restoreUserData(@RequestParam String email) {
+
+        if (email == null || email.isEmpty()) {
+            return ResponseEntity.badRequest().body("이메일 주소를 입력하세요.");
+        }
+        Long userId = userService.getUserIdByEmail(email);
+
+        if (userId == null) {
+            return ResponseEntity.badRequest().body("해당 이메일로 등록된 사용자가 없습니다.");
+        }
+
+        try {
+            userService.restoreProfile(userId);
+            return ResponseEntity.ok().body("데이터 복구 완료");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
 }
