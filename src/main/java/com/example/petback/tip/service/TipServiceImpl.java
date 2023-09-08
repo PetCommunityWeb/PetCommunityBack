@@ -24,7 +24,6 @@ import java.util.concurrent.RejectedExecutionException;
 @Transactional
 public class TipServiceImpl implements TipService {
     private final TipRepository tipRepository;
-    private final UserRepository userRepository;
     private final TipLikeRepository tipLikeRepository;
 
     // 팁 작성
@@ -90,53 +89,21 @@ public class TipServiceImpl implements TipService {
 
     // 팁 좋아요
     @Override
-    public void likeTip(UserDetailsImpl userDetails, Long id) {
-        User user = userDetails.getUser();
-
-        if (user == null) {
-            throw new RejectedExecutionException("사용자를 찾을 수 없습니다.");
-        }
-
+    public void likeTip(User user, Long id) {
         Tip tip = tipRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("팁 게시글을 찾을 수 없습니다."));
 
-
-        TipLike tipLike = tipLikeRepository.findByUserAndTip(user, tip);
-        if (tipLike != null) {
-            throw new RejectedExecutionException("이미 좋아요를 눌렀습니다.");
+        if (tip.getUser().equals(user)) {
+            throw new IllegalArgumentException("본인의 팁에 좋아요를 누를 수 없습니다.");
         }
-        tipLikeRepository.save(new TipLike(user, tip));
+        if (tipLikeRepository.existsByUserAndTip(user, tip)) {
+            throw new IllegalArgumentException("이미 좋아요를 눌렀습니다.");
+        }
+        TipLike tipLike = TipLike.builder()
+                .user(user)
+                .tip(tip)
+                .build();
+        tipLikeRepository.save(tipLike);
     }
-
-
-    // 팁 좋아요 취소
-    @Override
-    public void deleteLikeTip(UserDetailsImpl userDetails, Long id) {
-        User user = userDetails.getUser();
-
-        if (user == null) {
-            throw new RejectedExecutionException("사용자를 찾을 수 없습니다.");
-        }
-
-        Tip tip = tipRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("팁 게시글을 찾을 수 없습니다."));
-
-        TipLike tipLike = tipLikeRepository.findByUserAndTip(user, tip);
-        if (tipLike == null) {
-            throw new RejectedExecutionException("좋아요를 누르지 않았습니다.");
-        }
-
-        if (this.checkValidUser(user, tipLike)) {
-            throw new RejectedExecutionException("본인의 좋아요만 취소할 수 있습니다.");
-        }
-
-        tipLikeRepository.delete(tipLike);
-    }
-
-    private boolean checkValidUser(User user, TipLike tipLike) {
-        boolean result = !(user.getId().equals(tipLike.getUser().getId())) && !(user.getRole().equals(UserRoleEnum.ADMIN));
-        return result;
-    }
-
-
 }
 
 

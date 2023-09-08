@@ -33,7 +33,6 @@ public class ReservationSlotScheduler {
         List<Hospital> allHospitals = hospitalRepository.findAll(); // 모든 병원 정보를 가져옵니다.
         for (Hospital hospital : allHospitals) {
             hospital.getOperatingDays().forEach(System.out::println);
-            System.out.println(dayOfWeek);
             if (hospital.getOperatingDays().contains(dayOfWeek)) {
                 // 예약 슬롯을 추가하는 로직
                 LocalTime time = LocalTime.of(9, 0); // 시작 시간은 오전 9시
