@@ -6,6 +6,7 @@ import com.example.petback.review.dto.ReviewResponseDto;
 import com.example.petback.review.entity.Review;
 import com.example.petback.review.service.ReviewService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -27,7 +28,7 @@ public class ReviewController {
 
     @GetMapping
     public ResponseEntity selectAllReviews(@AuthenticationPrincipal UserDetailsImpl userDetails){
-        List<ReviewResponseDto> responseDtos = reviewService.selectAllReviews(userDetails.getUser());
+        List<ReviewResponseDto> responseDtos = reviewService.selectAllReviews(userDetails.getUser()).getReviewResponseDtos();
         return ResponseEntity.ok().body(responseDtos);
     }
 

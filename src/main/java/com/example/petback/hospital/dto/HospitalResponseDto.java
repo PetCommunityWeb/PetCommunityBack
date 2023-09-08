@@ -8,8 +8,11 @@ import com.example.petback.reservation.entity.Reservation;
 import com.example.petback.review.dto.ReviewResponseDto;
 import com.example.petback.species.SpeciesEnum;
 import com.example.petback.subject.SubjectEnum;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 
 import java.util.List;
 import java.util.Objects;
@@ -18,6 +21,8 @@ import java.util.stream.Collectors;
 
 @Builder
 @Getter
+@NoArgsConstructor
+@AllArgsConstructor
 public class HospitalResponseDto {
     private Long id;
     private String name;
