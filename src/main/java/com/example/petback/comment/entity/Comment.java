@@ -40,5 +40,5 @@ public class Comment {
     }
     public void setDeleted(boolean isDeleted) {
         this.isDeleted = Boolean.TRUE;
-    }
+}
 }

@@ -54,8 +54,6 @@ public class UserController {
         return ResponseEntity.ok().body(responseDto);
     }
 
-
-
     // 회원정보 수정
     @PutMapping("/profile")
     public ResponseEntity<ApiResponseDto> updateProfile(@RequestBody ProfileRequestDto profileRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
@@ -63,11 +61,32 @@ public class UserController {
             return ResponseEntity.ok().body(new ApiResponseDto("프로필 수정 성공", HttpStatus.OK.value()));
     }
 
-
     // 회원 탈퇴
     @DeleteMapping("/profile/{id}")
     public ResponseEntity deleteProfile(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable Long id) {
         userService.deleteProfile(userDetails.getUser(), id);
         return ResponseEntity.ok().body("삭제가 완료되었습니다.");
     }
+    //회원 탈퇴후 복구 -> 입력받은 email을 기준으로 userId 파악
+    @PostMapping("/profile/restore")
+    public ResponseEntity<String> restoreUserData(@RequestParam String email) {
+
+        if (email == null || email.isEmpty()) {
+            return ResponseEntity.badRequest().body("이메일 주소를 입력하세요.");
+        }
+//        email = email.replace("\"", "");
+        Long userId = userService.getUserIdByEmail(email);
+
+        if (userId == null) {
+            return ResponseEntity.badRequest().body("해당 이메일로 등록된 사용자가 없습니다.");
+        }
+
+        try {
+            userService.restoreProfile(userId);
+            return ResponseEntity.ok().body("데이터 복구 완료");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
 }

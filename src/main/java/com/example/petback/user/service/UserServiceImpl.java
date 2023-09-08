@@ -90,39 +90,47 @@ public class UserServiceImpl implements UserService {
             throw new IllegalArgumentException("탈퇴 권한이 없습니다.");
         }
 
-        List<Comment> comments = userToDelete.getComments();
-        for (Comment comment : comments) {
-            comment.setDeleted(true);
-        }
+        userToDelete.getComments().forEach(comment -> comment.setDeleted(true));
+        userToDelete.getFeeds().forEach(feed -> feed.setDeleted(true));
+        userToDelete.getFeedLikes().forEach(feedLike -> feedLike.setDeleted(true));
+        userToDelete.getHospitals().forEach(Hospital::setDeleted);
+        userToDelete.getReservations().forEach(reservation -> reservation.setDeleted(true));
+        userToDelete.getReviews().forEach(review -> review.setDeleted(true));
 
-        List<Feed> feeds = userToDelete.getFeeds();
-        for (Feed feed : feeds) {
-            feed.setDeleted(true);
-        }
-
-        List<FeedLike> feedLikes = userToDelete.getFeedLikes();
-        for (FeedLike feedLike : feedLikes) {
-            feedLike.setDeleted(true);
-        }
-
-        List<Hospital> hospitals = userToDelete.getHospitals();
-        for (Hospital hospital : hospitals) {
-            hospital.setDeleted();
-        }
-
-        List<Reservation> reservations = userToDelete.getReservations();
-        for (Reservation reservation : reservations) {
-            reservation.setDeleted(true);
-        }
-        List<Review> reviews = userToDelete.getReviews();
-        for (Review review : reviews) {
-            review.setDeleted(true);
-        }
-
+        // UserRepository 를 통해 변경 사항을 저장
         userRepository.flush();
+
+
+        // User 엔티티의 삭제 상태 설정 및 저장
         userToDelete.setDeleted(true);
         userRepository.save(userToDelete);
     }
+
+    //회원탈퇴 시 삭제된 데이터 복구
+    @Override
+    @Transactional
+    public void restoreProfile(Long id) {
+        User userToRestore = findUser(id);
+
+
+        // 복구 가능한 상태인지 확인
+        if (!userToRestore.isDeleted()) {
+            throw new IllegalArgumentException("이미 복구된 사용자입니다.");
+        }
+        userToRestore.getComments().forEach(comment -> comment.setDeleted(false));
+        userToRestore.getFeeds().forEach(feed -> feed.setDeleted(false));
+        userToRestore.getFeedLikes().forEach(feedLike -> feedLike.setDeleted(false));
+        userToRestore.getChatMessages().forEach(chatMessage -> chatMessage.setDeleted(false));
+        userToRestore.getHospitals().forEach(Hospital::setDeleted);
+        userToRestore.getReservations().forEach(reservation -> reservation.setDeleted(false));
+        userToRestore.getReviews().forEach(review -> review.setDeleted(false));
+
+        // 복구 가능한 상태라면 삭제 상태를 false로 변경하고 저장
+        userToRestore.setDeleted(false);
+        userRepository.save(userToRestore);
+
+    }
+
 
     @Override
     public User findUser(Long id) {
@@ -143,4 +151,16 @@ public class UserServiceImpl implements UserService {
         tokens.put("refreshToken", refreshToken); // 기존 refreshToken 유효하므로 그대로 반환
         return tokens;
     }
+
+    //softDelete된 데이터도 검색
+    @Override
+    public Long getUserIdByEmail(String email) {
+        User user = userRepository.findByEmail(email);
+        if (user != null) {
+            return user.getId();
+        }
+        return null; // 사용자가 없는 경우
+    }
+
+
 }
