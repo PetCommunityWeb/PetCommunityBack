@@ -14,10 +14,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByUsername(String username);
     Optional<User> findById(Long id);
 
-
-    void deleteByUsername(String testUser);
-
-    User findByEmail(String email);
+    Optional<User> findByEmail(String email);
 
     @Query("SELECT u FROM User u WHERE u.email = :email AND u.isDeleted = true")
     User findByEmailIgnoringSoftDelete(@Param("email") String email);

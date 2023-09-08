@@ -67,14 +67,13 @@ public class UserController {
         userService.deleteProfile(userDetails.getUser(), id);
         return ResponseEntity.ok().body("삭제가 완료되었습니다.");
     }
-    //회원 탈퇴후 복구 -> 입력받은 email을 기준으로 userId 파악
+
     @PostMapping("/profile/restore")
     public ResponseEntity<String> restoreUserData(@RequestParam String email) {
 
         if (email == null || email.isEmpty()) {
             return ResponseEntity.badRequest().body("이메일 주소를 입력하세요.");
         }
-//        email = email.replace("\"", "");
         Long userId = userService.getUserIdByEmail(email);
 
         if (userId == null) {

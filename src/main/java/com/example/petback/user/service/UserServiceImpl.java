@@ -37,11 +37,10 @@ public class UserServiceImpl implements UserService {
     // 회원 가입
     @Override
     public void signUp(SignupRequestDto requestDto) {
-        String username = requestDto.getUsername();
         String password = passwordEncoder.encode(requestDto.getPassword());
         requestDto.setPassword(password);
-        if (userRepository.findByUsername(username).isPresent()) {
-            throw new IllegalArgumentException("이미 존재하는 아이디입니다.");
+        if (userRepository.findByUsername(requestDto.getUsername()).isPresent() || userRepository.findByEmail(requestDto.getEmail()).isPresent()) {
+            throw new IllegalArgumentException("이미 존재하는 아이디 또는 이메일 입니다.");
         }
         userRepository.save(requestDto.toEntity());
     }
@@ -153,12 +152,10 @@ public class UserServiceImpl implements UserService {
     //softDelete된 데이터도 검색
     @Override
     public Long getUserIdByEmail(String email) {
-        User user = userRepository.findByEmail(email);
+        User user = userRepository.findByEmail(email).get();
         if (user != null) {
             return user.getId();
         }
         return null; // 사용자가 없는 경우
     }
-
-
 }
