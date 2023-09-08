@@ -102,6 +102,7 @@ public class UserServiceImpl implements UserService {
         // UserRepository 를 통해 변경 사항을 저장
         userRepository.flush();
 
+
         // User 엔티티의 삭제 상태 설정 및 저장
         userToDelete.setDeleted(true);
         userRepository.save(userToDelete);
@@ -112,6 +113,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public void restoreProfile(Long id) {
         User userToRestore = findUser(id);
+
 
         // 복구 가능한 상태인지 확인
         if (!userToRestore.isDeleted()) {
@@ -139,7 +141,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Map<String, String> refreshToken(String refreshToken) {
+    public Map<String, String> refreshToken(String refreshToken) throws NoSuchElementException{
+        if (refreshToken == null) throw new NoSuchElementException("refreshToken이 만료되었습니다.");
         RefreshToken redisToken = refreshTokenRepository.findById(refreshToken)
                 .orElseThrow(() -> new NoSuchElementException("refreshToken이 만료되었습니다.")); // 무조건 @Id로만 찾기
         Long userId = redisToken.getUserId();

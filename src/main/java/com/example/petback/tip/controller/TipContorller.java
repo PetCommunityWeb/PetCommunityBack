@@ -31,7 +31,7 @@ public class TipContorller {
     }
 
     // 팁 전체 조회
-    @GetMapping("")
+    @GetMapping
     public ResponseEntity selectTips() {
         List<TipResponseDto> responseDto = tipService.selectTips();
         return ResponseEntity.ok().body(responseDto);

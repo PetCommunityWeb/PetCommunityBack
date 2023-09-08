@@ -1,11 +1,10 @@
 package com.example.petback.feed.service;
 
+import com.example.petback.feed.dto.FeedListResponseDto;
 import com.example.petback.feed.dto.FeedRequestDto;
 import com.example.petback.feed.dto.FeedResponseDto;
 import com.example.petback.feed.entity.Feed;
 import com.example.petback.user.entity.User;
-
-import java.util.List;
 
 public interface FeedService {
 
@@ -13,7 +12,7 @@ public interface FeedService {
     FeedResponseDto createFeed(FeedRequestDto requestDto, User user);
 
     //전체 조회
-    List<FeedResponseDto> selectFeeds();
+    FeedListResponseDto selectFeeds();
 
     //상세 조회
     FeedResponseDto selectFeed(Long id);
@@ -28,5 +27,5 @@ public interface FeedService {
 
     String likeFeed(Long id, User user);
 
-    List<FeedResponseDto> selectFeedsByUser(User user);
+    FeedListResponseDto selectFeedsByUser(User user);
 }

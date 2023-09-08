@@ -10,7 +10,7 @@ import java.util.NoSuchElementException;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
-    @ExceptionHandler({IllegalArgumentException.class, NoSuchElementException.class})
+    @ExceptionHandler({IllegalArgumentException.class})
     public ResponseEntity illegalExceptionHandler(Exception ex) {
         return ResponseEntity.badRequest().body(new ApiResponseDto(ex.getMessage(), HttpStatus.BAD_REQUEST.value()));
     }
