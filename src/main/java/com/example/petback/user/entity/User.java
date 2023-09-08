@@ -40,17 +40,13 @@ public class User {
 
     @Column(nullable = false)
     private String password;
+    @Column(nullable = false, unique = true)
     private String email;
     private String nickname;
     private String introduction;
 
     @Builder.Default
     private boolean isDeleted = Boolean.FALSE;
-
-    //삭제 데이터 복구용 메싸드
-    public void restore() {
-        this.isDeleted = false;
-    }
 
     @Column
     private String imageUrl;
