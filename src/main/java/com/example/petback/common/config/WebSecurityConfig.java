@@ -74,6 +74,7 @@ public class WebSecurityConfig {
                         .requestMatchers("/api/chats").permitAll() // 채팅방 조회를 위한 권한 허용
                         .requestMatchers("/api/chat").permitAll() // 채팅방 조회를 위한 권한 허용
                         .requestMatchers("/api/feeds/**").permitAll()
+                        .requestMatchers("/api/tips/**").permitAll()
                         .requestMatchers("/api/comments/**").permitAll()
                         .requestMatchers("/api/email/**").permitAll()
                         .anyRequest().authenticated() // 그 외 모든 요청 인증처리 -->permitAll

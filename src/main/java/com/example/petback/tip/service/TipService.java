@@ -3,7 +3,6 @@ package com.example.petback.tip.service;
 import com.example.petback.common.security.UserDetailsImpl;
 import com.example.petback.tip.dto.TipRequestDto;
 import com.example.petback.tip.dto.TipResponseDto;
-import com.example.petback.tip.entity.Tip;
 import com.example.petback.user.entity.User;
 
 import java.util.List;
@@ -23,7 +22,7 @@ public interface TipService {
     TipResponseDto updateTip(Long id, TipRequestDto requestDto, User user);
 
     // 팁 삭제
-    Tip deleteTip(Long id, User user);
+    void deleteTip(Long id, User user);
 
     // 팁 좋아요
     void likeTip(UserDetailsImpl userDetails, Long id);

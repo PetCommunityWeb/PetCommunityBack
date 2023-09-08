@@ -2,6 +2,7 @@ package com.example.petback.tip.service;
 
 
 import com.example.petback.common.security.UserDetailsImpl;
+import com.example.petback.feed.entity.Feed;
 import com.example.petback.tip.dto.TipRequestDto;
 import com.example.petback.tip.dto.TipResponseDto;
 import com.example.petback.tip.entity.Tip;
@@ -32,6 +33,7 @@ public class TipServiceImpl implements TipService {
         Tip tip = requestDto.toEntity();
         tip.setUser(user);
         tipRepository.save(tip);
+
         return TipResponseDto.of(tip);
     }
 
@@ -66,7 +68,7 @@ public class TipServiceImpl implements TipService {
         String username = findTip(id).getUser().getUsername();
         Tip tip = findTip(id);
         if (!(user.getRole().equals(UserRoleEnum.ADMIN) || username.equals(user.getUsername()))) {
-
+            throw new IllegalArgumentException("팁 작성자만 수정할 수 있습니다.");
         }
 
         tip.setTitle(requestDto.getTitle());
@@ -78,9 +80,12 @@ public class TipServiceImpl implements TipService {
 
     // 팁 삭제
     @Override
-    public Tip deleteTip(Long id, User user) {
-        return tipRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 게시글입니다."));
+    public void deleteTip(Long id, User user) {
+        Tip tip = findTip(id);
+        if (!tip.getUser().equals(user)) {
+            throw new IllegalArgumentException("팁 작성자만 삭제할 수 있습니다.");
+        }
+        tipRepository.delete(tip);
     }
 
     // 팁 좋아요

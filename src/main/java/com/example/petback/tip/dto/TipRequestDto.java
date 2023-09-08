@@ -16,6 +16,7 @@ public class TipRequestDto {
     private String title;
     private String content;
     private String imageUrl;
+    private String username;
 
     public Tip toEntity() {
         return Tip.builder()

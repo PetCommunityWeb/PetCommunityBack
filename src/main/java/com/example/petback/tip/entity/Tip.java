@@ -1,12 +1,16 @@
 package com.example.petback.tip.entity;
 
 
+import com.example.petback.feed.entity.FeedLike;
 import com.example.petback.user.entity.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -38,4 +42,8 @@ public class Tip {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn
     private User user;
+
+    @Builder.Default
+    @OneToMany(mappedBy = "tip", orphanRemoval = true)
+    private List<TipLike> tipLikes = new ArrayList<>();
 }
