@@ -32,4 +32,10 @@ public class ChatMessage {
 
     @ManyToOne(fetch = FetchType.LAZY)
     private ChatRoom chatRoom;
+
+    @Builder.Default
+    private boolean isDeleted = Boolean.FALSE;
+    public void setDeleted(boolean isDeleted) {
+        this.isDeleted = Boolean.TRUE;
+    }
 }
