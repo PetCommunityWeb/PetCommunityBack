@@ -90,11 +90,9 @@ public class UserServiceImpl implements UserService {
             throw new IllegalArgumentException("탈퇴 권한이 없습니다.");
         }
 
-        // 채팅방, > 탈퇴시 안지워짐
         userToDelete.getComments().forEach(comment -> comment.setDeleted(true));
         userToDelete.getFeeds().forEach(feed -> feed.setDeleted(true));
         userToDelete.getFeedLikes().forEach(feedLike -> feedLike.setDeleted(true));
-        userToDelete.getChatMessages().forEach(chatMessage -> chatMessage.setDeleted(true));
         userToDelete.getHospitals().forEach(Hospital::setDeleted);
         userToDelete.getReservations().forEach(reservation -> reservation.setDeleted(true));
         userToDelete.getReviews().forEach(review -> review.setDeleted(true));
