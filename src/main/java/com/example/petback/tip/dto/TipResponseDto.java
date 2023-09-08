@@ -14,7 +14,6 @@ public class TipResponseDto {
     private String content;
     private String imageUrl;
     private String username;
-    private User user;
     private int likeCount;
 
 
@@ -25,7 +24,6 @@ public class TipResponseDto {
                 .content(tip.getContent())
                 .imageUrl(tip.getImageUrl())
                 .likeCount(tip.getTipLikes().size())
-                .user(tip.getUser())
                 .username(tip.getUser().getUsername())
                 .build();
 
