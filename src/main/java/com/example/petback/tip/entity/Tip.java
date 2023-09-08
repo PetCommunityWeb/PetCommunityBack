@@ -30,6 +30,7 @@ public class Tip {
     @NotNull
     private String title;
 
+    @Column(length = 1000)
     @NotNull
     private String content;
 

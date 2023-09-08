@@ -46,7 +46,6 @@ public class HospitalController {
 
     @PutMapping("/{id}")
     public ResponseEntity updateHospital(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable Long id, @RequestBody HospitalRequestDto requestDto){
-        System.out.println(userDetails.getUser().getId());
         HospitalResponseDto responseDto = hospitalService.updateHospital(userDetails.getUser(), id, requestDto);
         return ResponseEntity.ok().body(responseDto);
     }

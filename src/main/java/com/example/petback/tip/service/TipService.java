@@ -25,8 +25,5 @@ public interface TipService {
     void deleteTip(Long id, User user);
 
     // 팁 좋아요
-    void likeTip(UserDetailsImpl userDetails, Long id);
-
-    // 팁 좋아요 취소
-    void deleteLikeTip(UserDetailsImpl userDetails, Long id);
+    void likeTip(User user, Long id);
 }

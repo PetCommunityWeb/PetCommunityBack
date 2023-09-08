@@ -22,8 +22,7 @@ import java.util.concurrent.RejectedExecutionException;
 @RequestMapping("/api/tips")
 public class TipContorller {
     private final TipService tipService;
-    private final UserService userService;
-
+    
     // 팁 작성
     @PostMapping("/create")
     public TipResponseDto createTip(@RequestBody TipRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
@@ -72,23 +71,7 @@ public class TipContorller {
 
     // 팁 좋아요
     @PostMapping("/{id}/likes")
-    public ResponseEntity<ApiResponseDto> likeTip(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable Long id) {
-        try {
-            tipService.likeTip(userDetails, id);
-        } catch (DuplicateRequestException e) {
-            return ResponseEntity.badRequest().body(new ApiResponseDto(e.getMessage(), HttpStatus.BAD_REQUEST.value()));
-        }
-        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponseDto("팁 좋아요 성공", HttpStatus.OK.value()));
-    }
-
-    // 팁 좋아요 취소
-    @DeleteMapping("/{id}/likes")
-    public ResponseEntity<ApiResponseDto> deleteLikeTip(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable Long id) {
-        try {
-            tipService.deleteLikeTip(userDetails, id);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(new ApiResponseDto(e.getMessage(), HttpStatus.BAD_REQUEST.value()));
-        }
-        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponseDto("팁 좋아요 취소 성공", HttpStatus.OK.value()));
+    public void likeTip(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable Long id) {
+        tipService.likeTip(userDetails.getUser(), id);
     }
 }
