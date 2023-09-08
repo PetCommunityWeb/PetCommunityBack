@@ -154,7 +154,7 @@ public class UserServiceImpl implements UserService {
     //softDelete된 데이터도 검색
     @Override
     public Long getUserIdByEmail(String email) {
-        User user = userRepository.findByEmailIgnoringSoftDelete(email);
+        User user = userRepository.findByEmail(email);
         if (user != null) {
             return user.getId();
         }
