@@ -68,7 +68,7 @@ public class TipServiceImpl implements TipService {
         String username = findTip(id).getUser().getUsername();
         Tip tip = findTip(id);
         if (!(user.getRole().equals(UserRoleEnum.ADMIN) || username.equals(user.getUsername()))) {
-
+            throw new IllegalArgumentException("팁 작성자만 수정할 수 있습니다.");
         }
 
         tip.setTitle(requestDto.getTitle());

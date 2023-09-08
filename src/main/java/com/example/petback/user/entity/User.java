@@ -39,6 +39,24 @@ public class User {
     @Enumerated(value = EnumType.STRING)
     private UserRoleEnum role;
 
+    private String provider; //어떤 OAuth인지(google, naver 등)
+    private String provideId; // 해당 OAuth 의 key(id)
+
+    private Long kakaoId;
+
+    public User(String nickname, String password, String email, UserRoleEnum userRoleEnum, Long kakaoId) {
+        this.nickname = nickname;
+        this.password = password;
+        this.email = email;
+        this.role = role;
+        this.kakaoId = kakaoId;
+    }
+
+    public User kakaoIdUpdate(Long kakaoId) {
+        this.kakaoId = kakaoId;
+        return this;
+    }
+
 //    @OneToOne(mappedBy = "user")
 //    private Hospital hospital;
 }
