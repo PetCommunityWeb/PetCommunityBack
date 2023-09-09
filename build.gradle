@@ -69,6 +69,11 @@ dependencies {
     // 스프링 AOP
     implementation 'org.springframework.boot:spring-boot-starter-aop'
 
+    implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
+    annotationProcessor "com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jakarta"
+    annotationProcessor "jakarta.annotation:jakarta.annotation-api"
+    annotationProcessor "jakarta.persistence:jakarta.persistence-api"
+
     // for test
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
@@ -86,6 +91,11 @@ dependencies {
 
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
 
+}
+
+def querydslSrcDir = 'src/main/generated'
+sourceSets {
+    main.java.srcDir querydslSrcDir
 }
 
 tasks.named('test') {

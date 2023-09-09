@@ -52,7 +52,11 @@ public class Hospital {
 
     @ElementCollection(targetClass = OperatingDay.class, fetch = FetchType.LAZY)
     @Enumerated(EnumType.STRING)
-    @CollectionTable(name = "hospital_operating_days", joinColumns = @JoinColumn(name = "hospital_id"))
+    @CollectionTable(
+            name = "hospital_operating_days",
+            joinColumns = @JoinColumn(name = "hospital_id"),
+            indexes = @Index(columnList = "operatingDays")
+    )
     @Builder.Default
     private Set<OperatingDay> operatingDays = new HashSet<>();
 

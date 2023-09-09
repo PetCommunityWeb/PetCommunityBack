@@ -6,7 +6,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table(name = "hospital_subjects")
+@Table(name = "hospital_subjects", indexes = @Index(name = "index_subject", columnList = "subject_id"))
 @Getter
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
