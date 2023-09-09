@@ -6,6 +6,7 @@ import com.example.petback.user.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface TipLikeRepository extends JpaRepository<TipLike, Long> {
+    boolean existsByUserAndTip(User user, Tip tip);
 
     TipLike findByUserAndTip(User user, Tip tip);
 

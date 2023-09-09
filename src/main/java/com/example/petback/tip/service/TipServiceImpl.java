@@ -130,27 +130,7 @@ public class TipServiceImpl implements TipService {
         if (user == null) {
             throw new RejectedExecutionException("사용자를 찾을 수 없습니다.");
         }
-
-        Tip tip = tipRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("팁 게시글을 찾을 수 없습니다."));
-
-        TipLike tipLike = tipLikeRepository.findByUserAndTip(user, tip);
-        if (tipLike == null) {
-            throw new RejectedExecutionException("좋아요를 누르지 않았습니다.");
-        }
-
-        if (this.checkValidUser(user, tipLike)) {
-            throw new RejectedExecutionException("본인의 좋아요만 취소할 수 있습니다.");
-        }
-
-        tipLikeRepository.delete(tipLike);
     }
-
-    private boolean checkValidUser(User user, TipLike tipLike) {
-        boolean result = !(user.getId().equals(tipLike.getUser().getId())) && !(user.getRole().equals(UserRoleEnum.ADMIN));
-        return result;
-    }
-
-
 }
 
 

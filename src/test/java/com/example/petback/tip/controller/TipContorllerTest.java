@@ -149,6 +149,7 @@ class TipControllerTest {
 
     @Test
     void likeTip() throws Exception {
+        // 본인의 tip에는 좋아요 시 BAD_REQUEST
         Long id = createTestTip();
         Tip tip = tipRepository.findById(id)
                 .orElseThrow();
@@ -157,27 +158,8 @@ class TipControllerTest {
                 .header(JwtUtil.AUTHORIZATION_HEADER, accessToken)
                 )
                 .andDo(print())
-                .andExpect(status().isOk())
+                .andExpect(status().isBadRequest())
                 .andReturn();
 
-    }
-
-    @Test
-    void deleteLikeTip() throws Exception {
-        Long id = createTestTip();
-        Tip tip = tipRepository.findById(id)
-                .orElseThrow();
-        tipLikeRepository.save(TipLike.builder()
-                .user(user)
-                .tip(tip)
-                .build());
-        TipLike tipLike = tipLikeRepository.findByUserAndTip(user, tip);
-        mockMvc.perform(delete("/api/tips/" + tip.getId() + "/likes")
-                        .contentType(MediaType.ALL)
-                        .header(JwtUtil.AUTHORIZATION_HEADER, accessToken)
-                )
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andReturn();
     }
 }

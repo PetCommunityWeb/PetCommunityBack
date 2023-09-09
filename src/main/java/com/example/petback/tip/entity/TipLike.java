@@ -23,9 +23,4 @@ public class TipLike {
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL) // 지연 로딩
     @JoinColumn(name = "tip_id")
     private Tip tip;
-
-    public TipLike(User user, Tip tip) {
-        this.user = user;
-        this.tip = tip;
-    }
 }
