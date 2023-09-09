@@ -6,14 +6,8 @@ import com.example.petback.reservationslot.entity.ReservationSlot;
 import com.example.petback.review.entity.Review;
 import com.example.petback.user.entity.User;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.Where;
 import lombok.*;
-import org.hibernate.mapping.ToOne;
+import org.hibernate.annotations.Where;
 
 @Entity
 @Table(name = "reservations")

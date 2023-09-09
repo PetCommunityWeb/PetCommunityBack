@@ -7,12 +7,10 @@ import lombok.*;
 
 @Getter
 @Entity
-@Table(name = "hospital_species")
+@Table(name = "hospital_species", indexes = @Index(name = "index_species", columnList = "species_id"))
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-//@Where(clause = "is_deleted = false")
-//@SQLDelete(sql = "UPDATE hospital_species SET is_deleted = true WHERE id = ?")
 public class HospitalSpecies {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

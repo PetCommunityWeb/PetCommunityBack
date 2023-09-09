@@ -5,7 +5,6 @@ import com.example.petback.common.security.JwtAuthenticationFilter;
 import com.example.petback.common.security.JwtAuthorizationFilter;
 import com.example.petback.common.security.UserDetailsServiceImpl;
 import com.example.petback.user.service.RefreshTokenService;
-import com.example.petback.user.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;

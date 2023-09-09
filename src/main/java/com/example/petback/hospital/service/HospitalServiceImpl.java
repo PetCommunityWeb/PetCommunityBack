@@ -100,11 +100,21 @@ public class HospitalServiceImpl implements HospitalService{
     @Override
     @Transactional(readOnly = true)
     @Cacheable(value = "allHospitals")
+    @Deprecated
     public HospitalListResponseDto selectAllHospitals() {
         List<Hospital> hospitals = hospitalRepository.findAll();
 
         return HospitalListResponseDto.builder()
                 .hospitalResponseDtos(hospitals.stream().map(HospitalResponseDto::of).toList())
+                .build();
+    }
+
+    @Override
+    @Cacheable(value = "allHospitals")
+    public HospitalListResponseDto selectAllHospitalsByFilter(SpeciesEnum speciesEnum, SubjectEnum subjectEnum, OperatingDay operatingDay) {
+        return HospitalListResponseDto.builder()
+                .hospitalResponseDtos(hospitalRepository.selectAllHospitalsByFilter(speciesEnum, subjectEnum, operatingDay)
+                        .stream().map(HospitalResponseDto::of).toList())
                 .build();
     }
 

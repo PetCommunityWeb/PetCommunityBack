@@ -1,9 +1,7 @@
 package com.example.petback.hospital.dto;
 
-import com.example.petback.common.domain.Address;
 import com.example.petback.hospital.OperatingDay;
 import com.example.petback.hospital.entity.Hospital;
-import com.example.petback.reservation.dto.ReservationResponseDto;
 import com.example.petback.reservation.entity.Reservation;
 import com.example.petback.review.dto.ReviewResponseDto;
 import com.example.petback.species.SpeciesEnum;
@@ -12,12 +10,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Builder
 @Getter
