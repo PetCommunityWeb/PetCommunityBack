@@ -94,15 +94,14 @@ public class TipServiceImpl implements TipService {
         tipRepository.delete(tip);
     }
 
+
     // 팁 좋아요
     @Override
     @Caching(evict = {
             @CacheEvict(value = "allTips", allEntries = true),
             @CacheEvict(value = "tip", key = "#id")
     })
-    public void likeTip(UserDetailsImpl userDetails, Long id) {
-        User user = userDetails.getUser();
-
+    public void likeTip(User user, Long id) {
         if (user == null) {
             throw new RejectedExecutionException("사용자를 찾을 수 없습니다.");
         }
@@ -114,22 +113,10 @@ public class TipServiceImpl implements TipService {
         if (tipLike != null) {
             throw new RejectedExecutionException("이미 좋아요를 눌렀습니다.");
         }
-        tipLikeRepository.save(new TipLike(user, tip));
-    }
-
-
-    // 팁 좋아요 취소
-    @Override
-    @Caching(evict = {
-            @CacheEvict(value = "allTips", allEntries = true),
-            @CacheEvict(value = "tip", key = "#id")
-    })
-    public void deleteLikeTip(UserDetailsImpl userDetails, Long id) {
-        User user = userDetails.getUser();
-
-        if (user == null) {
-            throw new RejectedExecutionException("사용자를 찾을 수 없습니다.");
-        }
+        tipLikeRepository.save(TipLike.builder()
+                        .user(user)
+                        .tip(tip)
+                .build());
     }
 }
 

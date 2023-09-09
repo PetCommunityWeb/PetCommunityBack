@@ -29,9 +29,8 @@ public class Tip {
     @NotNull
     private String title;
 
-    @Column(length = 1000)
-    @NotNull
     @Column(length = 10000)
+    @NotNull
     private String content;
 
     @Column
