@@ -1,14 +1,8 @@
 package com.example.petback.user.service;
 
-import com.example.petback.chat.entity.ChatMessage;
-import com.example.petback.comment.entity.Comment;
 import com.example.petback.common.jwt.JwtUtil;
 import com.example.petback.common.jwt.RefreshToken;
-import com.example.petback.feed.entity.Feed;
-import com.example.petback.feed.entity.FeedLike;
 import com.example.petback.hospital.entity.Hospital;
-import com.example.petback.reservation.entity.Reservation;
-import com.example.petback.review.entity.Review;
 import com.example.petback.user.dto.ProfileRequestDto;
 import com.example.petback.user.dto.ProfileResponseDto;
 import com.example.petback.user.dto.SignupRequestDto;

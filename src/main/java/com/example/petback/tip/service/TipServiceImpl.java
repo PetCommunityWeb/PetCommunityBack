@@ -2,7 +2,7 @@ package com.example.petback.tip.service;
 
 
 import com.example.petback.common.security.UserDetailsImpl;
-import com.example.petback.feed.entity.Feed;
+import com.example.petback.tip.dto.TipListResponseDto;
 import com.example.petback.tip.dto.TipRequestDto;
 import com.example.petback.tip.dto.TipResponseDto;
 import com.example.petback.tip.entity.Tip;
@@ -11,12 +11,13 @@ import com.example.petback.tip.repository.TipLikeRepository;
 import com.example.petback.tip.repository.TipRepository;
 import com.example.petback.user.entity.User;
 import com.example.petback.user.enums.UserRoleEnum;
-import com.example.petback.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.concurrent.RejectedExecutionException;
 
 @Service
@@ -24,11 +25,11 @@ import java.util.concurrent.RejectedExecutionException;
 @Transactional
 public class TipServiceImpl implements TipService {
     private final TipRepository tipRepository;
-    private final UserRepository userRepository;
     private final TipLikeRepository tipLikeRepository;
 
     // 팁 작성
     @Override
+    @CacheEvict(value = "allTips", allEntries = true)
     public TipResponseDto createTip(TipRequestDto requestDto, User user) {
         Tip tip = requestDto.toEntity();
         tip.setUser(user);
@@ -40,13 +41,17 @@ public class TipServiceImpl implements TipService {
     // 팁 전체 조회
     @Transactional(readOnly = true)
     @Override
-    public List<TipResponseDto> selectTips() {
-        return tipRepository.findAll().stream().map(TipResponseDto::of).toList();
+    @Cacheable(value = "allTips")
+    public TipListResponseDto selectTips() {
+        return TipListResponseDto.builder()
+                .tipResponseDtos(tipRepository.findAll().stream().map(TipResponseDto::of).toList())
+                .build();
     }
 
     // 팁 상세 조회
     @Override
     @Transactional(readOnly = true)
+    @Cacheable(value = "tip")
     public TipResponseDto selectTip(Long id) {
         Tip tip = findTip(id);
         return TipResponseDto.of(tip);
@@ -58,12 +63,12 @@ public class TipServiceImpl implements TipService {
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 게시글입니다."));
     }
 
-    // 키워드로 팁 검색 -> 시간 남으면 해보기
-
-
-
     // 팁 수정
     @Override
+    @Caching(evict = {
+            @CacheEvict(value = "allTips", allEntries = true),
+            @CacheEvict(value = "tip", key = "#id")
+    })
     public TipResponseDto updateTip(Long id, TipRequestDto requestDto, User user) {
         String username = findTip(id).getUser().getUsername();
         Tip tip = findTip(id);
@@ -80,6 +85,7 @@ public class TipServiceImpl implements TipService {
 
     // 팁 삭제
     @Override
+    @CacheEvict(value = "allTips", allEntries = true)
     public void deleteTip(Long id, User user) {
         Tip tip = findTip(id);
         if (!tip.getUser().equals(user)) {
@@ -90,6 +96,10 @@ public class TipServiceImpl implements TipService {
 
     // 팁 좋아요
     @Override
+    @Caching(evict = {
+            @CacheEvict(value = "allTips", allEntries = true),
+            @CacheEvict(value = "tip", key = "#id")
+    })
     public void likeTip(UserDetailsImpl userDetails, Long id) {
         User user = userDetails.getUser();
 
@@ -110,6 +120,10 @@ public class TipServiceImpl implements TipService {
 
     // 팁 좋아요 취소
     @Override
+    @Caching(evict = {
+            @CacheEvict(value = "allTips", allEntries = true),
+            @CacheEvict(value = "tip", key = "#id")
+    })
     public void deleteLikeTip(UserDetailsImpl userDetails, Long id) {
         User user = userDetails.getUser();
 

@@ -1,8 +1,8 @@
 package com.example.petback.user.dto;
 
 import com.example.petback.user.entity.User;
-import lombok.AllArgsConstructor;
 import com.example.petback.user.enums.UserRoleEnum;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

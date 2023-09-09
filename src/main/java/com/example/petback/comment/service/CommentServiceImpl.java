@@ -5,19 +5,14 @@ import com.example.petback.comment.dto.CommentResponseDto;
 import com.example.petback.comment.entity.Comment;
 import com.example.petback.comment.repository.CommentRepository;
 import com.example.petback.feed.entity.Feed;
-import com.example.petback.feed.repository.FeedRepository;
 import com.example.petback.feed.service.FeedService;
 import com.example.petback.user.entity.User;
-import com.example.petback.user.enums.UserRoleEnum;
-import com.example.petback.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Caching;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.concurrent.RejectedExecutionException;
 
 @Service
 @RequiredArgsConstructor

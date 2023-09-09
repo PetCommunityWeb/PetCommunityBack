@@ -1,7 +1,6 @@
 package com.example.petback.reservationslot.service;
 
 import com.example.petback.reservationslot.dto.ReservationSlotRequestDto;
-import com.example.petback.reservationslot.dto.SelectReservationSlotRequestDto;
 import com.example.petback.reservationslot.dto.SelectReservationSlotResponseDto;
 import com.example.petback.user.entity.User;
 

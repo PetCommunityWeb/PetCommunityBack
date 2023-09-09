@@ -1,6 +1,5 @@
 package com.example.petback.notification.dto;
 
-import com.example.petback.notification.entity.Notification;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

@@ -1,7 +1,6 @@
 package com.example.petback.tip.entity;
 
 
-import com.example.petback.feed.entity.FeedLike;
 import com.example.petback.user.entity.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -31,6 +30,7 @@ public class Tip {
     private String title;
 
     @NotNull
+    @Column(length = 10000)
     private String content;
 
     @Column

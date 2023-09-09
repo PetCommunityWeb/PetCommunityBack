@@ -1,7 +1,6 @@
 package com.example.petback.chat.dto;
 
 import com.example.petback.chat.entity.ChatRoom;
-import com.example.petback.chat.service.ChatService;
 import com.example.petback.user.entity.User;
 import lombok.Builder;
 import lombok.Getter;

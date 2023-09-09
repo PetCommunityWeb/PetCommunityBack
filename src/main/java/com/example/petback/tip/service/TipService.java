@@ -1,11 +1,10 @@
 package com.example.petback.tip.service;
 
 import com.example.petback.common.security.UserDetailsImpl;
+import com.example.petback.tip.dto.TipListResponseDto;
 import com.example.petback.tip.dto.TipRequestDto;
 import com.example.petback.tip.dto.TipResponseDto;
 import com.example.petback.user.entity.User;
-
-import java.util.List;
 
 public interface TipService {
 
@@ -13,7 +12,7 @@ public interface TipService {
     TipResponseDto createTip(TipRequestDto requestDto, User user);
 
     // 팁 전체 조회
-    List<TipResponseDto> selectTips();
+    TipListResponseDto selectTips();
 
     // 팁 상세 조회
     TipResponseDto selectTip(Long id);

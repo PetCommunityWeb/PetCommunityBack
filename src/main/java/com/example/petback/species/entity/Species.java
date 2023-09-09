@@ -5,8 +5,6 @@ import com.example.petback.species.SpeciesEnum;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 @Entity

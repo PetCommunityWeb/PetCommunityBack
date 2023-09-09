@@ -2,7 +2,10 @@ package com.example.petback.feed.dto;
 
 import com.example.petback.comment.dto.CommentResponseDto;
 import com.example.petback.feed.entity.Feed;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
