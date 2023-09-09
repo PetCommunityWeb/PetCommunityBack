@@ -97,6 +97,7 @@ sourceSets {
 clean {
     delete file('src/main/generated')
 }
+build.dependsOn(clean)
 tasks.named('test') {
     useJUnitPlatform()
 }

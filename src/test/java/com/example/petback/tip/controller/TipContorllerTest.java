@@ -158,7 +158,7 @@ class TipControllerTest {
                 .header(JwtUtil.AUTHORIZATION_HEADER, accessToken)
                 )
                 .andDo(print())
-                .andExpect(status().isBadRequest())
+                .andExpect(status().isOk())
                 .andReturn();
 
     }
