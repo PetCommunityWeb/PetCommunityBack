@@ -33,6 +33,14 @@ public class FeedController {
         List<FeedResponseDto> responseDtos = feedService.selectFeeds().getFeedResponseDtos();
         return ResponseEntity.ok().body(responseDtos);
     }
+
+    // 피드 좋아요 순 조회
+    @GetMapping("/like")
+    public ResponseEntity selectFeedsByLike() {
+        List<FeedResponseDto> responseDtos = feedService.selectFeedsByLike().getFeedResponseDtos();
+        return ResponseEntity.ok().body(responseDtos);
+    }
+
     //내가 쓴 피드 조회
     @GetMapping("/my-feeds")
     public ResponseEntity selectFeeds(@AuthenticationPrincipal UserDetailsImpl userDetails) {
