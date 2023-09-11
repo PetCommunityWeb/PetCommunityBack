@@ -76,6 +76,7 @@ public class WebSecurityConfig {
                         .requestMatchers("/api/tips/**").permitAll()
                         .requestMatchers("/api/comments/**").permitAll()
                         .requestMatchers("/api/email/**").permitAll()
+                        .requestMatchers("/actuator/**").permitAll()
                         .anyRequest().authenticated() // 그 외 모든 요청 인증처리 -->permitAll
 
         );
