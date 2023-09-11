@@ -40,6 +40,13 @@ public class FeedController {
         List<FeedResponseDto> responseDtos = feedService.selectFeedsByLike().getFeedResponseDtos();
         return ResponseEntity.ok().body(responseDtos);
     }
+    
+    // 피드 댓글 순 조회
+    @GetMapping("/comment")
+    public ResponseEntity selectFeedsByComment() {
+        List<FeedResponseDto> responseDtos = feedService.selectFeedsByComment().getFeedResponseDtos();
+        return ResponseEntity.ok().body(responseDtos);
+    }
 
     //내가 쓴 피드 조회
     @GetMapping("/my-feeds")
