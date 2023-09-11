@@ -7,6 +7,7 @@ import com.example.petback.user.dto.ProfileRequestDto;
 import com.example.petback.user.dto.ProfileResponseDto;
 import com.example.petback.user.dto.SignupRequestDto;
 import com.example.petback.user.entity.User;
+import com.example.petback.user.enums.UserRoleEnum;
 import com.example.petback.user.repository.RefreshTokenRepository;
 import com.example.petback.user.repository.UserRepository;
 import jakarta.persistence.EntityManager;
@@ -43,7 +44,7 @@ public class UserServiceImpl implements UserService {
     // 회원정보 전체 조회
     @Override
     public List<ProfileResponseDto> selectProfiles() {
-        return userRepository.findAll().stream().map(ProfileResponseDto::new).toList();
+        return userRepository.findAllByRole(UserRoleEnum.OWNER).stream().map(ProfileResponseDto::new).toList();
     }
 
     @Override

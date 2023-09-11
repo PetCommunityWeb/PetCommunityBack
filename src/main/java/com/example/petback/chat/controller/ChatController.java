@@ -20,7 +20,7 @@ public class ChatController {
     // 채팅방 생성
     @PostMapping("/chats")
     public RoomDto createRoom(@RequestBody RoomRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return chatService.createRoom(requestDto.getName(), userDetails.getUser());
+        return chatService.createRoom(requestDto, userDetails.getUser());
     }
 
     // 채팅방 단일 조회
@@ -32,8 +32,8 @@ public class ChatController {
 
     // 생성된 채팅방 전체조회
     @GetMapping("/chats")
-    public List<ChatRoomResponseDto> selectRooms() {
-        return chatService.selectRooms().getChatRoomResponseDtoList();
+    public List<ChatRoomResponseDto> selectRooms(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return chatService.selectRooms(userDetails.getUser()).getChatRoomResponseDtoList();
     }
 
     // 채팅방 삭제

@@ -38,8 +38,8 @@ public class UserController {
     }
 
     // 회원정보 전체 조회
-    @GetMapping("/profile")
-    public ResponseEntity selectProfiles() {
+    @GetMapping("/doctors")
+    public ResponseEntity selectAllDoctorProfiles() {
         List<ProfileResponseDto> responseDto = userService.selectProfiles();
         return ResponseEntity.ok().body(responseDto);
     }
