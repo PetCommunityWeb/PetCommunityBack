@@ -18,10 +18,8 @@ public class ChatMessage {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
     private String message;
 
-    @Column
     private LocalDateTime time;
 
     @ManyToOne(fetch = FetchType.LAZY)

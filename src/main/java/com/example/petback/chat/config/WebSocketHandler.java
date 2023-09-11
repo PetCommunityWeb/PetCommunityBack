@@ -70,21 +70,6 @@ public class WebSocketHandler extends TextWebSocketHandler {
         ChatMessage chatMessage = messageDto.toEntity(user, chatRoom);
         chatMessageRepository.save(chatMessage);
 
-//        // Redis에서 기존의 메시지 목록을 가져온다
-//        ValueOperations<String, String> valueOperations = redisTemplate.opsForValue();
-//        String existingMessagesJson = valueOperations.get("chatroom:" + roomId);
-//
-//        // 기존 메시지 목록에 새 메시지를 추가
-//        List<MessageDto> existingMessages = existingMessagesJson == null ?
-//                new ArrayList<>() :
-//                objectMapper.readValue(existingMessagesJson, new TypeReference<List<MessageDto>>() {});
-//
-//        existingMessages.add(messageDto);
-//
-//        // Redis에 업데이트된 메시지 목록을 저장
-//        valueOperations.set("chatroom:" + roomId, objectMapper.writeValueAsString(existingMessages));
-
-        // 모든 해당 채팅방의 사용자에게 메시지 전송
         for (WebSocketSession roomSession : roomSessionsMap.get(roomId)) {
             roomSession.sendMessage(message);
         }
