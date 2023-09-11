@@ -3,9 +3,12 @@ package com.example.petback.chat.service;
 import com.example.petback.chat.dto.ChatRoomListResponseDto;
 import com.example.petback.chat.dto.ChatRoomResponseDto;
 import com.example.petback.chat.dto.RoomDto;
+import com.example.petback.chat.dto.RoomRequestDto;
 import com.example.petback.chat.entity.ChatRoom;
 import com.example.petback.chat.repository.ChatRoomRepository;
 import com.example.petback.user.entity.User;
+import com.example.petback.user.enums.UserRoleEnum;
+import com.example.petback.user.repository.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +29,7 @@ import java.util.*;
 public class ChatServiceImpl implements ChatService{
     private final ObjectMapper objectMapper;
     private final ChatRoomRepository chatRoomRepository;
+    private final UserRepository userRepository;
     private Map<String, RoomDto> chatRooms;
 
     @PostConstruct // 빈 생성과 의존성 주입이 완료된 후 호출되는 초기화 메소드
@@ -33,32 +37,35 @@ public class ChatServiceImpl implements ChatService{
         chatRooms = new LinkedHashMap<>();
     }
 
-    public List<RoomDto> findRooms() {
-        return new ArrayList<>(chatRooms.values());
-    }
-
     @Override
+    @Transactional
     public RoomDto selectRoomById(String roomId) {
         ChatRoom room = chatRoomRepository.findByUuid(roomId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 채팅방이 존재하지 않습니다."));
         return RoomDto.builder()
                 .roomId(room.getUuid())
                 .name(room.getRoomName())
+                .userNickname(room.getUser().getNickname())
+                .doctorNickname(room.getDoctor().getNickname())
                 .build();
     }
 
     @Override
     @Transactional
-    @CacheEvict(value = "chatRooms", allEntries = true)
-    public RoomDto createRoom(String name, User user) {
+    @CacheEvict(value = "chatRooms", key = "#user.id")
+    public RoomDto createRoom(RoomRequestDto requestDto, User user) {
         String randomId = UUID.randomUUID().toString();
+        User doctor = userRepository.findById(requestDto.getDoctorId())
+                .orElseThrow(() -> new IllegalArgumentException("해당 의사가 없습니다."));
         RoomDto roomDto = RoomDto.builder()
                 .roomId(randomId)
-                .name(name)
+                .name(requestDto.getName())
+                .userNickname(user.getNickname())
+                .doctorNickname(doctor.getNickname())
                 .build();
         chatRooms.put(randomId, roomDto);
 
-        ChatRoom chatRoom = roomDto.toEntity(randomId, name, user);
+        ChatRoom chatRoom = roomDto.toEntity(randomId, requestDto.getName(), user, doctor);
         chatRoomRepository.save(chatRoom);
         return roomDto;
     }
@@ -72,10 +79,14 @@ public class ChatServiceImpl implements ChatService{
 
     @Override
     @Transactional(readOnly = true)
-    @Cacheable(value = "chatRooms")
-    public ChatRoomListResponseDto selectRooms() {
+    @Cacheable(value = "chatRooms", key = "#user.id")
+    public ChatRoomListResponseDto selectRooms(User user) {
+        if (user.getRole().equals(UserRoleEnum.USER))
+            return ChatRoomListResponseDto.builder()
+                    .chatRoomResponseDtoList(chatRoomRepository.findAllByUser_Id(user.getId()).stream().map(ChatRoomResponseDto::of).toList())
+                    .build();
         return ChatRoomListResponseDto.builder()
-                .chatRoomResponseDtoList(chatRoomRepository.findAll().stream().map(ChatRoomResponseDto::of).toList())
+                .chatRoomResponseDtoList(chatRoomRepository.findAllByDoctor_Id(user.getId()).stream().map(ChatRoomResponseDto::of).toList())
                 .build();
 
     }
@@ -91,7 +102,7 @@ public class ChatServiceImpl implements ChatService{
 
     @Override
     @Transactional
-    @CacheEvict(value = "chatRooms", allEntries = true)
+    @CacheEvict(value = "chatRooms", key = "#user.id")
     public void deleteRoom(String uuid, User user) {
         ChatRoom chatRoom = chatRoomRepository.findByUuid(uuid).get();
         if (!user.equals(chatRoom.getUser())) {

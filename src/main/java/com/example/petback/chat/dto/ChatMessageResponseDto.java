@@ -14,6 +14,7 @@ public class ChatMessageResponseDto {
     private Long messageId;
     private String message;
     private String sender;
+    private String profileUrl;
     private String time;
 
     public static ChatMessageResponseDto of (ChatMessage chatMessage) {
@@ -21,6 +22,7 @@ public class ChatMessageResponseDto {
                 .messageId(chatMessage.getId())
                 .sender(chatMessage.getUser().getUsername())
                 .message(chatMessage.getMessage())
+                .profileUrl(chatMessage.getUser().getImageUrl())
                 .time(chatMessage.getTime().toString())
                 .build();
     }
