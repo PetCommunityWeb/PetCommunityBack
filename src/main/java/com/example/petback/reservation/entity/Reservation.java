@@ -35,11 +35,16 @@ public class Reservation {
     @Builder.Default
     private boolean isDeleted = Boolean.FALSE;
 
-    public void setDeleted(boolean isDeleted) {
+    public void setDeleted() {
         this.isDeleted = Boolean.TRUE;
     }
     public void cancle() {
         this.reservationStatus = ReservationStatusEnum.예약취소;
         this.reservationSlot.setReserved(false);
     }
+
+    public void restore() {
+        this.isDeleted = Boolean.FALSE;
+    }
+
 }
