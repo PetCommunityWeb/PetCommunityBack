@@ -27,7 +27,8 @@ public class FeedServiceImpl implements FeedService {
     @Caching(evict = {
             @CacheEvict(value = "myFeeds", key = "#user.id"),
             @CacheEvict(value = "allFeeds", allEntries = true),
-            @CacheEvict(value = "allFeedsByLike", allEntries = true)
+            @CacheEvict(value = "allFeedsByLike", allEntries = true),
+            @CacheEvict(value = "allFeedsByComment", allEntries = true)
     })
     public FeedResponseDto createFeed(FeedRequestDto requestDto, User user) {
         Feed feed = requestDto.toEntity(user);
@@ -52,6 +53,15 @@ public class FeedServiceImpl implements FeedService {
     public FeedListResponseDto selectFeedsByLike() {
         return FeedListResponseDto.builder()
                 .feedResponseDtos(feedRepository.findAllOrderByLikes().stream().map(FeedResponseDto::of).toList())
+                .build();
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    @Cacheable(value = "allFeedsByComment")
+    public FeedListResponseDto selectFeedsByComment() {
+        return FeedListResponseDto.builder()
+                .feedResponseDtos(feedRepository.findAllOrderByCommentCount().stream().map(FeedResponseDto::of).toList())
                 .build();
     }
 
@@ -82,7 +92,8 @@ public class FeedServiceImpl implements FeedService {
             @CacheEvict(value = "feed", key = "#id"),
             @CacheEvict(value = "myFeeds", key = "#user.id"),
             @CacheEvict(value = "allFeeds", allEntries = true),
-            @CacheEvict(value = "allFeedsByLike", allEntries = true)
+            @CacheEvict(value = "allFeedsByLike", allEntries = true),
+            @CacheEvict(value = "allFeedsByComment", allEntries = true)
     })
     public void updateFeed(Long id, FeedRequestDto requestDto, User user) {
         Feed feed = findFeed(id);
@@ -97,7 +108,8 @@ public class FeedServiceImpl implements FeedService {
     @Caching(evict = {
             @CacheEvict(value = "myFeeds", key = "#user.id"),
             @CacheEvict(value = "allFeeds", allEntries = true),
-            @CacheEvict(value = "allFeedsByLike", allEntries = true)
+            @CacheEvict(value = "allFeedsByLike", allEntries = true),
+            @CacheEvict(value = "allFeedsByComment", allEntries = true)
     })
     public void deleteFeed(Long id, User user) {
         Feed feed = findFeed(id);
@@ -112,6 +124,7 @@ public class FeedServiceImpl implements FeedService {
     @Caching(evict = {
             @CacheEvict(value = "allFeeds", allEntries = true),
             @CacheEvict(value = "allFeedsByLike", allEntries = true),
+            @CacheEvict(value = "allFeedsByComment", allEntries = true),
             @CacheEvict(value = "feed", key = "#id"),
             @CacheEvict(value = "myFeeds", key = "#user.id")
     })

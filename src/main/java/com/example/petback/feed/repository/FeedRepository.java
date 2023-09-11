@@ -23,5 +23,7 @@ public interface FeedRepository extends JpaRepository<Feed, Long> {
 
     @Query(value = "SELECT f.* FROM feeds f LEFT JOIN feed_like fl ON f.id = fl.feed_id WHERE f.is_deleted = false GROUP BY f.id ORDER BY COUNT(fl.feed_id) DESC", nativeQuery = true)
     List<Feed> findAllOrderByLikes();
-
+  
+    @Query(value = "SELECT f.* FROM feeds f LEFT JOIN comments c ON f.id = c.feed_id WHERE f.is_deleted = false GROUP BY f.id ORDER BY COUNT(c.feed_id) DESC", nativeQuery = true)
+    List<Feed> findAllOrderByCommentCount();
 }

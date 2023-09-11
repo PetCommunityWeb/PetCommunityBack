@@ -30,4 +30,6 @@ public interface FeedService {
     FeedListResponseDto selectFeedsByUser(User user);
 
     FeedListResponseDto selectFeedsByLike();
+
+    FeedListResponseDto selectFeedsByComment();
 }
