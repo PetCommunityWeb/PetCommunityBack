@@ -58,25 +58,6 @@ public class User {
     @Enumerated(value = EnumType.STRING)
     private UserRoleEnum role;
 
-
-    private String provider; //어떤 OAuth인지(google, naver 등)
-    private String provideId; // 해당 OAuth 의 key(id)
-
-    private Long kakaoId;
-
-    public User(String nickname, String password, String email, UserRoleEnum userRoleEnum, Long kakaoId) {
-        this.nickname = nickname;
-        this.password = password;
-        this.email = email;
-        this.role = role;
-        this.kakaoId = kakaoId;
-    }
-
-    public User kakaoIdUpdate(Long kakaoId) {
-        this.kakaoId = kakaoId;
-        return this;
-    }
-
     // USER 삭제 시, 같이 삭제되야할 것들
     // 피드, 피드 좋아요, 피드 댓글
     // 팁, 팁 좋아요, 팁 댓글
@@ -90,7 +71,8 @@ public class User {
     @Builder.Default
     private List<FeedLike> feedLikes = new ArrayList<>();
 
-        @OneToMany(cascade = CascadeType.REMOVE)
+
+    @OneToMany(cascade = CascadeType.REMOVE)
     @Builder.Default
     private List<Tip> tips = new ArrayList<>();
 
@@ -128,6 +110,11 @@ public class User {
         this.introduction = requestDto.getIntroduction();
     }
 
+    public User updateOauthProfile(String name, String picture) {
+        this.nickname = name;
+        this.imageUrl = picture;
+        return this;
+    }
     public void restore() {
         this.setDeleted(false);
     }

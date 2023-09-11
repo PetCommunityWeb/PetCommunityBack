@@ -31,6 +31,7 @@ public class RoomDto {
         return ChatRoom.builder()
                 .uuid(uuid)
                 .roomName(roomName)
+                .createdAt(System.currentTimeMillis())
                 .user(user)
                 .doctor(doctor)
                 .build();

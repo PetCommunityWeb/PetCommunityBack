@@ -17,14 +17,15 @@ public class ChatRoom {
     @Id
     private String uuid;
 
-    @Column
     private String roomName;
+    private long createdAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private User doctor;
+
 
     @Builder.Default
     @OneToMany(mappedBy = "chatRoom", orphanRemoval = true)
