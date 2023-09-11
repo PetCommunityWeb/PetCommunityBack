@@ -5,6 +5,7 @@ import com.example.petback.user.entity.User;
 import io.lettuce.core.dynamic.annotation.Param;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.security.core.parameters.P;
 
 import java.util.List;
 import java.util.Optional;
@@ -14,5 +15,5 @@ public interface FeedRepository extends JpaRepository<Feed, Long> {
     List<Feed> findByUser(User user);
 
     @Query(value = "SELECT * FROM feeds WHERE user_id = :userId", nativeQuery = true)
-    List<Feed> findSoftDeletedFeedsByUserId(Long userId);
+    List<Feed> findSoftDeletedFeedsByUserId(@Param("userId") Long userId);
 }

@@ -51,7 +51,7 @@ public class Review {
     }
     @Builder.Default
     private boolean isDeleted = Boolean.FALSE;
-    public void setDeleted(boolean isDeleted) {
+    public void setDeleted() {
         this.isDeleted = Boolean.TRUE;
     }
 

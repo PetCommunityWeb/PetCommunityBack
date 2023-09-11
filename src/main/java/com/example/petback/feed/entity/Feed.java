@@ -55,10 +55,10 @@ public class Feed {
         this.imageUrl = imageUrl;
     }
 
-    public void setDeleted(boolean isDeleted) {
+    public void setDeleted() {
         this.isDeleted = Boolean.TRUE;
     }
     public void restore() {
-        this.setDeleted(false);
+        this.isDeleted=Boolean.FALSE;
     }
 }

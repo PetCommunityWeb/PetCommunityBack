@@ -38,7 +38,7 @@ public class Comment {
         this.content = content;
     }
 
-    public void setDeleted(boolean isDeleted) {
+    public void setDeleted() {
         this.isDeleted = Boolean.TRUE;
     }
 

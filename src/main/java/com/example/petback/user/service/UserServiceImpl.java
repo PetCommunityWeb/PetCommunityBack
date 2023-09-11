@@ -109,14 +109,14 @@ public class UserServiceImpl implements UserService {
             throw new IllegalArgumentException("탈퇴 권한이 없습니다.");
         }
 
-        userToDelete.getComments().forEach(comment -> comment.setDeleted(true));
-        userToDelete.getFeeds().forEach(feed -> feed.setDeleted(true));
-        userToDelete.getFeedLikes().forEach(feedLike -> feedLike.setDeleted(true));
+        userToDelete.getComments().forEach(Comment::setDeleted);
+        userToDelete.getFeeds().forEach(Feed::setDeleted);
+        userToDelete.getFeedLikes().forEach(FeedLike::setDeleted);
         userToDelete.getHospitals().forEach(Hospital::setDeleted);
-        userToDelete.getReservations().forEach(reservation -> reservation.setDeleted(true));
-        userToDelete.getReviews().forEach(review -> review.setDeleted(true));
-        userToDelete.getTips().forEach(tip -> tip.setDeleted(true));
-        userToDelete.getTipLikes().forEach(tipLike -> tipLike.setDeleted(true));
+        userToDelete.getReservations().forEach(Reservation::setDeleted);
+        userToDelete.getReviews().forEach(Review::setDeleted);
+        userToDelete.getTips().forEach(Tip::setDeleted);
+        userToDelete.getTipLikes().forEach(TipLike::setDeleted);
 
         // UserRepository 를 통해 변경 사항을 저장
         userRepository.flush();
