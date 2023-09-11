@@ -4,7 +4,6 @@ package com.example.petback.oauth2;
 import com.example.petback.oauth2.dto.OAuthAttributes;
 import com.example.petback.user.entity.User;
 import com.example.petback.user.repository.UserRepository;
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
