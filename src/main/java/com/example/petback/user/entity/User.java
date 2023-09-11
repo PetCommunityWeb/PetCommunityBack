@@ -114,6 +114,7 @@ public class User {
         this.nickname = name;
         this.imageUrl = picture;
         return this;
+    }
     public void restore() {
         this.setDeleted(false);
     }
