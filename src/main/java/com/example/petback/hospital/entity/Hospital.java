@@ -128,4 +128,8 @@ public class Hospital {
     public void setDeleted() {
         this.isDeleted = Boolean.TRUE;
     }
+
+    public void restore() {
+        this.isDeleted = Boolean.FALSE;
+    }
 }

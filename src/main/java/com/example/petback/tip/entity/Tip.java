@@ -39,11 +39,22 @@ public class Tip {
     @Builder.Default
     private boolean isDeleted = Boolean.FALSE;
 
+    public void setDeleted() {
+        this.isDeleted = Boolean.TRUE;
+    }
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn
     private User user;
+
+
+    public void restore() {
+        this.isDeleted = Boolean.FALSE;
+    }
+
 
     @Builder.Default
     @OneToMany(mappedBy = "tip", orphanRemoval = true)
     private List<TipLike> tipLikes = new ArrayList<>();
 }
+
