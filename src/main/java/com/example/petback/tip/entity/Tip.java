@@ -50,7 +50,8 @@ public class Tip {
 
     public void restore() {
         this.isDeleted = Boolean.FALSE;
-    }}
+    }
+
 
     @Builder.Default
     @OneToMany(mappedBy = "tip", orphanRemoval = true)
