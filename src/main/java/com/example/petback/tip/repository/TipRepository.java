@@ -13,6 +13,6 @@ public interface TipRepository  extends JpaRepository<Tip, Long> {
     Optional<Tip> findById(Long id);
 
 
-    @Query(value = "SELECT * FROM feeds WHERE user_id = :userId", nativeQuery = true)
+    @Query(value = "SELECT * FROM tip WHERE user_id = :userId", nativeQuery = true)
     List<Tip> findSoftDeletedTipsByUserId(Long id);
 }

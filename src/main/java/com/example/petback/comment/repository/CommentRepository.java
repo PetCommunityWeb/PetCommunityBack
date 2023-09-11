@@ -7,6 +7,6 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface CommentRepository extends JpaRepository<Comment, Long> {
-    @Query(value = "SELECT * FROM feeds WHERE user_id = :userId", nativeQuery = true)
+    @Query(value = "SELECT * FROM comments WHERE user_id = :userId", nativeQuery = true)
     List<Comment> findSoftDeletedCommentsByUserId(Long id);
 }

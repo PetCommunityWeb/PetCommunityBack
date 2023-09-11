@@ -12,6 +12,6 @@ public interface TipLikeRepository extends JpaRepository<TipLike, Long> {
 
     TipLike findByUserAndTip(User user, Tip tip);
 
-    @Query(value = "SELECT * FROM feeds WHERE user_id = :userId", nativeQuery = true)
+    @Query(value = "SELECT * FROM tip_like WHERE user_id = :userId", nativeQuery = true)
     List<TipLike> findSoftDeletedTipLikesByUserId(Long id);
 }

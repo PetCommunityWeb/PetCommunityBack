@@ -13,6 +13,6 @@ public interface ReservationRepository extends JpaRepository<Reservation, String
     List<Reservation> findByReservationSlot_StartTimeBetween(LocalTime startTimeStart, LocalTime startTimeEnd);
     List<Reservation> findAllByUserOrderByReservationSlotDateDescReservationSlotStartTimeDesc(User user);
 
-    @Query(value = "SELECT * FROM feeds WHERE user_id = :userId", nativeQuery = true)
+    @Query(value = "SELECT * FROM reservations WHERE user_id = :userId", nativeQuery = true)
     List<Reservation> findSoftDeletedReservationsByUserId(Long id);
 }

@@ -10,6 +10,6 @@ import java.util.List;
 public interface ReviewRepository extends JpaRepository<Review, Long> {
     List<Review> findAllByUser(User user);
 
-    @Query(value = "SELECT * FROM feeds WHERE user_id = :userId", nativeQuery = true)
+    @Query(value = "SELECT * FROM reviews WHERE user_id = :userId", nativeQuery = true)
     List<Review> findSoftDeletedReviewsByUserId(Long id);
 }

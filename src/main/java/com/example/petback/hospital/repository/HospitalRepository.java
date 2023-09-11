@@ -14,6 +14,6 @@ public interface HospitalRepository extends JpaRepository<Hospital, Long> {
 
     List<Hospital> findAllByUser(User user);
 
-    @Query(value = "SELECT * FROM feeds WHERE user_id = :userId", nativeQuery = true)
+    @Query(value = "SELECT * FROM hospitals WHERE user_id = :userId", nativeQuery = true)
     List<Hospital> findSoftDeletedHospitalsByUserId(Long id);
 }

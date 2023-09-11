@@ -13,6 +13,6 @@ public interface FeedLikeRepository extends JpaRepository<FeedLike, Long> {
     Boolean existsByUserAndFeed(User user, Feed feed);
     Optional<FeedLike> findByUserAndFeed(User user, Feed feed);
 
-    @Query(value = "SELECT * FROM feeds WHERE user_id = :userId", nativeQuery = true)
+    @Query(value = "SELECT * FROM feed_like WHERE user_id = :userId", nativeQuery = true)
     List<FeedLike> findSoftDeletedFeedLikesByUserId(Long id);
 }
