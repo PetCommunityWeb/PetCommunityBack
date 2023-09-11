@@ -7,7 +7,7 @@ import lombok.*;
 
 @Getter
 @Entity
-@Table(name = "hospital_species", indexes = @Index(name = "index_species", columnList = "species_id"))
+@Table(name = "hospital_species")
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor

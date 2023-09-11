@@ -12,7 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 @Builder
-@Table(name = "ChatRooms")
+@Table(name = "chat_rooms")
 public class ChatRoom {
     @Id
     private String uuid;
@@ -22,6 +22,9 @@ public class ChatRoom {
 
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private User doctor;
 
     @Builder.Default
     @OneToMany(mappedBy = "chatRoom", orphanRemoval = true)
