@@ -3,6 +3,7 @@ package com.example.petback.reservation.repository;
 import com.example.petback.reservation.dto.ReservationResponseDto;
 import com.example.petback.reservation.entity.Reservation;
 import com.example.petback.user.entity.User;
+import io.lettuce.core.dynamic.annotation.Param;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -14,5 +15,5 @@ public interface ReservationRepository extends JpaRepository<Reservation, String
     List<Reservation> findAllByUserOrderByReservationSlotDateDescReservationSlotStartTimeDesc(User user);
 
     @Query(value = "SELECT * FROM reservations WHERE user_id = :userId", nativeQuery = true)
-    List<Reservation> findSoftDeletedReservationsByUserId(Long id);
+    List<Reservation> findSoftDeletedReservationsByUserId(@Param("userId") Long userId);
 }
