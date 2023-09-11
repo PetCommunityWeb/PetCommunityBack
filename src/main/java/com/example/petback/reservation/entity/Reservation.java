@@ -48,4 +48,9 @@ public class Reservation {
         this.reservationStatus = ReservationStatusEnum.예약취소;
         this.reservationSlot.setReserved(false);
     }
+
+    public void restore() {
+        this.isDeleted = Boolean.FALSE;
+    }
+
 }

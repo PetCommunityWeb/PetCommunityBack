@@ -10,6 +10,8 @@ import com.example.petback.feed.entity.FeedLike;
 import com.example.petback.hospital.entity.Hospital;
 import com.example.petback.reservation.entity.Reservation;
 import com.example.petback.review.entity.Review;
+import com.example.petback.tip.entity.Tip;
+import com.example.petback.tip.entity.TipLike;
 import com.example.petback.user.dto.ProfileRequestDto;
 import com.example.petback.user.enums.UserRoleEnum;
 import jakarta.persistence.*;
@@ -61,7 +63,7 @@ public class User {
     // 팁, 팁 좋아요, 팁 댓글
     // 등록 병원
     // 리뷰 , 예약, 실시간 채팅,
-    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     @Builder.Default
     private List<Feed> feeds = new ArrayList<>();
 
@@ -69,14 +71,14 @@ public class User {
     @Builder.Default
     private List<FeedLike> feedLikes = new ArrayList<>();
 
-    //    @OneToMany(cascade = CascadeType.REMOVE)
-//    @Builder.Default
-//    private List<Tip> tips = new ArrayList<>();
-//
-//    @OneToMany(cascade = CascadeType.REMOVE)
-//    @Builder.Default
-//    private List<TipLike> tipLikes = new ArrayList<>();
-//
+        @OneToMany(cascade = CascadeType.REMOVE)
+    @Builder.Default
+    private List<Tip> tips = new ArrayList<>();
+
+    @OneToMany(cascade = CascadeType.REMOVE)
+    @Builder.Default
+    private List<TipLike> tipLikes = new ArrayList<>();
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     @Builder.Default
     private List<Comment> comments = new ArrayList<>();
@@ -105,5 +107,9 @@ public class User {
         this.nickname = requestDto.getNickname();
         this.imageUrl = requestDto.getImageUrl();
         this.introduction = requestDto.getIntroduction();
+    }
+
+    public void restore() {
+        this.setDeleted(false);
     }
 }

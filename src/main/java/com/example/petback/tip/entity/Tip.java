@@ -35,7 +35,14 @@ public class Tip {
     @Builder.Default
     private boolean isDeleted = Boolean.FALSE;
 
+    public void setDeleted(boolean isDeleted) {
+        this.isDeleted = Boolean.TRUE;
+    }
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn
     private User user;
-}
+
+    public void restore() {
+        this.isDeleted = Boolean.FALSE;
+    }

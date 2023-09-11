@@ -5,7 +5,6 @@ import com.example.petback.user.entity.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
-import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 @Entity
@@ -38,7 +37,13 @@ public class Comment {
     public void updateContent(String content) {
         this.content = content;
     }
+
     public void setDeleted(boolean isDeleted) {
         this.isDeleted = Boolean.TRUE;
-}
+    }
+
+    public void restore() {
+        this.isDeleted = Boolean.FALSE;
+    }
+
 }

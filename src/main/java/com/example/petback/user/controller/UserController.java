@@ -75,7 +75,6 @@ public class UserController {
             return ResponseEntity.badRequest().body("이메일 주소를 입력하세요.");
         }
         Long userId = userService.getUserIdByEmail(email);
-
         if (userId == null) {
             return ResponseEntity.badRequest().body("해당 이메일로 등록된 사용자가 없습니다.");
         }

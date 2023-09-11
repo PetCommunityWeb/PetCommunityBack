@@ -1,16 +1,31 @@
 package com.example.petback.user.service;
 
+import com.example.petback.comment.entity.Comment;
+import com.example.petback.comment.repository.CommentRepository;
 import com.example.petback.common.jwt.JwtUtil;
 import com.example.petback.common.jwt.RefreshToken;
+import com.example.petback.feed.entity.Feed;
+import com.example.petback.feed.entity.FeedLike;
+import com.example.petback.feed.repository.FeedLikeRepository;
+import com.example.petback.feed.repository.FeedRepository;
 import com.example.petback.hospital.entity.Hospital;
+import com.example.petback.hospital.repository.HospitalRepository;
+import com.example.petback.reservation.entity.Reservation;
+import com.example.petback.reservation.repository.ReservationRepository;
+import com.example.petback.review.entity.Review;
+import com.example.petback.review.repository.ReviewRepository;
+import com.example.petback.tip.entity.Tip;
+import com.example.petback.tip.entity.TipLike;
+import com.example.petback.tip.repository.TipLikeRepository;
+import com.example.petback.tip.repository.TipRepository;
 import com.example.petback.user.dto.ProfileRequestDto;
 import com.example.petback.user.dto.ProfileResponseDto;
 import com.example.petback.user.dto.SignupRequestDto;
 import com.example.petback.user.entity.User;
 import com.example.petback.user.repository.RefreshTokenRepository;
 import com.example.petback.user.repository.UserRepository;
-import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,11 +38,21 @@ import java.util.NoSuchElementException;
 @Service
 @RequiredArgsConstructor
 @Transactional
+@Slf4j
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
     private final RefreshTokenRepository refreshTokenRepository;
+
+    private final CommentRepository commentRepository;
+    private final TipRepository tipRepository;
+    private final TipLikeRepository tipLikeRepository;
+    private final FeedRepository feedRepository;
+    private final FeedLikeRepository feedLikeRepository;
+    private final HospitalRepository hospitalRepository;
+    private final ReservationRepository reservationRepository;
+    private final ReviewRepository reviewRepository;
 
     // 회원 가입
     @Override
@@ -90,6 +115,8 @@ public class UserServiceImpl implements UserService {
         userToDelete.getHospitals().forEach(Hospital::setDeleted);
         userToDelete.getReservations().forEach(reservation -> reservation.setDeleted(true));
         userToDelete.getReviews().forEach(review -> review.setDeleted(true));
+        userToDelete.getTips().forEach(tip -> tip.setDeleted(true));
+        userToDelete.getTipLikes().forEach(tipLike -> tipLike.setDeleted(true));
 
         // UserRepository 를 통해 변경 사항을 저장
         userRepository.flush();
@@ -100,25 +127,32 @@ public class UserServiceImpl implements UserService {
         userRepository.save(userToDelete);
     }
 
-    //회원탈퇴 시 삭제된 데이터 복구
+    // ---------------------------- 회원탈퇴 후 복구시 삭제된 데이터 복구
     @Override
     @Transactional
-    public void restoreProfile(Long id) {
-        User userToRestore = findUser(id);
+    public void restoreProfile(Long userId) {
+
+        User userToRestore = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다"));
 
         // 복구 가능한 상태인지 확인
         if (!userToRestore.isDeleted()) {
             throw new IllegalArgumentException("이미 복구된 사용자입니다.");
         }
-        userToRestore.getComments().forEach(comment -> comment.setDeleted(false));
-        userToRestore.getFeeds().forEach(feed -> feed.setDeleted(false));
-        userToRestore.getFeedLikes().forEach(feedLike -> feedLike.setDeleted(false));
-        userToRestore.getHospitals().forEach(Hospital::setDeleted);
-        userToRestore.getReservations().forEach(reservation -> reservation.setDeleted(false));
-        userToRestore.getReviews().forEach(review -> review.setDeleted(false));
+        userToRestore.restore();
+        userRepository.save(userToRestore);
+
+        restoreSoftDeletedFeeds(userToRestore);
+        restoreSoftDeletedFeedLikes(userToRestore);
+        restoreSoftDeletedComments(userToRestore);
+        restoreSoftDeletedHospitals(userToRestore);
+        restoreSoftDeletedReservations(userToRestore);
+        restoreSoftDeletedReviews(userToRestore);
+        restoreSoftDeletedTips(userToRestore);
+        restoreSoftDeletedTipLikes(userToRestore);
 
         // 복구 가능한 상태라면 삭제 상태를 false로 변경하고 저장
-        userToRestore.setDeleted(false);
+        userRepository.flush();
         userRepository.save(userToRestore);
 
     }
@@ -148,11 +182,86 @@ public class UserServiceImpl implements UserService {
     @Override
     public Long getUserIdByEmail(String email) {
 
-
         User user = userRepository.findUserByEmailIgnoringSoftDelete(email);
         if (user != null) {
             return user.getId();
         }
         return null;
     }
+
+    /*복구해야 하는 것들
+     * Feed, FeedLikes, Comment, Hospital
+     * Reservations, Review, Tip, TipLikes 8개 */
+    @Transactional
+    public void restoreSoftDeletedFeeds(User userToRestore) {
+        List<Feed> softDeletedFeeds = feedRepository.findSoftDeletedFeedsByUserId(userToRestore.getId());
+
+        for (Feed feed : softDeletedFeeds) {
+            feed.restore();
+        }
+    }
+
+    @Transactional
+    public void restoreSoftDeletedFeedLikes(User userToRestore) {
+        List<FeedLike> softDeletedFeedLikes = feedLikeRepository.findSoftDeletedFeedLikesByUserId(userToRestore.getId());
+
+        for (FeedLike feedLike : softDeletedFeedLikes) {
+            feedLike.restore();
+        }
+    }
+
+    @Transactional
+    public void restoreSoftDeletedComments(User userToRestore) {
+        List<Comment> softDeletedComments = commentRepository.findSoftDeletedCommentsByUserId(userToRestore.getId());
+
+        for (Comment comment : softDeletedComments) {
+            comment.restore();
+        }
+    }
+
+    @Transactional
+    public void restoreSoftDeletedHospitals(User userToRestore) {
+        List<Hospital> softDeletedHospitals = hospitalRepository.findSoftDeletedHospitalsByUserId(userToRestore.getId());
+
+        for (Hospital hospital : softDeletedHospitals) {
+            hospital.restore();
+        }
+    }
+
+    @Transactional
+    public void restoreSoftDeletedReservations(User userToRestore) {
+        List<Reservation> softDeletedReservations = reservationRepository.findSoftDeletedReservationsByUserId(userToRestore.getId());
+
+        for (Reservation reservation : softDeletedReservations) {
+            reservation.restore();
+        }
+    }
+
+    @Transactional
+    public void restoreSoftDeletedReviews(User userToRestore) {
+        List<Review> softDeletedReviews = reviewRepository.findSoftDeletedReviewsByUserId(userToRestore.getId());
+
+        for (Review review : softDeletedReviews) {
+            review.restore();
+        }
+    }
+
+    @Transactional
+    public void restoreSoftDeletedTips(User userToRestore) {
+        List<Tip> softDeletedTips = tipRepository.findSoftDeletedTipsByUserId(userToRestore.getId());
+
+        for (Tip tip : softDeletedTips) {
+            tip.restore();
+        }
+    }
+
+    @Transactional
+    public void restoreSoftDeletedTipLikes(User userToRestore) {
+        List<TipLike> softDeletedTipLikes = tipLikeRepository.findSoftDeletedTipLikesByUserId(userToRestore.getId());
+
+        for (TipLike tipLike : softDeletedTipLikes) {
+            tipLike.restore();
+        }
+    }
+
 }

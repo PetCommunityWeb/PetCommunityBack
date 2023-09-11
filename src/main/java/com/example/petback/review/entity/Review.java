@@ -54,4 +54,8 @@ public class Review {
     public void setDeleted(boolean isDeleted) {
         this.isDeleted = Boolean.TRUE;
     }
+
+    public void restore() {
+        this.isDeleted = Boolean.FALSE;
+    }
 }

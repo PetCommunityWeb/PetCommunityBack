@@ -42,11 +42,11 @@ public class Feed {
     private User user;
 
     @Builder.Default
-    @OneToMany(mappedBy = "feed", orphanRemoval = true)
+    @OneToMany(mappedBy = "feed", orphanRemoval = true, cascade = CascadeType.ALL)
     private List<Comment> comments = new ArrayList<>();
 
     @Builder.Default
-    @OneToMany(mappedBy = "feed", orphanRemoval = true)
+    @OneToMany(mappedBy = "feed", orphanRemoval = true, cascade = CascadeType.ALL)
     private List<FeedLike> feedLikes = new ArrayList<>();
 
     public void update(String title, String content, String imageUrl) {
@@ -57,5 +57,8 @@ public class Feed {
 
     public void setDeleted(boolean isDeleted) {
         this.isDeleted = Boolean.TRUE;
+    }
+    public void restore() {
+        this.setDeleted(false);
     }
 }
