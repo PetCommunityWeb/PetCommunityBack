@@ -37,7 +37,13 @@ public class Comment {
     public void updateContent(String content) {
         this.content = content;
     }
-    public void setDeleted(boolean isDeleted) {
+
+    public void setDeleted() {
         this.isDeleted = Boolean.TRUE;
-}
+    }
+
+    public void restore() {
+        this.isDeleted = Boolean.FALSE;
+    }
+
 }

@@ -16,6 +16,13 @@ public class TipLike {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Builder.Default
+    private boolean isDeleted = Boolean.FALSE;
+
+    public void setDeleted() {
+        this.isDeleted = Boolean.TRUE;
+    }
+
     @ManyToOne(fetch = FetchType.LAZY) // 지연 로딩
     @JoinColumn(name = "user_id")
     private User user;
@@ -23,4 +30,16 @@ public class TipLike {
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL) // 지연 로딩
     @JoinColumn(name = "tip_id")
     private Tip tip;
+
+
+    public TipLike(User user, Tip tip) {
+        this.user = user;
+        this.tip = tip;
+    }
+
+    public void restore() {
+        this.isDeleted = Boolean.FALSE;
+    }
+
+
 }
