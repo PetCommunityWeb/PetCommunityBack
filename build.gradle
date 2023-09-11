@@ -84,6 +84,8 @@ dependencies {
 
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
 
+    // health check API를 위한 actuator 의존성 추가
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
 }
 //def generated = 'src/main/generated'
 
