@@ -45,4 +45,4 @@ public class Tip {
 
     public void restore() {
         this.isDeleted = Boolean.FALSE;
-    }
+    }}
