@@ -5,11 +5,7 @@ import com.example.petback.chat.dto.RoomDto;
 import com.example.petback.chat.dto.RoomRequestDto;
 import com.example.petback.chat.service.ChatService;
 import com.example.petback.common.security.UserDetailsImpl;
-import com.example.petback.user.entity.User;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.annotations.Cache;
-import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 

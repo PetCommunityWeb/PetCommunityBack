@@ -4,9 +4,9 @@ import com.example.petback.feed.dto.FeedListResponseDto;
 import com.example.petback.feed.dto.FeedRequestDto;
 import com.example.petback.feed.dto.FeedResponseDto;
 import com.example.petback.feed.entity.Feed;
+import com.example.petback.feed.entity.FeedLike;
 import com.example.petback.feed.repository.FeedLikeRepository;
 import com.example.petback.feed.repository.FeedRepository;
-import com.example.petback.feed.entity.FeedLike;
 import com.example.petback.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
@@ -26,7 +26,8 @@ public class FeedServiceImpl implements FeedService {
     @Override
     @Caching(evict = {
             @CacheEvict(value = "myFeeds", key = "#user.id"),
-            @CacheEvict(value = "allFeeds", allEntries = true)
+            @CacheEvict(value = "allFeeds", allEntries = true),
+            @CacheEvict(value = "allFeedsByLike", allEntries = true)
     })
     public FeedResponseDto createFeed(FeedRequestDto requestDto, User user) {
         Feed feed = requestDto.toEntity(user);
@@ -43,9 +44,19 @@ public class FeedServiceImpl implements FeedService {
                 .feedResponseDtos(feedRepository.findAll().stream().map(FeedResponseDto::of).toList())
                 .build();
     }
+    
+    // 피드 좋아요 순 조회
+    @Transactional(readOnly = true)
+    @Override
+    @Cacheable(value = "allFeedsByLike")
+    public FeedListResponseDto selectFeedsByLike() {
+        return FeedListResponseDto.builder()
+                .feedResponseDtos(feedRepository.findAllOrderByLikes().stream().map(FeedResponseDto::of).toList())
+                .build();
+    }
 
     //내가 쓴 피드만 조회
-    @Transactional
+    @Transactional(readOnly = true)
     @Override
     @Cacheable(value = "myFeeds", key = "#user.id")
     public FeedListResponseDto selectFeedsByUser(User user) {
@@ -70,7 +81,8 @@ public class FeedServiceImpl implements FeedService {
     @Caching(evict = {
             @CacheEvict(value = "feed", key = "#id"),
             @CacheEvict(value = "myFeeds", key = "#user.id"),
-            @CacheEvict(value = "allFeeds", allEntries = true)
+            @CacheEvict(value = "allFeeds", allEntries = true),
+            @CacheEvict(value = "allFeedsByLike", allEntries = true)
     })
     public void updateFeed(Long id, FeedRequestDto requestDto, User user) {
         Feed feed = findFeed(id);
@@ -84,7 +96,8 @@ public class FeedServiceImpl implements FeedService {
     @Override
     @Caching(evict = {
             @CacheEvict(value = "myFeeds", key = "#user.id"),
-            @CacheEvict(value = "allFeeds", allEntries = true)
+            @CacheEvict(value = "allFeeds", allEntries = true),
+            @CacheEvict(value = "allFeedsByLike", allEntries = true)
     })
     public void deleteFeed(Long id, User user) {
         Feed feed = findFeed(id);
@@ -98,8 +111,9 @@ public class FeedServiceImpl implements FeedService {
     @Override
     @Caching(evict = {
             @CacheEvict(value = "allFeeds", allEntries = true),
+            @CacheEvict(value = "allFeedsByLike", allEntries = true),
             @CacheEvict(value = "feed", key = "#id"),
-            @CacheEvict(value = "myFeeds", key = "#user.id"),
+            @CacheEvict(value = "myFeeds", key = "#user.id")
     })
     public String likeFeed(Long id, User user) {
         Feed feed = findFeed(id);

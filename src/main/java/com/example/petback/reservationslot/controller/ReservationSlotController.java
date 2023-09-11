@@ -2,10 +2,8 @@ package com.example.petback.reservationslot.controller;
 
 import com.example.petback.common.security.UserDetailsImpl;
 import com.example.petback.reservationslot.dto.ReservationSlotRequestDto;
-import com.example.petback.reservationslot.dto.SelectReservationSlotRequestDto;
 import com.example.petback.reservationslot.dto.SelectReservationSlotResponseDto;
 import com.example.petback.reservationslot.service.ReservationSlotService;
-import com.example.petback.reservationslot.service.ReservationSlotServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;

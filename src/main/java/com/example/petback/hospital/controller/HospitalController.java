@@ -1,13 +1,13 @@
 package com.example.petback.hospital.controller;
 
 import com.example.petback.common.security.UserDetailsImpl;
-import com.example.petback.hospital.dto.HospitalListResponseDto;
+import com.example.petback.hospital.OperatingDay;
 import com.example.petback.hospital.dto.HospitalRequestDto;
 import com.example.petback.hospital.dto.HospitalResponseDto;
 import com.example.petback.hospital.service.HospitalService;
-import com.example.petback.user.entity.User;
+import com.example.petback.species.SpeciesEnum;
+import com.example.petback.subject.SubjectEnum;
 import lombok.RequiredArgsConstructor;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -33,9 +33,12 @@ public class HospitalController {
     }
 
     @GetMapping
-    public ResponseEntity selectAllHospitals(){
-        List<HospitalResponseDto> responseDtos = hospitalService.selectAllHospitals().getHospitalResponseDtos();
-        return ResponseEntity.ok().body(responseDtos);
+    public ResponseEntity getAllHospitalsByFilter(
+            @RequestParam(required = false) SpeciesEnum species,
+            @RequestParam(required = false) SubjectEnum subject,
+            @RequestParam(required = false) OperatingDay operatingDay) {
+        List<HospitalResponseDto> responseDtos = hospitalService.selectAllHospitalsByFilter(species, subject, operatingDay).getHospitalResponseDtos();
+        return ResponseEntity.ok(responseDtos);
     }
 
     @GetMapping("/{id}")
@@ -46,7 +49,6 @@ public class HospitalController {
 
     @PutMapping("/{id}")
     public ResponseEntity updateHospital(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable Long id, @RequestBody HospitalRequestDto requestDto){
-        System.out.println(userDetails.getUser().getId());
         HospitalResponseDto responseDto = hospitalService.updateHospital(userDetails.getUser(), id, requestDto);
         return ResponseEntity.ok().body(responseDto);
     }

@@ -1,7 +1,5 @@
 package com.example.petback.subject.service;
 
-import com.example.petback.species.SpeciesEnum;
-import com.example.petback.species.entity.Species;
 import com.example.petback.subject.SubjectEnum;
 import com.example.petback.subject.entity.Subject;
 import com.example.petback.subject.repository.SubjectRepository;

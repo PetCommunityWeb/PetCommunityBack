@@ -3,15 +3,12 @@ package com.example.petback.review.controller;
 import com.example.petback.common.security.UserDetailsImpl;
 import com.example.petback.review.dto.ReviewRequestDto;
 import com.example.petback.review.dto.ReviewResponseDto;
-import com.example.petback.review.entity.Review;
 import com.example.petback.review.service.ReviewService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.nio.file.Path;
 import java.util.List;
 
 @RestController

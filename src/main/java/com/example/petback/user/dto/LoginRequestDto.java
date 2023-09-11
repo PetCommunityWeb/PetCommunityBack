@@ -1,8 +1,6 @@
 package com.example.petback.user.dto;
 
 import com.example.petback.user.entity.User;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

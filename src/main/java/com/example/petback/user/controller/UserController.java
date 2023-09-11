@@ -2,9 +2,9 @@ package com.example.petback.user.controller;
 
 import com.example.petback.common.advice.ApiResponseDto;
 import com.example.petback.common.security.UserDetailsImpl;
-import com.example.petback.tip.dto.TipResponseDto;
-import com.example.petback.user.dto.*;
-import com.example.petback.user.entity.User;
+import com.example.petback.user.dto.ProfileRequestDto;
+import com.example.petback.user.dto.ProfileResponseDto;
+import com.example.petback.user.dto.SignupRequestDto;
 import com.example.petback.user.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -12,12 +12,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @Slf4j
 @RestController

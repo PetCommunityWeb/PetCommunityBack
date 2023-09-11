@@ -1,11 +1,8 @@
 package com.example.petback.notification.entity;
 
 import com.example.petback.reservation.entity.Reservation;
-import com.example.petback.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.SQLInsert;
 import org.hibernate.annotations.Where;
 
 import java.time.LocalDateTime;

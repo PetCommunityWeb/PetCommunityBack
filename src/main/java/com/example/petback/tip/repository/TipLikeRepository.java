@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface TipLikeRepository extends JpaRepository<TipLike, Long> {
+    boolean existsByUserAndTip(User user, Tip tip);
 
     TipLike findByUserAndTip(User user, Tip tip);
 

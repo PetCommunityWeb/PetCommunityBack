@@ -1,8 +1,6 @@
 package com.example.petback.reservation.event;
 
 import com.example.petback.reservation.entity.Reservation;
-import com.example.petback.user.entity.User;
-import lombok.Builder;
 import lombok.Getter;
 import org.springframework.context.ApplicationEvent;
 

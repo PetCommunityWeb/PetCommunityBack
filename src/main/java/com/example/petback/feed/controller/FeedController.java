@@ -2,7 +2,6 @@ package com.example.petback.feed.controller;
 
 import com.example.petback.common.advice.ApiResponseDto;
 import com.example.petback.common.security.UserDetailsImpl;
-import com.example.petback.feed.dto.FeedListResponseDto;
 import com.example.petback.feed.dto.FeedRequestDto;
 import com.example.petback.feed.dto.FeedResponseDto;
 import com.example.petback.feed.service.FeedService;
@@ -13,7 +12,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.concurrent.RejectedExecutionException;
 
 @RestController
 @RequiredArgsConstructor
@@ -35,6 +33,14 @@ public class FeedController {
         List<FeedResponseDto> responseDtos = feedService.selectFeeds().getFeedResponseDtos();
         return ResponseEntity.ok().body(responseDtos);
     }
+
+    // 피드 좋아요 순 조회
+    @GetMapping("/like")
+    public ResponseEntity selectFeedsByLike() {
+        List<FeedResponseDto> responseDtos = feedService.selectFeedsByLike().getFeedResponseDtos();
+        return ResponseEntity.ok().body(responseDtos);
+    }
+
     //내가 쓴 피드 조회
     @GetMapping("/my-feeds")
     public ResponseEntity selectFeeds(@AuthenticationPrincipal UserDetailsImpl userDetails) {

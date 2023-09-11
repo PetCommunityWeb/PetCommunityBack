@@ -3,8 +3,6 @@ package com.example.petback.tip.entity;
 import com.example.petback.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.Where;
 
 @Entity
 @Getter
@@ -33,6 +31,7 @@ public class TipLike {
     @JoinColumn(name = "tip_id")
     private Tip tip;
 
+
     public TipLike(User user, Tip tip) {
         this.user = user;
         this.tip = tip;
@@ -41,4 +40,6 @@ public class TipLike {
     public void restore() {
         this.isDeleted = Boolean.FALSE;
     }
+
+
 }

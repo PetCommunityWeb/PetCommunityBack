@@ -28,4 +28,6 @@ public interface FeedService {
     String likeFeed(Long id, User user);
 
     FeedListResponseDto selectFeedsByUser(User user);
+
+    FeedListResponseDto selectFeedsByLike();
 }

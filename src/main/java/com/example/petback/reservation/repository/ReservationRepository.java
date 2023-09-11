@@ -1,6 +1,5 @@
 package com.example.petback.reservation.repository;
 
-import com.example.petback.reservation.dto.ReservationResponseDto;
 import com.example.petback.reservation.entity.Reservation;
 import com.example.petback.user.entity.User;
 import io.lettuce.core.dynamic.annotation.Param;

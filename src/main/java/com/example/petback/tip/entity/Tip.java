@@ -8,6 +8,9 @@ import lombok.*;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Getter
 @Setter
@@ -26,6 +29,7 @@ public class Tip {
     @NotNull
     private String title;
 
+    @Column(length = 10000)
     @NotNull
     private String content;
 
@@ -43,6 +47,13 @@ public class Tip {
     @JoinColumn
     private User user;
 
+
     public void restore() {
         this.isDeleted = Boolean.FALSE;
     }}
+
+    @Builder.Default
+    @OneToMany(mappedBy = "tip", orphanRemoval = true)
+    private List<TipLike> tipLikes = new ArrayList<>();
+}
+

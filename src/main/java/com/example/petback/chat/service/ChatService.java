@@ -6,8 +6,6 @@ import com.example.petback.chat.dto.RoomDto;
 import com.example.petback.user.entity.User;
 import org.springframework.web.socket.WebSocketSession;
 
-import java.util.List;
-
 public interface ChatService {
 
     RoomDto selectRoomById(String roomId);
