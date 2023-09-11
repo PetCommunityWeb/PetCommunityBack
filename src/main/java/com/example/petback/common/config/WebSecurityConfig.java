@@ -86,6 +86,7 @@ public class WebSecurityConfig {
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll() // resources 접근 허용 설정
                         .requestMatchers("/api/users/**").permitAll() //
                         .requestMatchers(HttpMethod.GET, "/api/hospitals/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/reservation-slot**").permitAll()
                         .requestMatchers("/ws/**").permitAll() // ws에서 접속하는 websocket 권한 허용
                         .requestMatchers("/api/chats").permitAll() // 채팅방 조회를 위한 권한 허용
                         .requestMatchers("/api/chat").permitAll() // 채팅방 조회를 위한 권한 허용
