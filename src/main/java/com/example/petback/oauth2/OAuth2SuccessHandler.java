@@ -52,15 +52,8 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
         refreshTokenRepository.save(new RefreshToken(refreshTokenVal, user.getId()));
         String token = jwtUtil.createToken(username, role, user.getId());
         token = URLEncoder.encode(token, "utf-8").replaceAll("\\+", "%20");
-        // 쿠키 생성
-        Cookie refreshToken = new Cookie("refreshToken", refreshTokenVal);
-        Cookie accessToken = new Cookie(JwtUtil.AUTHORIZATION_HEADER, token);
-        refreshToken.setPath("/");
-        accessToken.setPath("/"); // 쿠키의 유효 범위 설정 (루트 경로에 모든 요청에 대해 쿠키 전송)
-        // 쿠키를 응답 헤더에 추가
-        response.addCookie(refreshToken);
-        response.addCookie(accessToken);
-        response.sendRedirect(frontUrl + "/oauth2");
+
+        response.sendRedirect(frontUrl + "/oauth2?refreshToken="+refreshTokenVal+"&accessToken="+token);
 
         log.info("로그인성공");
     }
