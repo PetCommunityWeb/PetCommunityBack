@@ -83,10 +83,10 @@ public class ChatServiceImpl implements ChatService{
     public ChatRoomListResponseDto selectRooms(User user) {
         if (user.getRole().equals(UserRoleEnum.USER))
             return ChatRoomListResponseDto.builder()
-                    .chatRoomResponseDtoList(chatRoomRepository.findAllByUser_Id(user.getId()).stream().map(ChatRoomResponseDto::of).toList())
+                    .chatRoomResponseDtoList(chatRoomRepository.findAllByUser_IdOrderByCreatedAtDesc(user.getId()).stream().map(ChatRoomResponseDto::of).toList())
                     .build();
         return ChatRoomListResponseDto.builder()
-                .chatRoomResponseDtoList(chatRoomRepository.findAllByDoctor_Id(user.getId()).stream().map(ChatRoomResponseDto::of).toList())
+                .chatRoomResponseDtoList(chatRoomRepository.findAllByDoctor_IdOrderByCreatedAtDesc(user.getId()).stream().map(ChatRoomResponseDto::of).toList())
                 .build();
 
     }
