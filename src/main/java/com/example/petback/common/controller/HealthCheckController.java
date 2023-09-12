@@ -10,6 +10,6 @@ public class HealthCheckController {
     @GetMapping("/actuator/health")
     public ResponseEntity<Void> checkHealthStatus() {
         System.out.println("정상");
-        return new ResponseEntity<>(HttpStatus.OK);
+        return ResponseEntity.ok("version2");
     }
 }
