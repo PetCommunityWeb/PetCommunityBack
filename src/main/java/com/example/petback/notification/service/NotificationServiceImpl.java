@@ -64,21 +64,21 @@ public class NotificationServiceImpl implements NotificationService {
         notification.read();
     }
 
-//    @Transactional
-//    @Scheduled(fixedRate = 60000 * 10)
-//    public void checkReservation() {
-//        log.info("스케쥴러 실행");
-//        LocalDateTime later = LocalDateTime.now().plusMinutes(6);
-//        List<Reservation> reservations = reservationRepository.findByReservationSlot_StartTimeBetween(LocalTime.from(LocalDateTime.now()), LocalTime.from(later));
-//        for (Reservation reservation : reservations) {
-//            LocalTime reservationTime = reservation.getReservationSlot().getStartTime();
-//            Duration difference = Duration.between(reservationTime, later);
-//            if (Math.abs(difference.getSeconds()) < 60) {
-//                log.info("5분전");
-//                sendNotification(reservation);
-//            }
-//        }
-//    }
+    @Transactional
+    @Scheduled(fixedRate = 60000 * 10)
+    public void checkReservation() {
+        log.info("스케쥴러 실행");
+        LocalDateTime later = LocalDateTime.now().plusMinutes(6);
+        List<Reservation> reservations = reservationRepository.findByReservationSlot_StartTimeBetween(LocalTime.from(LocalDateTime.now()), LocalTime.from(later));
+        for (Reservation reservation : reservations) {
+            LocalTime reservationTime = reservation.getReservationSlot().getStartTime();
+            Duration difference = Duration.between(reservationTime, later);
+            if (Math.abs(difference.getSeconds()) < 60) {
+                log.info("5분전");
+                sendNotification(reservation);
+            }
+        }
+    }
 
     @CacheEvict(value = "myNotifications", key = "#reservation.user.id")
     public void sendNotification(Reservation reservation) {
