@@ -67,7 +67,7 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Transactional
-    @Scheduled(fixedRate = 60000 * 10)
+    @Scheduled(fixedRate = 1000 * 60)
     @SchedulerLock(name = "checkReservationLock", lockAtMostFor = "10m", lockAtLeastFor = "10m")
     public void checkReservation() {
         log.info("스케쥴러 실행");
