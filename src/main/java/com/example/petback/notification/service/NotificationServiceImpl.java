@@ -19,6 +19,8 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
+import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;
+
 
 @Slf4j
 @Service
@@ -65,7 +67,8 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Transactional
-    @Scheduled(fixedRate = 60000 * 10)
+    @Scheduled(fixedRate = 1000 * 60)
+    @SchedulerLock(name = "checkReservationLock", lockAtMostFor = "10m", lockAtLeastFor = "10m")
     public void checkReservation() {
         log.info("스케쥴러 실행");
         LocalDateTime later = LocalDateTime.now().plusMinutes(6);

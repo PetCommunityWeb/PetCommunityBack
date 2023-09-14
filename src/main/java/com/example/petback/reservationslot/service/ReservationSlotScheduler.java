@@ -6,6 +6,7 @@ import com.example.petback.hospital.repository.HospitalRepository;
 import com.example.petback.reservationslot.entity.ReservationSlot;
 import com.example.petback.reservationslot.repository.ReservationSlotRepository;
 import lombok.RequiredArgsConstructor;
+import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,6 +27,7 @@ public class ReservationSlotScheduler {
 //     매일 오전 4시에 실행될 메서드
     @Transactional
     @Scheduled(cron = "0 0 4 * * ?")
+    @SchedulerLock(name = "addReservationSlotsLock", lockAtMostFor = "10m", lockAtLeastFor = "5m")
     public void addReservationSlots() {
         LocalDate twoMonthsLater = LocalDate.now().plusMonths(2);
         OperatingDay dayOfWeek = OperatingDay.valueOf(twoMonthsLater.getDayOfWeek().name());
