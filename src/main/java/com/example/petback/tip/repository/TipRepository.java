@@ -9,6 +9,8 @@ import java.util.Optional;
 public interface TipRepository  extends JpaRepository<Tip, Long> {
 
     Optional<Tip> findById(Long id);
+    Optional<Tip> findByTitleContaining(String searchKeyword);
 
+//    Optional<Tip> findByUsernameContaining(String searchKeyword);
 
 }

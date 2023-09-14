@@ -8,7 +8,11 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
+import org.springframework.data.annotation.CreatedDate;
 
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,7 +25,7 @@ import java.util.List;
 @Where(clause = "is_deleted = false")
 @Table(name = "tip")
 @SQLDelete(sql  = "UPDATE tip SET is_deleted = true WHERE id = ?")
-public class Tip {
+public class Tip extends TimeStamped{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,6 +35,7 @@ public class Tip {
     private String title;
 
     @NotNull
+    @Column(length = 10000)
     private String content;
 
     @Column
@@ -42,6 +47,7 @@ public class Tip {
     @ManyToOne
     @JoinColumn
     private User user;
+
 
     @Builder.Default
     @OneToMany(mappedBy = "tip", orphanRemoval = true)

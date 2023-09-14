@@ -4,6 +4,7 @@ import com.example.petback.common.advice.ApiResponseDto;
 import com.example.petback.common.security.UserDetailsImpl;
 import com.example.petback.tip.dto.TipRequestDto;
 import com.example.petback.tip.dto.TipResponseDto;
+import com.example.petback.tip.entity.Tip;
 import com.example.petback.tip.service.TipService;
 import com.example.petback.user.service.UserService;
 import com.sun.jdi.request.DuplicateRequestException;
@@ -15,6 +16,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.RejectedExecutionException;
 
 @RestController
@@ -45,6 +47,11 @@ public class TipContorller {
     }
 
     // 팁 검색어 조회
+    @GetMapping("/search")
+    public ResponseEntity tipSearchList(@PathVariable String searchKeyword) {
+        Optional<Tip> tipList = tipService.tipSearchList(searchKeyword);
+        return ResponseEntity.ok().body(tipList);
+    }
 
 
     // 팁 수정

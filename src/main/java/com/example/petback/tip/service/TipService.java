@@ -3,9 +3,11 @@ package com.example.petback.tip.service;
 import com.example.petback.common.security.UserDetailsImpl;
 import com.example.petback.tip.dto.TipRequestDto;
 import com.example.petback.tip.dto.TipResponseDto;
+import com.example.petback.tip.entity.Tip;
 import com.example.petback.user.entity.User;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface TipService {
 
@@ -29,4 +31,9 @@ public interface TipService {
 
     // 팁 좋아요 취소
     void deleteLikeTip(UserDetailsImpl userDetails, Long id);
+
+    // 팁 검색
+    Optional<Tip> tipSearchList(String searchKeyword);
+//    Optional<Tip> tipSearchLists(String searchKeyword);
+
 }

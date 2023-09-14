@@ -17,7 +17,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.RejectedExecutionException;
+import java.io.File;
 
 @Service
 @RequiredArgsConstructor
@@ -59,7 +61,13 @@ public class TipServiceImpl implements TipService {
     }
 
     // 키워드로 팁 검색 -> 시간 남으면 해보기
+    public Optional<Tip> tipSearchList(String searchKeyword){
+        return tipRepository.findByTitleContaining(searchKeyword);
+    }
 
+//    public Optional<Tip> tipSearchLists(String searchKeyword){
+//        return tipRepository.findByUsernameContaining(searchKeyword);
+//    }
 
 
     // 팁 수정

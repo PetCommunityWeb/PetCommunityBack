@@ -70,6 +70,9 @@ dependencies {
 
     // webSocket
     implementation 'org.springframework.boot:spring-boot-starter-websocket'
+
+    // oauth2-client 라이브러리
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 }
 
 tasks.named('test') {
