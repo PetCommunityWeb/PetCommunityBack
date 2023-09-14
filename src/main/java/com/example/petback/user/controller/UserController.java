@@ -34,7 +34,6 @@ public class UserController {
     @GetMapping("/my-profile")
     public ResponseEntity selectMyProfile(@AuthenticationPrincipal UserDetailsImpl userDetails){
         ProfileResponseDto responseDto = userService.selectMyProfile(userDetails.getUser());
-        System.out.println("마프마프마프마프마프마프");
         return ResponseEntity.ok().body(responseDto);
     }
 
