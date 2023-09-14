@@ -17,6 +17,12 @@ public interface TipService {
     // 팁 상세 조회
     TipResponseDto selectTip(Long id);
 
+    // 팁 제목 조회
+    TipListResponseDto searchTitle(String keyword);
+
+    // 팁 내용 조회
+    TipListResponseDto searchContent(String keyword);
+
     // 팁 수정
     TipResponseDto updateTip(Long id, TipRequestDto requestDto, User user);
 

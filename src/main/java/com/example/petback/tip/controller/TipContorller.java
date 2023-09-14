@@ -42,9 +42,19 @@ public class TipContorller {
         return ResponseEntity.ok().body(responseDto);
     }
 
-    // 팁 검색어 조회
+    // 팁 제목 조회
+    @GetMapping("/title")
+    public ResponseEntity searchTitle(@RequestParam String keyword) {
+        List<TipResponseDto> responseDto = tipService.searchTitle(keyword).getTipResponseDtos();
+        return ResponseEntity.ok().body(responseDto);
+    }
 
-
+    // 팁 내용 조회
+    @GetMapping("/content")
+    public ResponseEntity searchContent(@RequestParam String keyword) {
+        List<TipResponseDto> responseDto = tipService.searchContent(keyword).getTipResponseDtos();
+        return ResponseEntity.ok().body(responseDto);
+    }
     // 팁 수정
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponseDto> updateTip(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable Long id, @RequestBody TipRequestDto requestDto) {
