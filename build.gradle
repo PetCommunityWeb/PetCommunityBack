@@ -91,17 +91,18 @@ dependencies {
     // health check API를 위한 actuator 의존성 추가
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
 }
-//def generated = 'src/main/generated'
+
+def generated = 'src/main/generated'
 
 sourceSets {
     main {
         java {
-            srcDirs = ["$projectDir/src/main/java", "$projectDir/build/generated"]
+            srcDirs = ["$projectDir/src/main/java", generated]
         }
     }
 }
 clean {
-    delete file('src/main/generated')
+    delete generated
 }
 build.dependsOn(clean)
 tasks.named('test') {

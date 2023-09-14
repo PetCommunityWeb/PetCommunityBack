@@ -29,7 +29,11 @@ public class TipServiceImpl implements TipService {
 
     // 팁 작성
     @Override
-    @CacheEvict(value = "allTips", allEntries = true)
+    @Caching(evict = {
+            @CacheEvict(value = "allTips", allEntries = true),
+            @CacheEvict(value = "TipsByTitle", allEntries = true),
+            @CacheEvict(value = "TipsByContent", allEntries = true)
+    })
     public TipResponseDto createTip(TipRequestDto requestDto, User user) {
         Tip tip = requestDto.toEntity();
         tip.setUser(user);
@@ -57,6 +61,26 @@ public class TipServiceImpl implements TipService {
         return TipResponseDto.of(tip);
     }
 
+    // 팁 검색어 조회
+    @Override
+    @Transactional(readOnly = true)
+    @Cacheable(value = "TipsByTitle")
+    public TipListResponseDto searchTitle(String keyword) {
+        return TipListResponseDto.builder()
+                .tipResponseDtos(tipRepository.findByTitleContains(keyword).stream().map(TipResponseDto::of).toList())
+                .build();
+    }
+    
+    // 팁 내용 조회
+    @Override
+    @Transactional(readOnly = true)
+    @Cacheable(value = "TipsByContent")
+    public TipListResponseDto searchContent(String keyword) {
+        return TipListResponseDto.builder()
+                .tipResponseDtos(tipRepository.findByContentContains(keyword).stream().map(TipResponseDto::of).toList())
+                .build();
+    }
+    
     // 특정 팁 찾기
     private Tip findTip(Long id) {
         return tipRepository.findById(id)
@@ -67,6 +91,8 @@ public class TipServiceImpl implements TipService {
     @Override
     @Caching(evict = {
             @CacheEvict(value = "allTips", allEntries = true),
+            @CacheEvict(value = "TipsByTitle", allEntries = true),
+            @CacheEvict(value = "TipsByContent", allEntries = true),
             @CacheEvict(value = "tip", key = "#id")
     })
     public TipResponseDto updateTip(Long id, TipRequestDto requestDto, User user) {
@@ -85,7 +111,11 @@ public class TipServiceImpl implements TipService {
 
     // 팁 삭제
     @Override
-    @CacheEvict(value = "allTips", allEntries = true)
+    @Caching(evict = {
+            @CacheEvict(value = "allTips", allEntries = true),
+            @CacheEvict(value = "TipsByTitle", allEntries = true),
+            @CacheEvict(value = "TipsByContent", allEntries = true)
+    })
     public void deleteTip(Long id, User user) {
         Tip tip = findTip(id);
         if (!tip.getUser().equals(user)) {

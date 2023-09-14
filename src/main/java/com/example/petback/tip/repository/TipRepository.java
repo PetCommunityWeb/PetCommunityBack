@@ -13,6 +13,8 @@ import java.util.List;
 import java.util.Optional;
 
 public interface TipRepository  extends JpaRepository<Tip, Long> {
+    List<Tip> findByContentContains(String content);
+    List<Tip> findByTitleContains(String title);
 
     Optional<Tip> findById(Long id);
 
