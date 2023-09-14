@@ -1,3 +1,6 @@
+## 🛠️ 기술 스택
+
+---
 #### Front-End
 
 <div>
@@ -50,5 +53,9 @@
 </div>
 
 ---
+
+***
 ## 📚 Service Architecture  
+
+---
 <img src="image/ServiceArchitecture_v3.png">
