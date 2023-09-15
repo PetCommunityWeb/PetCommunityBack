@@ -23,9 +23,12 @@
 >2023.08.16. - 2023.09.18. ~ (last update date)
 
 ## 프로젝트 멤버
->송이삭  
->최혁진  
->지은영  
+>송이삭 ( [github](https://github.com/Isaacsong-2) )
+>
+>최혁진 ( [github](https://github.com/chj970702))
+>
+>지은영 ( [github](https://github.com/eunyoungji))
+>
 >최종우 ( [github](https://github.com/Jonggae) )
 
 # 2. 프로젝트 실행 환경
