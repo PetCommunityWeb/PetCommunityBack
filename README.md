@@ -129,4 +129,4 @@
 ***
 
 # 6. 화면 구성
-> 프론트엔드 repository 참고
+> [프론트엔드 repository](https://github.com/PetCommunityWeb/PetCommunityFront) 참고
