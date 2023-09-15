@@ -1,10 +1,7 @@
 package com.example.petback.tip.dto;
 
 import com.example.petback.tip.entity.Tip;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Getter
 @Builder

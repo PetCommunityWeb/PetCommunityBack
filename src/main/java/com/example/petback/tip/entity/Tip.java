@@ -29,8 +29,8 @@ public class Tip {
     @NotNull
     private String title;
 
-    @Column(length = 10000)
-    @NotNull
+    @Lob
+    @Column(columnDefinition = "MEDIUMTEXT")
     private String content;
 
     @Column
