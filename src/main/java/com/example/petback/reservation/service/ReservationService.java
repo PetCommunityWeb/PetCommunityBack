@@ -4,9 +4,6 @@ import com.example.petback.reservation.dto.ReservationListResponseDto;
 import com.example.petback.reservation.dto.ReservationRequestDto;
 import com.example.petback.reservation.dto.ReservationResponseDto;
 import com.example.petback.user.entity.User;
-import org.springframework.web.bind.annotation.RequestParam;
-
-import java.util.List;
 
 public interface ReservationService {
 

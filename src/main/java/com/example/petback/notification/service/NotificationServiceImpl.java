@@ -9,6 +9,7 @@ import com.example.petback.reservation.repository.ReservationRepository;
 import com.example.petback.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -19,7 +20,6 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
-import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;
 
 
 @Slf4j

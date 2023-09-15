@@ -5,8 +5,6 @@ import com.example.petback.common.security.UserDetailsImpl;
 import com.example.petback.tip.dto.TipRequestDto;
 import com.example.petback.tip.dto.TipResponseDto;
 import com.example.petback.tip.service.TipService;
-import com.example.petback.user.service.UserService;
-import com.sun.jdi.request.DuplicateRequestException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

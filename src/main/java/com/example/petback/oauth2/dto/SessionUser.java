@@ -1,8 +1,9 @@
 package com.example.petback.oauth2.dto;
 
 
-import lombok.Getter;
 import com.example.petback.user.entity.User;
+import lombok.Getter;
+
 import java.io.Serializable;
 
 @Getter

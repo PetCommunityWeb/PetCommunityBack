@@ -1,8 +1,6 @@
 package com.example.petback.hospital.repository;
 
 import com.example.petback.hospital.entity.Hospital;
-import com.example.petback.species.SpeciesEnum;
-import com.example.petback.subject.SubjectEnum;
 import com.example.petback.user.entity.User;
 import io.lettuce.core.dynamic.annotation.Param;
 import org.springframework.data.jpa.repository.JpaRepository;

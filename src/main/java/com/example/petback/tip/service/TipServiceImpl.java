@@ -1,7 +1,6 @@
 package com.example.petback.tip.service;
 
 
-import com.example.petback.common.security.UserDetailsImpl;
 import com.example.petback.tip.dto.TipListResponseDto;
 import com.example.petback.tip.dto.TipRequestDto;
 import com.example.petback.tip.dto.TipResponseDto;

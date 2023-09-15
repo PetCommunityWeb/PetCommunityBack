@@ -1,11 +1,7 @@
 package com.example.petback.tip.repository;
 
 import com.example.petback.tip.entity.Tip;
-
-import com.example.petback.user.entity.User;
 import io.lettuce.core.dynamic.annotation.Param;
-
-
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

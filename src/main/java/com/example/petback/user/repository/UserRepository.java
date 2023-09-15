@@ -1,11 +1,9 @@
 package com.example.petback.user.repository;
 
-import com.example.petback.user.dto.UserDto;
 import com.example.petback.user.entity.User;
 import com.example.petback.user.enums.UserRoleEnum;
 import io.lettuce.core.dynamic.annotation.Param;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 

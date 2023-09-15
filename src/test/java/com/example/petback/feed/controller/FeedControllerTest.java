@@ -3,7 +3,6 @@ package com.example.petback.feed.controller;
 import com.example.petback.common.jwt.JwtUtil;
 import com.example.petback.feed.dto.FeedRequestDto;
 import com.example.petback.feed.entity.Feed;
-import com.example.petback.feed.repository.FeedLikeRepository;
 import com.example.petback.feed.repository.FeedRepository;
 import com.example.petback.user.entity.User;
 import com.example.petback.user.enums.UserRoleEnum;

@@ -1,7 +1,6 @@
 package com.example.petback.chat.repository;
 
 import com.example.petback.chat.entity.ChatRoom;
-import com.example.petback.user.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
