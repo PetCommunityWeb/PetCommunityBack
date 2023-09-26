@@ -66,7 +66,7 @@ public class TipServiceImpl implements TipService {
     @Cacheable(value = "TipsByTitle")
     public TipListResponseDto searchTitle(String keyword) {
         return TipListResponseDto.builder()
-                .tipResponseDtos(tipRepository.findByTitleContains(keyword).stream().map(TipResponseDto::of).toList())
+                .tipResponseDtos(tipRepository.findByTitleContains(keyword + "*").stream().map(TipResponseDto::of).toList())
                 .build();
     }
     
