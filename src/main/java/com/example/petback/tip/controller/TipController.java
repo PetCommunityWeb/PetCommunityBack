@@ -17,7 +17,7 @@ import java.util.concurrent.RejectedExecutionException;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/tips")
-public class TipContorller {
+public class TipController {
     private final TipService tipService;
     
     // 팁 작성
